@@ -2,7 +2,7 @@
 //  Player.swift
 //  Block Rush
 //
-//  Created by Sebastian Snyder on 3/25/18.
+//  Created by Sebastian Snyder on 3/28/18.
 //
 
 import Foundation
@@ -11,17 +11,21 @@ import GameKit
 
 class Player
 {
-    let generator: GKRandomDistribution;
-    let pieceQueue: Queue<Piece>;
-    let scene: SKScene;
+    //INPUT LOGIC
+    internal var curFrame: Int;      //The most recently executed frame
+    internal let inputDevice: InputDevice;
     
-    var curFrame: Int;      //The most recently executed frame
-    var nextFrame: Int;     //The frame at which to deliver the player's next piece
-    var readyPiece: Piece?;
-    var columnOver = 3;
-    let inputDevice: InputDevice;
+    //GAME LOGIC
+    internal var generator: GKRandomDistribution;
+    internal var readyPiece: Piece?;
+    internal var nextFrame: Int;     //The frame at which to deliver the player's next piece
+    internal var pieceQueue: Queue<Piece>;
+    public var columnOver = 3;
     
-    init(rngSeed: UInt64, scene s: SKScene,device: InputDevice)
+    //UI LOGIC
+    internal var scene: SKScene;
+    
+    internal init(rngSeed: UInt64, scene s: SKScene, device: InputDevice)
     {
         let source = GKMersenneTwisterRandomSource(seed: rngSeed);
         generator = GKRandomDistribution(randomSource: source, lowestValue: 0, highestValue: BlockRush.BlockColors.count-1);
@@ -39,7 +43,6 @@ class Player
         }
         
         SceneUpdate();
-        
     }
     
     func GeneratePiece()
@@ -51,34 +54,12 @@ class Player
     
     func SceneUpdate()
     {
-        for i in 0...pieceQueue.count()-1
-        {
-            let sX = scene.frame.width * 0.45;
-            let sY = scene.frame.height * (CGFloat(i-4)/10.0);
-            let CenterPt = CGPoint(x: sX, y: sY);
-            pieceQueue.peek(i).SceneAdd(scene: scene, position: CenterPt);
-        }
+        //Must override.
     }
     
     func Ready(_ p: Piece)
     {
-        readyPiece = p;
-        columnOver = -1;
-        MoveToColumn(3);
-    }
-    
-    func ReadyNext()
-    {
-        let p = pieceQueue.dequeue();
-        Ready(p);
-        GeneratePiece();
-    }
-    
-    func Play(_ field: PlayField)
-    {
-        field.Push(column: columnOver, piece: readyPiece!);
-        readyPiece = nil;
-        nextFrame = curFrame + 30;
+        //Must override.
     }
     
     func MoveToColumn(_ n:Int)
@@ -94,12 +75,30 @@ class Player
         else if(n != columnOver)
         {
             columnOver = n;
-            let pX = BlockRush.BlockWidth/2 + BlockRush.BlockWidth*CGFloat(n-3);
-            readyPiece?.FrontBlock.nod.position = CGPoint(x: pX,
-                                                y:-scene.frame.height/2+BlockRush.BlockWidth);
-            readyPiece?.RearBlock.nod.position = CGPoint(x: pX,
-                                               y:-scene.frame.height/2+BlockRush.BlockWidth/2);
+            PositionToColumn(n);
         }
+    }
+    
+    func PositionToColumn(_ n:Int)
+    {
+        //Must override.
+    }
+    
+    func ReadyNext()
+    {
+        let p = pieceQueue.dequeue();
+        Ready(p);
+        GeneratePiece();
+    }
+    
+    func Play(_ field: PlayField)
+    {
+        //Must override
+    }
+    
+    func Execute(input: Input,field: PlayField)
+    {
+        //Must override.
     }
     
     //Executes this player's inputs up to a frame number.
@@ -115,27 +114,11 @@ class Player
                 ReadyNext();
             }
             
-            if(inputDevice.Get(input: .LEFT))
+            for I in Input.ARRAY
             {
-                print("Recieved LEFT  input!");
-                MoveToColumn(columnOver-1);
-            }
-            if(inputDevice.Get(input: .RIGHT))
-            {
-                print("Recieved RIGHT input!");
-                MoveToColumn(columnOver+1);
-            }
-            if(inputDevice.Get(input: .FLIP))
-            {
-                print("Recieved FLIP  input!");
-                readyPiece?.Flip();
-            }
-            if(inputDevice.Get(input: .PLAY))
-            {
-                print("Recieved PLAY  input!");
-                if(readyPiece != nil)
+                if(inputDevice.Get(input: I))
                 {
-                    Play(playField);
+                    Execute(input: I,field: playField);
                 }
             }
             //

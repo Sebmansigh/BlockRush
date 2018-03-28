@@ -25,15 +25,15 @@ class PlayField
         return Field[0].count;
     }
     
-    func Push(column: Int, piece: Piece)
+    func PushBottom(column: Int, piece: Piece)
     {
-        Push(column:column,block:piece.FrontBlock);
-        Push(column:column,block:piece.RearBlock);
+        PushBottom(column:column,block:piece.FrontBlock);
+        PushBottom(column:column,block:piece.RearBlock);
     }
     
-    func Push(column: Int, block: Block)
+    func PushBottom(column: Int, block: Block)
     {
-        for i in 0...rows()-1
+        for i in rows()/2...rows()-1
         {
             if(Field[column][i] == nil)
             {
@@ -45,8 +45,11 @@ class PlayField
     }
     func GetPosition(column:Int,row:Int) -> CGPoint
     {
+        let offsetRows = CGFloat(rows())/2;
+        
         let pX = BlockRush.BlockWidth/2 + BlockRush.BlockWidth * CGFloat(column-3);
-        let pY = BlockRush.BlockWidth * ((10-CGFloat(row))/2-0.25);
+        let pY = BlockRush.BlockWidth * ((offsetRows-CGFloat(row))/2-0.25);
+        
         return CGPoint(x: pX, y: pY);
     }
 }

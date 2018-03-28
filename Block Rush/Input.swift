@@ -9,6 +9,7 @@ import Foundation
 
 struct Input : OptionSet
 {
+    
     let rawValue: UInt8;
     
     static let LEFT   = Input(rawValue: 0b0000_0001);
@@ -19,4 +20,6 @@ struct Input : OptionSet
     static let INPUT5 = Input(rawValue: 0b0010_0000);
     static let INPUT6 = Input(rawValue: 0b0100_0000);
     static let INPUT7 = Input(rawValue: 0b1000_0000);
+    
+    static let ARRAY = [LEFT,RIGHT,FLIP,PLAY,INPUT4,INPUT5,INPUT6,INPUT7];
 }

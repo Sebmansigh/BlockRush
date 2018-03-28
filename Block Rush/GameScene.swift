@@ -54,11 +54,11 @@ class GameScene: SKScene
         var seed: UInt64 = 0;
         arc4random_buf(&seed, MemoryLayout.size(ofValue: seed))
         //playerTop = Player(rngSeed: seed, scene:self);
-        playerBottom = Player(rngSeed: seed, scene:self, device: BDevice);
+        playerBottom = BottomPlayer(rngSeed: seed, scene:self, device: BDevice);
         backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
         backgroundGrid?.fillColor = UIColor.black;
         self.addChild(backgroundGrid!);
-        playField = PlayField(cols:6,rows:20);
+        playField = PlayField(cols:6,rows:44);
         
         backgroundGrid?.zPosition = -1;
         //*/
