@@ -24,6 +24,7 @@
 		A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0D206C0FB800AA579B /* InputDevice.swift */; };
 		A80CDA10206C14EC00AA579B /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0F206C14EC00AA579B /* Input.swift */; };
 		A80CDA12206C382700AA579B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA11206C382700AA579B /* Player.swift */; };
+		A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80FE7012072BAE000E73E36 /* TopPlayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		A80CDA0D206C0FB800AA579B /* InputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevice.swift; sourceTree = "<group>"; };
 		A80CDA0F206C14EC00AA579B /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		A80CDA11206C382700AA579B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		A80FE7012072BAE000E73E36 /* TopPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPlayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 				A80539CD20685A650059562D /* Info.plist */,
 				A80CDA11206C382700AA579B /* Player.swift */,
 				A80539EF206863990059562D /* BottomPlayer.swift */,
+				A80FE7012072BAE000E73E36 /* TopPlayer.swift */,
 				A80CDA0D206C0FB800AA579B /* InputDevice.swift */,
 				A80CDA0F206C14EC00AA579B /* Input.swift */,
 				A80539F320686FA40059562D /* Piece.swift */,
@@ -299,6 +302,7 @@
 				A80539F8206963DC0059562D /* PlayField.swift in Sources */,
 				A80539F220686CC60059562D /* CustomCollections.swift in Sources */,
 				A80539C420685A650059562D /* GameViewController.swift in Sources */,
+				A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */,
 				A80539BC20685A650059562D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

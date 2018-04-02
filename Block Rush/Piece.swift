@@ -28,6 +28,11 @@ class Piece
     
     func SceneAdd(scene: SKScene, position: CGPoint)
     {
+        SceneAdd(scene: scene, position: position, reversed: false)
+    }
+    
+    func SceneAdd(scene: SKScene, position: CGPoint, reversed: Bool)
+    {
         FrontBlock.nod.position = CGPoint(x:position.x, y:position.y - BlockRush.BlockWidth/4);
         RearBlock .nod.position = CGPoint(x:position.x, y:position.y + BlockRush.BlockWidth/4);
         
@@ -36,6 +41,11 @@ class Piece
         
         RearBlock.nod.removeFromParent();
         scene.addChild(RearBlock.nod);
+        
+        if(reversed)
+        {
+            swap(&(FrontBlock.nod.position), &(RearBlock.nod.position));
+        }
     }
 }
 

@@ -9,23 +9,23 @@ import Foundation
 import SpriteKit
 import GameKit
 
-class BottomPlayer: Player
+class TopPlayer: Player
 {
     /*
-    public override init(rngSeed: UInt64, scene: SKScene, device: InputDevice)
-    {
-        super.init(rngSeed: rngSeed, scene: scene, device: device);
-    }
-    */
+     public override init(rngSeed: UInt64, scene: SKScene, device: InputDevice)
+     {
+     super.init(rngSeed: rngSeed, scene: scene, device: device);
+     }
+     */
     
     override func SceneUpdate()
     {
         for i in 0...pieceQueue.count()-1
         {
-            let sX = scene.frame.width * 0.45;
-            let sY = scene.frame.height * (CGFloat(i-4)/10.0);
+            let sX = -scene.frame.width * 0.45;
+            let sY = -scene.frame.height * (CGFloat(i-4)/10.0);
             let CenterPt = CGPoint(x: sX, y: sY);
-            pieceQueue.peek(i).SceneAdd(scene: scene, position: CenterPt,reversed:true);
+            pieceQueue.peek(i).SceneAdd(scene: scene, position: CenterPt);
         }
     }
     
@@ -33,12 +33,12 @@ class BottomPlayer: Player
     {
         readyPiece = p;
         columnOver = -1;
-        MoveToColumn(3);
+        MoveToColumn(2);
     }
     
     override func Play(_ field: PlayField)
     {
-        field.PushBottom(column: columnOver, piece: readyPiece!);
+        field.PushTop(column: columnOver, piece: readyPiece!);
         readyPiece = nil;
         nextFrame = curFrame + 30;
     }
@@ -47,9 +47,9 @@ class BottomPlayer: Player
     {
         let pX = BlockRush.BlockWidth/2 + BlockRush.BlockWidth*CGFloat(n-3);
         readyPiece?.FrontBlock.nod.position = CGPoint(x: pX,
-                                                      y:-scene.frame.height/2+BlockRush.BlockWidth);
+                                                      y:scene.frame.height/2-BlockRush.BlockWidth);
         readyPiece?.RearBlock.nod.position = CGPoint(x: pX,
-                                                     y:-scene.frame.height/2+BlockRush.BlockWidth/2);
+                                                     y:scene.frame.height/2-BlockRush.BlockWidth/2);
     }
     
     override func Execute(input: Input, field: PlayField)
@@ -58,9 +58,9 @@ class BottomPlayer: Player
         switch(input)
         {
         case .LEFT:
-            MoveToColumn(columnOver-1);
-        case .RIGHT:
             MoveToColumn(columnOver+1);
+        case .RIGHT:
+            MoveToColumn(columnOver-1);
         case .FLIP:
             readyPiece?.Flip()
         case .PLAY:
@@ -81,3 +81,4 @@ class BottomPlayer: Player
         }
     }
 }
+

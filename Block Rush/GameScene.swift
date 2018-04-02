@@ -10,7 +10,7 @@ import GameplayKit
 
 class GameScene: SKScene
 {
-    class BottomTouchDevice: InputDevice
+    class TouchDevice: InputDevice
     {
         public var pendingInput: [Input] = [];
         
@@ -33,11 +33,14 @@ class GameScene: SKScene
         }
     }
     
-    let BDevice = BottomTouchDevice();
+    
+    let BDevice = TouchDevice();
+    let TDevice = TouchDevice();
     var BTarget: Int? = nil;
+    var TTarget: Int? = nil;
     
     var backgroundGrid : SKShapeNode? = nil;
-    //var playerTop: Player?;
+    var playerTop: Player?;
     var playerBottom: Player?;
     
     var playField : PlayField? = nil;
@@ -53,12 +56,12 @@ class GameScene: SKScene
         
         var seed: UInt64 = 0;
         arc4random_buf(&seed, MemoryLayout.size(ofValue: seed))
-        //playerTop = Player(rngSeed: seed, scene:self);
+        playerTop = TopPlayer(rngSeed: seed, scene:self, device: TDevice);
         playerBottom = BottomPlayer(rngSeed: seed, scene:self, device: BDevice);
         backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
         backgroundGrid?.fillColor = UIColor.black;
         self.addChild(backgroundGrid!);
-        playField = PlayField(cols:6,rows:44);
+        playField = PlayField(cols:6,rows:44,scene:self);
         
         backgroundGrid?.zPosition = -1;
         //*/
@@ -71,51 +74,91 @@ class GameScene: SKScene
         
     }
     
-    var numTouchDownFrames = 0;
-    var startPos = CGPoint.zero;
-    func touchDown(atPoint pos : CGPoint)
+    var TopTouch: UITouch? = nil;
+    var TopTouchFrames = 0;
+    var TopStartPos = CGPoint.zero;
+    
+    var BottomTouch: UITouch? = nil;
+    var BottomTouchFrames = 0;
+    var BottomStartPos = CGPoint.zero;
+    func touchDown(touch: UITouch)
     {
-        numTouchDownFrames = 0;
-        startPos = pos;
-        BTarget = 2+Int(pos.x / BlockRush.BlockWidth);
+        let pos = touch.location(in: self)
+        if(pos.y > 0)
+        {
+            TopTouch = touch;
+            TopStartPos = pos;
+            TTarget = 2+Int(pos.x / BlockRush.BlockWidth);
+            TopTouchFrames = 0;
+        }
+        else if(pos.y < 0)
+        {
+            BottomTouch = touch;
+            BottomStartPos = pos;
+            BTarget = 2+Int(pos.x / BlockRush.BlockWidth);
+            BottomTouchFrames = 0;
+        }
     }
     
     
-    func touchMoved(toPoint pos : CGPoint)
+    func touchMoved(touch: UITouch)
     {
-        BTarget = 2+Int(pos.x / BlockRush.BlockWidth);
+        if(touch == TopTouch)
+        {
+            TTarget = 2+Int(touch.location(in: self).x / BlockRush.BlockWidth);
+        }
+        else if(touch == BottomTouch)
+        {
+            BTarget = 2+Int(touch.location(in: self).x / BlockRush.BlockWidth);
+        }
     }
     
-    func touchUp(atPoint pos : CGPoint)
+    func touchUp(touch: UITouch)
     {
-        if(playerBottom != nil)
+        let pos = touch.location(in: self);
+        if(touch == TopTouch && playerTop != nil)
+        {
+            TTarget = nil;
+            TopTouch = nil;
+            if(TopStartPos.y-pos.y > BlockRush.BlockWidth*1.5)
+            {
+                TDevice.pendingInput.append(Input.PLAY);
+            }
+            else if(TopTouchFrames < 10)
+            {
+                TDevice.pendingInput.append(Input.FLIP);
+            }
+        }
+        else if(touch == BottomTouch && playerBottom != nil)
         {
             BTarget = nil;
-            if(pos.y-startPos.y > BlockRush.BlockWidth*1.5)
+            BottomTouch = nil;
+            if(pos.y-BottomStartPos.y > BlockRush.BlockWidth*1.5)
             {
                 BDevice.pendingInput.append(Input.PLAY);
             }
-            else if(numTouchDownFrames < 10)
+            else if(BottomTouchFrames < 10)
             {
                 BDevice.pendingInput.append(Input.FLIP);
             }
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
+        for t in touches { self.touchDown(touch: t) }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+        for t in touches { self.touchMoved(touch: t); }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for t in touches { self.touchUp(touch: t); }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for t in touches { self.touchUp(touch: t); }
     }
     
     
@@ -123,9 +166,9 @@ class GameScene: SKScene
     {
         if(GameReady)
         {
-            if(BTarget != nil)
+            if(BottomTouch != nil)
             {
-                numTouchDownFrames = numTouchDownFrames+1;
+                BottomTouchFrames += 1;
                 if(BTarget != playerBottom!.columnOver)
                 {
                     if(BTarget! < playerBottom!.columnOver)
@@ -137,8 +180,25 @@ class GameScene: SKScene
                         BDevice.pendingInput.append(Input.RIGHT);
                     }
                 }
+                print(BottomTouchFrames);
+            }
+            if(TopTouch != nil)
+            {
+                TopTouchFrames += 1;
+                if(TTarget != playerTop!.columnOver)
+                {
+                    if(TTarget! < playerTop!.columnOver)
+                    {
+                        TDevice.pendingInput.append(Input.RIGHT);
+                    }
+                    else
+                    {
+                        TDevice.pendingInput.append(Input.LEFT);
+                    }
+                }
             }
             let _ = playerBottom!.runTo(targetFrame: GameFrame,playField: playField!);
+            let _ = playerTop!   .runTo(targetFrame: GameFrame,playField: playField!);
             // Get most recent frame from player
             
             GameFrame+=1;

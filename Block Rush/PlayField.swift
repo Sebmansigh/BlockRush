@@ -11,10 +11,16 @@ import SpriteKit
 class PlayField
 {
     var Field: [[Block?]]
-    init(cols:Int,rows:Int)
+    let CenterBar: SKSpriteNode;
+    init(cols:Int, rows:Int, scene:SKScene)
     {
         let inArr = Array<Block?>(repeating: nil, count:rows);
         Field = Array<Array<Block?>>(repeating: inArr, count:cols);
+        CenterBar = SKSpriteNode(texture: nil,
+                                 color: .white,
+                                 size: CGSize(width: BlockRush.BlockWidth*6, height: 8));
+        scene.addChild(CenterBar);
+        CenterBar.zPosition = 2;
     }
     
     func columns() -> Int {
@@ -43,6 +49,26 @@ class PlayField
             }
         }
     }
+    
+    func PushTop(column: Int, piece: Piece)
+    {
+        PushTop(column:column,block:piece.FrontBlock);
+        PushTop(column:column,block:piece.RearBlock);
+    }
+    
+    func PushTop(column: Int, block: Block)
+    {
+        for i in (0...rows()/2-1).reversed()
+        {
+            if(Field[column][i] == nil)
+            {
+                block.nod.position = GetPosition(column:column,row:i);
+                Field[column][i] = block;
+                return;
+            }
+        }
+    }
+    
     func GetPosition(column:Int,row:Int) -> CGPoint
     {
         let offsetRows = CGFloat(rows())/2;
