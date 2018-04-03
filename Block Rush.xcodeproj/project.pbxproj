@@ -25,6 +25,7 @@
 		A80CDA10206C14EC00AA579B /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0F206C14EC00AA579B /* Input.swift */; };
 		A80CDA12206C382700AA579B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA11206C382700AA579B /* Player.swift */; };
 		A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80FE7012072BAE000E73E36 /* TopPlayer.swift */; };
+		A80FE7042072D8E900E73E36 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80FE7032072D8E900E73E36 /* Block.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		A80CDA0F206C14EC00AA579B /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		A80CDA11206C382700AA579B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		A80FE7012072BAE000E73E36 /* TopPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPlayer.swift; sourceTree = "<group>"; };
+		A80FE7032072D8E900E73E36 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 				A80CDA0D206C0FB800AA579B /* InputDevice.swift */,
 				A80CDA0F206C14EC00AA579B /* Input.swift */,
 				A80539F320686FA40059562D /* Piece.swift */,
+				A80FE7032072D8E900E73E36 /* Block.swift */,
 				A80539F120686CC60059562D /* CustomCollections.swift */,
 			);
 			path = "Block Rush";
@@ -294,6 +297,7 @@
 			files = (
 				A80CDA12206C382700AA579B /* Player.swift in Sources */,
 				A80CDA10206C14EC00AA579B /* Input.swift in Sources */,
+				A80FE7042072D8E900E73E36 /* Block.swift in Sources */,
 				A80539F0206863990059562D /* BottomPlayer.swift in Sources */,
 				A80539C220685A650059562D /* GameScene.swift in Sources */,
 				A80539F6206961420059562D /* BlockRush.swift in Sources */,

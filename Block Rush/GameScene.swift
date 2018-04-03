@@ -45,10 +45,6 @@ class GameScene: SKScene
     
     var playField : PlayField? = nil;
     
-    var GameReady = false;
-    var GameFrame: Int = 0;
-    
-    
     override func sceneDidLoad()
     {
         //*
@@ -66,7 +62,7 @@ class GameScene: SKScene
         backgroundGrid?.zPosition = -1;
         //*/
         
-        GameReady = true;
+        playField!.GameReady = true;
     }
     
     override func didMove(to view: SKView)
@@ -88,14 +84,14 @@ class GameScene: SKScene
         {
             TopTouch = touch;
             TopStartPos = pos;
-            TTarget = 2+Int(pos.x / BlockRush.BlockWidth);
+            TTarget = 2+Int(round(pos.x / BlockRush.BlockWidth));
             TopTouchFrames = 0;
         }
         else if(pos.y < 0)
         {
             BottomTouch = touch;
             BottomStartPos = pos;
-            BTarget = 2+Int(pos.x / BlockRush.BlockWidth);
+            BTarget = 2+Int(round(pos.x / BlockRush.BlockWidth));
             BottomTouchFrames = 0;
         }
     }
@@ -164,7 +160,7 @@ class GameScene: SKScene
     
     override func update(_ currentTime: TimeInterval)
     {
-        if(GameReady)
+        if(playField != nil && playField!.GameReady)
         {
             if(BottomTouch != nil)
             {
@@ -180,7 +176,6 @@ class GameScene: SKScene
                         BDevice.pendingInput.append(Input.RIGHT);
                     }
                 }
-                print(BottomTouchFrames);
             }
             if(TopTouch != nil)
             {
@@ -197,11 +192,13 @@ class GameScene: SKScene
                     }
                 }
             }
-            let _ = playerBottom!.runTo(targetFrame: GameFrame,playField: playField!);
-            let _ = playerTop!   .runTo(targetFrame: GameFrame,playField: playField!);
-            // Get most recent frame from player
-            
-            GameFrame+=1;
+            let BFrame = playerBottom!.runTo(targetFrame: playField!.GameFrame,playField: playField!);
+            let TFrame = playerTop!   .runTo(targetFrame: playField!.GameFrame,playField: playField!);
+            // If neither player is less than 15 frames behind
+            if(playField!.GameFrame - BFrame < 15 && playField!.GameFrame - TFrame < 15)
+            {
+                playField!.AdvanceFrame();
+            }
         }
         else
         {

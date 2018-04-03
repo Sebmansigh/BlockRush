@@ -49,19 +49,3 @@ class Piece
     }
 }
 
-class Block
-{
-    let col: Int;
-    let nod: SKSpriteNode;
-    init(nColor: Int)
-    {
-        col = nColor;
-        //nod = SKShapeNode(rectOf: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
-        nod = SKSpriteNode(texture: nil,
-                           color: BlockRush.BlockColors[col],
-                           size: CGSize(width: BlockRush.BlockWidth-2, height: BlockRush.BlockWidth/2-2));
-        
-        //nod.st
-        nod.zPosition = 0;
-    }
-}

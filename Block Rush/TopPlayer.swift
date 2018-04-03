@@ -38,7 +38,7 @@ class TopPlayer: Player
     
     override func Play(_ field: PlayField)
     {
-        field.PushTop(column: columnOver, piece: readyPiece!);
+        field.PushTop(column: columnOver, piece: readyPiece!, frame:curFrame);
         readyPiece = nil;
         nextFrame = curFrame + 30;
     }
@@ -54,7 +54,6 @@ class TopPlayer: Player
     
     override func Execute(input: Input, field: PlayField)
     {
-        print("Received input:"+String(describing: input));
         switch(input)
         {
         case .LEFT:
