@@ -133,7 +133,6 @@ class PlayField
     {
         for block in blocks
         {
-            block.nod.color = .white;
             block.nod.size.width*=1.2;
             block.nod.size.height*=1.2;
             block.nod.zPosition = 2;
@@ -151,6 +150,7 @@ class PlayField
         }
         else if(creditTop! == true)
         {
+            playerTop.Freeze();
             if(TopMatches[frame] == nil)
             {
                 TopMatches[frame] = (Set<Block>()).union(blocks);
@@ -162,6 +162,7 @@ class PlayField
         }
         else
         {
+            playerBottom.Freeze();
             if(BtmMatches[frame] == nil)
             {
                 BtmMatches[frame] = (Set<Block>()).union(blocks);
@@ -275,26 +276,34 @@ class PlayField
     
     func AnimMatches(frame: Int)
     {
+        let decayFactor: CGFloat = 0.92;
+        let preFrames: Int = 30;
+        let stayFrames: Int = 50;
+        let endFrame: Int = 90;
+        
         for (MatchFrame,S) in TopMatches
         {
-            print("ANIMATING MATCH")
             let AnimFrame = frame-MatchFrame;
-            print("Animating Frame "+String(AnimFrame));
+            if(AnimFrame < preFrames)
+            {
+                continue;
+            }
             for block in S
             {
-                if(AnimFrame >= 10)
+                block.nod.color = .white;
+                if(AnimFrame >= stayFrames)
                 {
-                    block.nod.alpha *= 0.9;
-                    block.nod.size.width *= 0.9;
-                    block.nod.size.height *= 0.9;
-                    if(AnimFrame == 30)
+                    block.nod.alpha *= decayFactor;
+                    block.nod.size.width *= decayFactor;
+                    block.nod.size.height *= decayFactor;
+                    if(AnimFrame == endFrame)
                     {
                         Field[block.iPos][block.jPos] = nil;
                         block.nod.removeFromParent();
                     }
                 }
             }
-            if(AnimFrame == 30)
+            if(AnimFrame == endFrame)
             {
                 TopMatches[MatchFrame] = nil;
             }
@@ -304,24 +313,27 @@ class PlayField
         
         for (MatchFrame,S) in BtmMatches
         {
-            print("ANIMATING MATCH")
             let AnimFrame = frame-MatchFrame;
-            print("Animating Frame "+String(AnimFrame));
+            if(AnimFrame < preFrames)
+            {
+                continue;
+            }
             for block in S
             {
-                if(AnimFrame >= 10)
+                block.nod.color = .white;
+                if(AnimFrame >= stayFrames)
                 {
-                    block.nod.alpha *= 0.9;
-                    block.nod.size.width *= 0.9;
-                    block.nod.size.height *= 0.9;
-                    if(AnimFrame == 30)
+                    block.nod.alpha *= decayFactor;
+                    block.nod.size.width *= decayFactor;
+                    block.nod.size.height *= decayFactor;
+                    if(AnimFrame == endFrame)
                     {
                         Field[block.iPos][block.jPos] = nil;
                         block.nod.removeFromParent();
                     }
                 }
             }
-            if(AnimFrame == 30)
+            if(AnimFrame == endFrame)
             {
                 BtmMatches[MatchFrame] = nil;
             }
@@ -331,27 +343,27 @@ class PlayField
         
         for (MatchFrame,S) in NilMatches
         {
-            print("ANIMATING MATCH")
             let AnimFrame = frame-MatchFrame;
-            print("Animating Frame "+String(AnimFrame));
+            if(AnimFrame < preFrames)
+            {
+                continue;
+            }
             for block in S
             {
-                if(AnimFrame >= 10)
+                block.nod.color = .white;
+                if(AnimFrame >= stayFrames)
                 {
-                    block.nod.alpha *= 0.9;
-                    block.nod.size.width *= 0.9;
-                    block.nod.size.height *= 0.9;
-                    if(AnimFrame == 30)
+                    block.nod.alpha *= decayFactor;
+                    block.nod.size.width *= decayFactor;
+                    block.nod.size.height *= decayFactor;
+                    if(AnimFrame == endFrame)
                     {
-                        if(block === Field[block.iPos][block.jPos])
-                        {
-                            Field[block.iPos][block.jPos] = nil;
-                        }
+                        Field[block.iPos][block.jPos] = nil;
                         block.nod.removeFromParent();
                     }
                 }
             }
-            if(AnimFrame == 30)
+            if(AnimFrame == endFrame)
             {
                 NilMatches[MatchFrame] = nil;
             }
