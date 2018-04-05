@@ -57,7 +57,7 @@ class GameScene: SKScene
         backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
         backgroundGrid?.fillColor = UIColor.black;
         self.addChild(backgroundGrid!);
-        playField = PlayField(cols:6,rows:44,scene:self);
+        playField = PlayField(cols:6, rows:44, playerTop:playerTop!, playerBottom:playerBottom!, scene:self);
         
         backgroundGrid?.zPosition = -1;
         //*/
@@ -195,9 +195,11 @@ class GameScene: SKScene
             let BFrame = playerBottom!.runTo(targetFrame: playField!.GameFrame,playField: playField!);
             let TFrame = playerTop!   .runTo(targetFrame: playField!.GameFrame,playField: playField!);
             // If neither player is less than 15 frames behind
-            if(playField!.GameFrame - BFrame < 15 && playField!.GameFrame - TFrame < 15)
+            if((playField!.GameFrame - BFrame) < 15 && (playField!.GameFrame - TFrame < 15))
+            //if(BFrame == TFrame)
             {
                 playField!.AdvanceFrame();
+                
             }
         }
         else

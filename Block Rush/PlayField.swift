@@ -14,11 +14,23 @@ class PlayField
     var GameFrame: Int;
     var GameReady: Bool;
     let CenterBar: SKSpriteNode;
+    var TopMatches: [Int: Set<Block> ];
+    var BtmMatches: [Int: Set<Block> ]
+    var NilMatches: [Int: Set<Block> ];
+    var playerTop: Player;
+    var playerBottom: Player;
     
-    init(cols:Int, rows:Int, scene:SKScene)
+    init(cols:Int, rows:Int, playerTop t:Player, playerBottom b: Player, scene:SKScene)
     {
         GameFrame = 0;
         GameReady = false;
+        
+        TopMatches = [:];
+        BtmMatches = [:];
+        NilMatches = [:];
+        
+        playerTop = t;
+        playerBottom = b;
         
         let inArr = Array<Block?>(repeating: nil, count:rows);
         Field = Array<Array<Block?>>(repeating: inArr, count:cols);
@@ -55,6 +67,8 @@ class PlayField
                 block.CreditTop = false;
                 block.LockFrame = frame;
                 Field[column][i] = block;
+                block.iPos = column;
+                block.jPos = i;
                 return;
             }
         }
@@ -76,6 +90,8 @@ class PlayField
                 block.CreditTop = true;
                 block.LockFrame = frame;
                 Field[column][i] = block;
+                block.iPos = column;
+                block.jPos = i;
                 return;
             }
         }
@@ -93,11 +109,76 @@ class PlayField
     
     func AdvanceFrame()
     {
+        let DoFrame = GameFrame-20;
+        EvalMatches(frame: DoFrame);
+        //
+        AnimMatches(frame: DoFrame);
+        let Fell = Cascade();
+        if(!Fell)
+        {
+            if(TopMatches.isEmpty)
+            {
+                playerTop.Unfreeze();
+            }
+            if(BtmMatches.isEmpty)
+            {
+                playerBottom.Unfreeze();
+            }
+        }
+        //
         GameFrame += 1;
+    }
+    
+    func ApplyMatch(blocks: [Block],frame: Int, creditTop: Bool?)
+    {
+        for block in blocks
+        {
+            block.nod.color = .white;
+            block.nod.size.width*=1.2;
+            block.nod.size.height*=1.2;
+            block.nod.zPosition = 2;
+        }
+        if(creditTop == nil)
+        {
+            if(NilMatches[frame] == nil)
+            {
+                NilMatches[frame] = (Set<Block>()).union(blocks);
+            }
+            else
+            {
+                NilMatches[frame]!.formUnion(blocks);
+            }
+        }
+        else if(creditTop! == true)
+        {
+            if(TopMatches[frame] == nil)
+            {
+                TopMatches[frame] = (Set<Block>()).union(blocks);
+            }
+            else
+            {
+                TopMatches[frame]!.formUnion(blocks);
+            }
+        }
+        else
+        {
+            if(BtmMatches[frame] == nil)
+            {
+                BtmMatches[frame] = (Set<Block>()).union(blocks);
+            }
+            else
+            {
+                BtmMatches[frame]!.formUnion(blocks);
+            }
+        }
+    }
+    
+    func EvalMatches(frame: Int)
+    {
         var TotalMatched: Set<Block> = [];
         //Detect Horizontal Matches
         
-        let DetectVec = [(0,1),(1,0),(1,1)];
+        let DetectVec = [(0,1),(1,0),(1,1),(1,-1)];
         for v in DetectVec
         {
             var DirMatched: Set<Block> = [];
@@ -105,9 +186,26 @@ class PlayField
             let y = v.1;
             for i in 0...(columns()-1-3*x)
             {
-                for j in 0...(rows()-1-3*y)
+                let s: [Int];
+                if(y >= 0)
+                {
+                    s = (0...(rows()-1-3*y)).sorted();
+                }
+                else
+                {
+                    s = (-3*y...(rows()-1)).reversed();
+                }
+                for j in s
                 {
                     if(Field[i][j] == nil)
+                    {
+                        continue;
+                    }
+                    if(Field[i][j]!.LockFrame > frame)
+                    {
+                        continue;
+                    }
+                    if(Field[i][j]!.col == nil)
                     {
                         continue;
                     }
@@ -123,10 +221,14 @@ class PlayField
                         var Matched = [curBlk];
                         var I = i+x;
                         var J = j+y;
-                        while(I < columns() && j < rows())
+                        while(I >= 0 && I < columns() && J >= 0 && J < rows() )
                         {
                             let NewBlk = Field[I][J];
-                            if(NewBlk == nil || NewBlk!.col != MatchCol)
+                            if(NewBlk == nil || NewBlk!.col == nil || NewBlk!.col! != MatchCol)
+                            {
+                                break;
+                            }
+                            else if(NewBlk!.LockFrame > frame)
                             {
                                 break;
                             }
@@ -140,15 +242,190 @@ class PlayField
                         if(Matched.count >= 4)
                         {
                             DirMatched.formUnion(Matched);
+                            //credit match to proper player
+                            var Mframe = -1;
+                            var MplayerTop: Bool? = nil;
+                            for b in Matched
+                            {
+                                if(b.LockFrame == Mframe)
+                                {
+                                    if(MplayerTop != b.CreditTop)
+                                    {
+                                        MplayerTop = nil;
+                                    }
+                                }
+                                else if(b.LockFrame > Mframe)
+                                {
+                                    Mframe = b.LockFrame;
+                                    MplayerTop = b.CreditTop;
+                                }
+                            }
+                            ApplyMatch(blocks: Matched, frame: frame, creditTop: MplayerTop);
                         }
                     }
                 }
             }
             TotalMatched.formUnion(DirMatched);
         }
-        for n in TotalMatched
+        for block in TotalMatched
         {
-            n.nod.color = .cyan;
+            block.col = nil;
         }
+    }
+    
+    func AnimMatches(frame: Int)
+    {
+        for (MatchFrame,S) in TopMatches
+        {
+            print("ANIMATING MATCH")
+            let AnimFrame = frame-MatchFrame;
+            print("Animating Frame "+String(AnimFrame));
+            for block in S
+            {
+                if(AnimFrame >= 10)
+                {
+                    block.nod.alpha *= 0.9;
+                    block.nod.size.width *= 0.9;
+                    block.nod.size.height *= 0.9;
+                    if(AnimFrame == 30)
+                    {
+                        Field[block.iPos][block.jPos] = nil;
+                        block.nod.removeFromParent();
+                    }
+                }
+            }
+            if(AnimFrame == 30)
+            {
+                TopMatches[MatchFrame] = nil;
+            }
+        }
+        
+        //
+        
+        for (MatchFrame,S) in BtmMatches
+        {
+            print("ANIMATING MATCH")
+            let AnimFrame = frame-MatchFrame;
+            print("Animating Frame "+String(AnimFrame));
+            for block in S
+            {
+                if(AnimFrame >= 10)
+                {
+                    block.nod.alpha *= 0.9;
+                    block.nod.size.width *= 0.9;
+                    block.nod.size.height *= 0.9;
+                    if(AnimFrame == 30)
+                    {
+                        Field[block.iPos][block.jPos] = nil;
+                        block.nod.removeFromParent();
+                    }
+                }
+            }
+            if(AnimFrame == 30)
+            {
+                BtmMatches[MatchFrame] = nil;
+            }
+        }
+        
+        //
+        
+        for (MatchFrame,S) in NilMatches
+        {
+            print("ANIMATING MATCH")
+            let AnimFrame = frame-MatchFrame;
+            print("Animating Frame "+String(AnimFrame));
+            for block in S
+            {
+                if(AnimFrame >= 10)
+                {
+                    block.nod.alpha *= 0.9;
+                    block.nod.size.width *= 0.9;
+                    block.nod.size.height *= 0.9;
+                    if(AnimFrame == 30)
+                    {
+                        if(block === Field[block.iPos][block.jPos])
+                        {
+                            Field[block.iPos][block.jPos] = nil;
+                        }
+                        block.nod.removeFromParent();
+                    }
+                }
+            }
+            if(AnimFrame == 30)
+            {
+                NilMatches[MatchFrame] = nil;
+            }
+        }
+    }
+    func Cascade() -> Bool
+    {
+        var ret = false;
+        for i in 0...columns()-1
+        {
+            var jFrom = rows()/2-2;
+            
+        columnBaseLoop:
+            for jTo in (0...rows()/2-1).reversed()
+            {
+                if(Field[i][jTo] == nil)
+                {
+                    let block: Block;
+                    while(Field[i][jFrom] == nil || jTo <= jFrom)
+                    {
+                        jFrom-=1;
+                        if(jFrom == -1)
+                        {
+                            break columnBaseLoop;
+                        }
+                    }
+                    block = Field[i][jFrom]!;
+                    
+                    if(block.col == nil)
+                    {
+                        continue;
+                    }
+                    ret = true;
+                    
+                    Field[i][jFrom] = nil;
+                    
+                    Field[i][jTo] = block;
+                    block.nod.position = GetPosition(column:i,row:jTo);
+                    block.iPos = i;
+                    block.jPos = jTo;
+                }
+            }
+            jFrom = rows()/2+1;
+            
+        columnBaseLoop:
+            for jTo in rows()/2...rows()-1
+            {
+                if(Field[i][jTo] == nil)
+                {
+                    let block: Block;
+                    while(Field[i][jFrom] == nil || jTo >= jFrom)
+                    {
+                        jFrom+=1;
+                        if(jFrom == rows())
+                        {
+                            break columnBaseLoop;
+                        }
+                    }
+                    block = Field[i][jFrom]!;
+                    
+                    if(block.col == nil)
+                    {
+                        continue;
+                    }
+                    ret = true;
+                    
+                    Field[i][jFrom] = nil;
+                    
+                    Field[i][jTo] = block;
+                    block.nod.position = GetPosition(column:i,row:jTo);block.iPos = i;
+                    block.jPos = jTo;
+                }
+            }
+        }
+        return ret;
     }
 }

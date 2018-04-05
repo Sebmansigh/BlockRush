@@ -20,6 +20,7 @@ class Player
     internal var readyPiece: Piece?;
     internal var nextFrame: Int;     //The frame at which to deliver the player's next piece
     internal var pieceQueue: Queue<Piece>;
+    private var frozen: Bool;
     public var columnOver = 3;
     
     //UI LOGIC
@@ -35,6 +36,7 @@ class Player
         nextFrame = 200;
         readyPiece = nil;
         inputDevice = device;
+        frozen = false;
         //
         
         for _ in 0...4
@@ -96,6 +98,20 @@ class Player
         //Must override
     }
     
+    func Freeze()
+    {
+        frozen = true;
+    }
+    
+    func Unfreeze()
+    {
+        if(frozen)
+        {
+            frozen = false;
+            nextFrame = curFrame+10;
+        }
+    }
+    
     func Execute(input: Input,field: PlayField)
     {
         //Must override.
@@ -109,7 +125,7 @@ class Player
         while(inputDevice.CanEval() && curFrame < targetFrame)
         {
             inputDevice.EvalFrame();
-            if(curFrame == nextFrame)
+            if(curFrame == nextFrame && !frozen)
             {
                 ReadyNext();
             }

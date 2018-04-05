@@ -15,16 +15,20 @@ class Block:Hashable
         return lhs === rhs;
     }
     
-    let col: Int;
+    var col: Int?;
+    let initCol: Int;
     let nod: SKSpriteNode;
-    var CreditTop: Bool = false;
+    var CreditTop: Bool? = nil;
     var LockFrame: Int = -1;
+    var iPos = -1;
+    var jPos = -1;
     init(nColor: Int)
     {
         col = nColor;
+        initCol = nColor;
         //nod = SKShapeNode(rectOf: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
         nod = SKSpriteNode(texture: nil,
-                           color: BlockRush.BlockColors[col],
+                           color: BlockRush.BlockColors[col!],
                            size: CGSize(width: BlockRush.BlockWidth-2, height: BlockRush.BlockWidth/2-2));
         
         //nod.st
@@ -32,6 +36,6 @@ class Block:Hashable
     }
     var hashValue: Int
     {
-        return (col*col*col)+(nod.hashValue)+LockFrame;
+        return (initCol*initCol*initCol)+(nod.hashValue)+LockFrame;
     }
 }
