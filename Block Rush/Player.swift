@@ -11,6 +11,8 @@ import GameKit
 
 class Player
 {
+    public var chainLevel: Int;
+    public var storedPower: Int;
     //INPUT LOGIC
     internal var curFrame: Int;      //The most recently executed frame
     internal let inputDevice: InputDevice;
@@ -37,6 +39,9 @@ class Player
         readyPiece = nil;
         inputDevice = device;
         frozen = false;
+        //
+        chainLevel = 0;
+        storedPower = 0;
         //
         
         for _ in 0...4
@@ -91,6 +96,7 @@ class Player
         let p = pieceQueue.dequeue();
         Ready(p);
         GeneratePiece();
+        chainLevel = 0;
     }
     
     func Play(_ field: PlayField)

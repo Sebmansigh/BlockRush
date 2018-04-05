@@ -107,13 +107,31 @@ class PlayField
         return CGPoint(x: pX, y: pY);
     }
     
+    func EvalChain(player: Player, numMatched: Int) -> Int
+    {
+        player.chainLevel += 1;
+        let linkDamage = BlockRush.CalculateDamage(chainLevel: player.chainLevel, blocksCleared: numMatched)
+        //
+        return linkDamage;
+    }
+    
+    func AnimChainTop(frame: Int)
+    {
+        
+    }
+    
+    func AnimChainBottom(frame: Int)
+    {
+        
+    }
+    
     func AdvanceFrame()
     {
         let DoFrame = GameFrame-20;
         EvalMatches(frame: DoFrame);
         //
         AnimMatches(frame: DoFrame);
-        let Fell = Cascade();
+        let Fell = Cascade(frame: DoFrame);
         if(!Fell)
         {
             if(TopMatches.isEmpty)
@@ -284,10 +302,19 @@ class PlayField
         for (MatchFrame,S) in TopMatches
         {
             let AnimFrame = frame-MatchFrame;
+            
             if(AnimFrame < preFrames)
             {
                 continue;
             }
+            if(AnimFrame == preFrames)
+            {
+                let linkDamage = EvalChain(player: playerTop, numMatched: S.count);
+                print("BOTTOM PLAYER-----");
+                print(String(playerTop.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
+            }
+            AnimChainTop(frame: AnimFrame);
+            
             for block in S
             {
                 block.nod.color = .white;
@@ -318,9 +345,17 @@ class PlayField
             {
                 continue;
             }
+            if(AnimFrame == preFrames)
+            {
+                let linkDamage = EvalChain(player: playerBottom, numMatched: S.count);
+                print("BOTTOM PLAYER-----");
+                print(String(playerBottom.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
+            }
+            AnimChainBottom(frame: frame);
             for block in S
             {
                 block.nod.color = .white;
+                
                 if(AnimFrame >= stayFrames)
                 {
                     block.nod.alpha *= decayFactor;
@@ -328,7 +363,23 @@ class PlayField
                     block.nod.size.height *= decayFactor;
                     if(AnimFrame == endFrame)
                     {
-                        Field[block.iPos][block.jPos] = nil;
+                        let I = block.iPos;
+                        let J = block.jPos;
+                        Field[I][J] = nil;
+                        if(J <= rows()/2-1)
+                        {
+                            if(J-1 >= 0 && Field[I][J-1] != nil)
+                            {
+                                Field[I][J-1]?.CreditTop = block.CreditTop;
+                            }
+                        }
+                        else
+                        {
+                            if(J+1 < rows() && Field[I][J+1] != nil)
+                            {
+                                Field[I][J+1]?.CreditTop = block.CreditTop;
+                            }
+                        }
                         block.nod.removeFromParent();
                     }
                 }
@@ -369,13 +420,14 @@ class PlayField
             }
         }
     }
-    func Cascade() -> Bool
+    func Cascade(frame:Int) -> Bool
     {
         var ret = false;
         for i in 0...columns()-1
         {
             var jFrom = rows()/2-2;
-            
+            var Credit: Bool? = nil;
+            var blockFell = false;
         columnBaseLoop:
             for jTo in (0...rows()/2-1).reversed()
             {
@@ -396,8 +448,15 @@ class PlayField
                     {
                         continue;
                     }
-                    ret = true;
+                    if(!blockFell)
+                    {
+                        Credit = block.CreditTop;
+                        blockFell = true
+                        ret = true;
+                    }
                     
+                    block.CreditTop = Credit;
+                    block.LockFrame = frame;
                     Field[i][jFrom] = nil;
                     
                     Field[i][jTo] = block;
@@ -406,7 +465,9 @@ class PlayField
                     block.jPos = jTo;
                 }
             }
+            
             jFrom = rows()/2+1;
+            blockFell = false;
             
         columnBaseLoop:
             for jTo in rows()/2...rows()-1
@@ -428,7 +489,15 @@ class PlayField
                     {
                         continue;
                     }
-                    ret = true;
+                    if(!blockFell)
+                    {
+                        Credit = block.CreditTop;
+                        blockFell = true
+                        ret = true;
+                    }
+                    
+                    block.CreditTop = Credit;
+                    block.LockFrame = frame;
                     
                     Field[i][jFrom] = nil;
                     
