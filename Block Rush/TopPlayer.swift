@@ -31,6 +31,10 @@ class TopPlayer: Player
     
     override func Ready(_ p: Piece)
     {
+        if(readyPiece != nil)
+        {
+            fatalError("Piece already readied!");
+        }
         readyPiece = p;
         columnOver = -1;
         MoveToColumn(2);

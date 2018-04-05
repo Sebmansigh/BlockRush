@@ -292,66 +292,51 @@ class PlayField
         }
     }
     
-    func AnimMatches(frame: Int)
+    private func AnimMatchesPartial(frame: Int, Matches: inout [Int:Set<Block>],CreditTop: Bool?)
     {
         let decayFactor: CGFloat = 0.92;
         let preFrames: Int = 30;
         let stayFrames: Int = 50;
         let endFrame: Int = 90;
         
-        for (MatchFrame,S) in TopMatches
+        for (MatchFrame,S) in Matches
         {
             let AnimFrame = frame-MatchFrame;
-            
             if(AnimFrame < preFrames)
             {
                 continue;
             }
             if(AnimFrame == preFrames)
             {
-                let linkDamage = EvalChain(player: playerTop, numMatched: S.count);
-                print("BOTTOM PLAYER-----");
-                print(String(playerTop.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
-            }
-            AnimChainTop(frame: AnimFrame);
-            
-            for block in S
-            {
-                block.nod.color = .white;
-                if(AnimFrame >= stayFrames)
+                if(CreditTop != nil)
                 {
-                    block.nod.alpha *= decayFactor;
-                    block.nod.size.width *= decayFactor;
-                    block.nod.size.height *= decayFactor;
-                    if(AnimFrame == endFrame)
+                    let linkDamage: Int;
+                    let p : Player;
+                    if(CreditTop!)
                     {
-                        Field[block.iPos][block.jPos] = nil;
-                        block.nod.removeFromParent();
+                        print("TOP PLAYER-----");
+                        p = playerTop;
                     }
+                    else
+                    {
+                        print("BOTTOM PLAYER-----");
+                        p = playerBottom;
+                    }
+                    linkDamage = EvalChain(player: p, numMatched: S.count);
+                    print(String(p.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
                 }
             }
-            if(AnimFrame == endFrame)
+            if(CreditTop != nil)
             {
-                TopMatches[MatchFrame] = nil;
+                if(CreditTop!)
+                {
+                    AnimChainTop(frame: frame)
+                }
+                else
+                {
+                    AnimChainBottom(frame: frame)
+                }
             }
-        }
-        
-        //
-        
-        for (MatchFrame,S) in BtmMatches
-        {
-            let AnimFrame = frame-MatchFrame;
-            if(AnimFrame < preFrames)
-            {
-                continue;
-            }
-            if(AnimFrame == preFrames)
-            {
-                let linkDamage = EvalChain(player: playerBottom, numMatched: S.count);
-                print("BOTTOM PLAYER-----");
-                print(String(playerBottom.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
-            }
-            AnimChainBottom(frame: frame);
             for block in S
             {
                 block.nod.color = .white;
@@ -370,14 +355,14 @@ class PlayField
                         {
                             if(J-1 >= 0 && Field[I][J-1] != nil)
                             {
-                                Field[I][J-1]?.CreditTop = block.CreditTop;
+                                Field[I][J-1]?.CreditTop = CreditTop;
                             }
                         }
                         else
                         {
                             if(J+1 < rows() && Field[I][J+1] != nil)
                             {
-                                Field[I][J+1]?.CreditTop = block.CreditTop;
+                                Field[I][J+1]?.CreditTop = CreditTop;
                             }
                         }
                         block.nod.removeFromParent();
@@ -386,40 +371,19 @@ class PlayField
             }
             if(AnimFrame == endFrame)
             {
-                BtmMatches[MatchFrame] = nil;
-            }
-        }
-        
-        //
-        
-        for (MatchFrame,S) in NilMatches
-        {
-            let AnimFrame = frame-MatchFrame;
-            if(AnimFrame < preFrames)
-            {
-                continue;
-            }
-            for block in S
-            {
-                block.nod.color = .white;
-                if(AnimFrame >= stayFrames)
-                {
-                    block.nod.alpha *= decayFactor;
-                    block.nod.size.width *= decayFactor;
-                    block.nod.size.height *= decayFactor;
-                    if(AnimFrame == endFrame)
-                    {
-                        Field[block.iPos][block.jPos] = nil;
-                        block.nod.removeFromParent();
-                    }
-                }
-            }
-            if(AnimFrame == endFrame)
-            {
-                NilMatches[MatchFrame] = nil;
+                Matches[MatchFrame] = nil;
             }
         }
     }
+    
+    func AnimMatches(frame: Int)
+    {
+        AnimMatchesPartial(frame: frame, Matches: &TopMatches, CreditTop: true);
+        AnimMatchesPartial(frame: frame, Matches: &BtmMatches, CreditTop: false);
+        AnimMatchesPartial(frame: frame, Matches: &NilMatches, CreditTop: nil);
+    }
+    
+    
     func Cascade(frame:Int) -> Bool
     {
         var ret = false;

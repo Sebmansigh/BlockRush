@@ -47,6 +47,13 @@ class GameScene: SKScene
     
     override func sceneDidLoad()
     {
+        /*
+         
+        for i in 4...16
+        {
+            print(BlockRush.CalculateDamage(chainLevel: 2, blocksCleared: i));
+        }
+        */
         //*
         BlockRush.BlockWidth = frame.width * 0.12;
         
