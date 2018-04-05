@@ -47,6 +47,10 @@ class GameScene: SKScene
     
     override func sceneDidLoad()
     {
+        if(playField != nil)
+        {
+            return;
+        }
         /*
          
         for i in 4...16

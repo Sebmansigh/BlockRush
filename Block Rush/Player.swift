@@ -109,12 +109,20 @@ class Player
         frozen = true;
     }
     
-    func Unfreeze()
+    func Unfreeze() -> Int
     {
         if(frozen)
         {
             frozen = false;
             nextFrame = curFrame+10;
+            
+            let r = storedPower;
+            storedPower = 0;
+            return r;
+        }
+        else
+        {
+            return 0;
         }
     }
     
@@ -134,6 +142,14 @@ class Player
             if(curFrame == nextFrame && !frozen)
             {
                 ReadyNext();
+            }
+            
+            if(curFrame+1 == nextFrame && !frozen)
+            {
+                if(playField.StackMove(player: self))
+                {
+                    nextFrame += 1;
+                }
             }
             
             for I in Input.ARRAY

@@ -20,9 +20,16 @@ class PlayField
     var playerTop: Player;
     var playerBottom: Player;
     var gameScene: SKScene;
+    var fieldNode: SKNode;
+    var movePower: Int;
+    var moveAmount: Int;
+    var LPowerNodes: [SKSpriteNode];
+    var RPowerNodes: [SKSpriteNode];
+    var curPowerVal: Int;
     
     init(cols:Int, rows:Int, playerTop t:Player, playerBottom b: Player, scene:SKScene)
     {
+        fieldNode = SKNode();
         GameFrame = 0;
         GameReady = false;
         
@@ -32,15 +39,22 @@ class PlayField
         
         playerTop = t;
         playerBottom = b;
+        movePower = 0;
+        moveAmount = 0;
         
         let inArr = Array<Block?>(repeating: nil, count:rows);
         Field = Array<Array<Block?>>(repeating: inArr, count:cols);
         CenterBar = SKSpriteNode(texture: nil,
                                  color: .white,
                                  size: CGSize(width: BlockRush.BlockWidth*6, height: 8));
-        scene.addChild(CenterBar);
+        fieldNode.addChild(CenterBar);
+        scene.addChild(fieldNode);
         gameScene = scene;
         CenterBar.zPosition = 2;
+        
+        LPowerNodes = [];
+        RPowerNodes = [];
+        curPowerVal = 0;
     }
     
     func columns() -> Int
@@ -51,6 +65,154 @@ class PlayField
     func rows() -> Int
     {
         return Field[0].count;
+    }
+    
+    func AnimPower()
+    {
+        let targetPowVal = playerBottom.storedPower-playerTop.storedPower+movePower;
+        if(curPowerVal == targetPowVal)
+        {
+            return;
+        }
+        
+        if(curPowerVal < 0 || (curPowerVal==0 && targetPowVal < 0))
+        {
+            //Displayed power is towards bottom player!
+            
+            let cp = curPowerVal % 8;
+            
+            if(curPowerVal > targetPowVal)
+            {
+                //Total power is also towards bottom player!
+                curPowerVal -= 1;
+                if(cp == 0)
+                {
+                    let Bw = BlockRush.BlockWidth;
+                    let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
+                    let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
+                    
+                    LPowerNodes.append(NewNodeL)
+                    RPowerNodes.append(NewNodeR);
+                    
+                    let pY = -CGFloat(LPowerNodes.count)*Bw/4+Bw/8;
+                    
+                    //Total power is towards bottom player
+                    NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
+                    NewNodeR.position = CGPoint(x: Bw*3,y:pY);
+                    
+                    NewNodeL.alpha = 0.125;
+                    NewNodeR.alpha = 0.125;
+                    
+                    gameScene.addChild(NewNodeL);
+                    gameScene.addChild(NewNodeR);
+                    
+                }
+                else
+                {
+                    //Increase alpha of topmost node
+                    let Lnode = LPowerNodes.last!;
+                    let Rnode = RPowerNodes.last!;
+                    var a = -CGFloat(curPowerVal % 8)/8;
+                    if(a == 0)
+                    {
+                        a = 1;
+                    }
+                    Lnode.alpha = a;
+                    Rnode.alpha = a;
+                }
+            }
+            else
+            {
+                //Total power is less towards bottom player!
+                curPowerVal += 1;
+                
+                //Decrease alpha of topmost node
+                let Lnode = LPowerNodes.last!;
+                let Rnode = RPowerNodes.last!;
+                let a = -CGFloat(curPowerVal % 8)/8;
+                if(a == 0)
+                {
+                    LPowerNodes.removeLast();
+                    RPowerNodes.removeLast();
+                    Lnode.removeFromParent();
+                    Rnode.removeFromParent();
+                }
+                else
+                {
+                    Lnode.alpha = a;
+                    Rnode.alpha = a;
+                }
+            }
+        }
+        else
+        {
+            //Displayed power is towards top player!
+            
+            let cp = curPowerVal % 8;
+            
+            if(curPowerVal < targetPowVal)
+            {
+                //Total power is also towards top player!
+                curPowerVal += 1;
+                if(cp == 0)
+                {
+                    let Bw = BlockRush.BlockWidth;
+                    let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
+                    let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
+                    
+                    LPowerNodes.append(NewNodeL)
+                    RPowerNodes.append(NewNodeR);
+                    
+                    let pY = CGFloat(LPowerNodes.count)*Bw/4-Bw/8;
+                    
+                    //Total power is towards bottom player
+                    NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
+                    NewNodeR.position = CGPoint(x: Bw*3,y:pY);
+                    
+                    NewNodeL.alpha = 0.125;
+                    NewNodeR.alpha = 0.125;
+                    
+                    gameScene.addChild(NewNodeL);
+                    gameScene.addChild(NewNodeR);
+                    
+                }
+                else
+                {
+                    //Increase alpha of bottommost node
+                    let Lnode = LPowerNodes.last!;
+                    let Rnode = RPowerNodes.last!;
+                    var a = CGFloat(curPowerVal % 8)/8;
+                    if(a == 0)
+                    {
+                        a = 1;
+                    }
+                    Lnode.alpha = a;
+                    Rnode.alpha = a;
+                }
+            }
+            else
+            {
+                //Total power is less towards bottom player!
+                curPowerVal -= 1;
+                
+                //Decrease alpha of topmost node
+                let Lnode = LPowerNodes.last!;
+                let Rnode = RPowerNodes.last!;
+                let a = CGFloat(curPowerVal % 8)/8;
+                if(a == 0)
+                {
+                    LPowerNodes.removeLast();
+                    RPowerNodes.removeLast();
+                    Lnode.removeFromParent();
+                    Rnode.removeFromParent();
+                }
+                else
+                {
+                    Lnode.alpha = a;
+                    Rnode.alpha = a;
+                }
+            }
+        }
     }
     
     func PushBottom(column: Int, piece: Piece, frame: Int)
@@ -71,6 +233,8 @@ class PlayField
                 Field[column][i] = block;
                 block.iPos = column;
                 block.jPos = i;
+                block.nod.removeFromParent();
+                fieldNode.addChild(block.nod);
                 return;
             }
         }
@@ -94,6 +258,8 @@ class PlayField
                 Field[column][i] = block;
                 block.iPos = column;
                 block.jPos = i;
+                block.nod.removeFromParent();
+                fieldNode.addChild(block.nod);
                 return;
             }
         }
@@ -113,9 +279,52 @@ class PlayField
     {
         player.chainLevel += 1;
         let linkDamage = BlockRush.CalculateDamage(chainLevel: player.chainLevel, blocksCleared: numMatched)
+        
+        player.storedPower += linkDamage;
         //
         return linkDamage;
     }
+    
+    func StackMove(player: Player) -> Bool
+    {
+        if(movePower < 0)
+        {
+            if(player === playerBottom)
+            {
+                movePower += 1;
+                moveAmount -= 1;
+                
+                fieldNode.position = CGPoint(x: 0, y: BlockRush.BlockWidth*CGFloat(moveAmount)/32);
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if(movePower > 0)
+        {
+            if(player === playerTop)
+            {
+                movePower -= 1;
+                moveAmount += 1;
+                
+                fieldNode.position = CGPoint(x: 0, y: BlockRush.BlockWidth*CGFloat(moveAmount)/32);
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
     func AdvanceFrame()
     {
         let DoFrame = GameFrame-20;
@@ -127,13 +336,15 @@ class PlayField
         {
             if(TopMatches.isEmpty)
             {
-                playerTop.Unfreeze();
+                movePower -= playerTop.Unfreeze();
             }
             if(BtmMatches.isEmpty)
             {
-                playerBottom.Unfreeze();
+                movePower += playerBottom.Unfreeze();
             }
         }
+        AnimPower();
+        
         //
         GameFrame += 1;
     }
@@ -295,15 +506,6 @@ class PlayField
         }
         
         let Bw = BlockRush.BlockWidth;
-        /*
-        let RectNode = SKShapeNode(rectOf: CGSize(width: Bw*3, height: Bw/2));
-        
-        RectNode.lineWidth = 2;
-        RectNode.fillColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5);
-        RectNode.position = CGPoint(x:cX,y:cY);
-        
-        gameScene.addChild(RectNode);
-        */
         let BaseNode = SKNode();
         
         let ChainNode = SKLabelNode(fontNamed:"Avenir-HeavyOblique");
@@ -373,19 +575,6 @@ class PlayField
                     CreateChainEffect(blocks: S, creditTop: CreditTop!, chainLevel: p.chainLevel);
                 }
             }
-            /*
-            if(CreditTop != nil)
-            {
-                if(CreditTop!)
-                {
-                    AnimChainTop(frame: frame)
-                }
-                else
-                {
-                    AnimChainBottom(frame: frame)
-                }
-            }
-            */
             for block in S
             {
                 block.nod.color = .white;
