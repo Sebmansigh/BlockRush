@@ -19,6 +19,7 @@ class PlayField
     var NilMatches: [Int: Set<Block> ];
     var playerTop: Player;
     var playerBottom: Player;
+    var gameScene: SKScene;
     
     init(cols:Int, rows:Int, playerTop t:Player, playerBottom b: Player, scene:SKScene)
     {
@@ -38,6 +39,7 @@ class PlayField
                                  color: .white,
                                  size: CGSize(width: BlockRush.BlockWidth*6, height: 8));
         scene.addChild(CenterBar);
+        gameScene = scene;
         CenterBar.zPosition = 2;
     }
     
@@ -114,17 +116,6 @@ class PlayField
         //
         return linkDamage;
     }
-    
-    func AnimChainTop(frame: Int)
-    {
-        
-    }
-    
-    func AnimChainBottom(frame: Int)
-    {
-        
-    }
-    
     func AdvanceFrame()
     {
         let DoFrame = GameFrame-20;
@@ -292,6 +283,61 @@ class PlayField
         }
     }
     
+    func CreateChainEffect(blocks: Set<Block>,creditTop:Bool,chainLevel:Int)
+    {
+        let cN = CGFloat(blocks.count);
+        var cX: CGFloat = 0;
+        var cY: CGFloat = 0;
+        for b in blocks
+        {
+            cX += b.nod.position.x / cN;
+            cY += b.nod.position.y / cN;
+        }
+        
+        let Bw = BlockRush.BlockWidth;
+        /*
+        let RectNode = SKShapeNode(rectOf: CGSize(width: Bw*3, height: Bw/2));
+        
+        RectNode.lineWidth = 2;
+        RectNode.fillColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5);
+        RectNode.position = CGPoint(x:cX,y:cY);
+        
+        gameScene.addChild(RectNode);
+        */
+        let BaseNode = SKNode();
+        
+        let ChainNode = SKLabelNode(fontNamed:"Avenir-HeavyOblique");
+        ChainNode.fontSize = Bw/2;
+        ChainNode.position = CGPoint(x:0,y:-Bw/6);
+        ChainNode.fontColor = UIColor.yellow;
+        ChainNode.text = "CHAIN";
+        ChainNode.verticalAlignmentMode = .center
+        
+        BaseNode.addChild(ChainNode);
+        
+        let NumNode = SKLabelNode(fontNamed:"Avenir-BlackOblique");
+        NumNode.fontSize = Bw*2;
+        NumNode.position = CGPoint(x: -Bw*5/4,y:0);
+        NumNode.fontColor = UIColor.yellow;
+        NumNode.text = String(chainLevel);
+        NumNode.verticalAlignmentMode = .center
+        
+        NumNode.run(.scale(by: 1/2, duration: 0.25))
+        
+        BaseNode.addChild(NumNode);
+        
+        BaseNode.position = CGPoint(x: cX, y: cY)
+        gameScene.addChild(BaseNode);
+        BaseNode.run(.fadeOut(withDuration: 2)) {
+            BaseNode.removeFromParent();
+        };
+
+        if(creditTop)
+        {
+            BaseNode.zRotation = .pi;
+        }
+    }
+    
     private func AnimMatchesPartial(frame: Int, Matches: inout [Int:Set<Block>],CreditTop: Bool?)
     {
         let decayFactor: CGFloat = 0.92;
@@ -324,8 +370,10 @@ class PlayField
                     }
                     linkDamage = EvalChain(player: p, numMatched: S.count);
                     print(String(p.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
+                    CreateChainEffect(blocks: S, creditTop: CreditTop!, chainLevel: p.chainLevel);
                 }
             }
+            /*
             if(CreditTop != nil)
             {
                 if(CreditTop!)
@@ -337,6 +385,7 @@ class PlayField
                     AnimChainBottom(frame: frame)
                 }
             }
+            */
             for block in S
             {
                 block.nod.color = .white;
