@@ -24,6 +24,7 @@ class Player
     internal var pieceQueue: Queue<Piece>;
     private var frozen: Bool;
     public var columnOver = 3;
+    public var hasLost = false;
     
     //UI LOGIC
     internal var scene: SKScene;

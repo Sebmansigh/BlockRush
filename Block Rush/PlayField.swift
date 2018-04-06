@@ -25,6 +25,8 @@ class PlayField
     var moveAmount: Int;
     var LPowerNodes: [SKSpriteNode];
     var RPowerNodes: [SKSpriteNode];
+    var LBigNodes: [SKSpriteNode];
+    var RBigNodes: [SKSpriteNode];
     var curPowerVal: Int;
     
     init(cols:Int, rows:Int, playerTop t:Player, playerBottom b: Player, scene:SKScene)
@@ -54,6 +56,8 @@ class PlayField
         
         LPowerNodes = [];
         RPowerNodes = [];
+        LBigNodes = [];
+        RBigNodes = [];
         curPowerVal = 0;
     }
     
@@ -67,6 +71,7 @@ class PlayField
         return Field[0].count;
     }
     
+    
     func AnimPower()
     {
         let targetPowVal = playerBottom.storedPower-playerTop.storedPower+movePower;
@@ -74,6 +79,7 @@ class PlayField
         {
             return;
         }
+        let Bw = BlockRush.BlockWidth;
         
         if(curPowerVal < 0 || (curPowerVal==0 && targetPowVal < 0))
         {
@@ -83,11 +89,43 @@ class PlayField
             
             if(curPowerVal > targetPowVal)
             {
+                
                 //Total power is also towards bottom player!
                 curPowerVal -= 1;
                 if(cp == 0)
                 {
-                    let Bw = BlockRush.BlockWidth;
+                    if(LPowerNodes.count == rows()/2-2)
+                    {
+                        for n in LPowerNodes
+                        {
+                            n.removeFromParent();
+                        }
+                        for n in RPowerNodes
+                        {
+                            n.removeFromParent();
+                        }
+                        LPowerNodes = [];
+                        RPowerNodes = [];
+                        let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw*2/3-4, height: Bw/2-4));
+                        let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw*2/3-4, height: Bw/2-4));
+                        
+                        LBigNodes.append(NewNodeL);
+                        RBigNodes.append(NewNodeR);
+                        
+                        let pY = CGFloat(LBigNodes.count)*Bw/2-Bw/4;
+                        
+                        //Total power is towards bottom player
+                        NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
+                        NewNodeR.position = CGPoint(x: Bw*3,y:pY);
+                        
+                        NewNodeL.zPosition = 10;
+                        NewNodeR.zPosition = 10;
+                        
+                        gameScene.addChild(NewNodeL);
+                        gameScene.addChild(NewNodeR);
+                    }
+                    
+                    
                     let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
                     let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
                     
@@ -123,6 +161,34 @@ class PlayField
             }
             else
             {
+                if(LPowerNodes.count == 0)
+                {
+                    for _ in 1...rows()/2-2
+                    {
+                        let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
+                        let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
+                        
+                        LPowerNodes.append(NewNodeL)
+                        RPowerNodes.append(NewNodeR);
+                        
+                        let pY = -CGFloat(LPowerNodes.count)*Bw/4+Bw/8;
+                        
+                        //Total power is towards bottom player
+                        NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
+                        NewNodeR.position = CGPoint(x: Bw*3,y:pY);
+                        
+                        NewNodeL.alpha = 1;
+                        NewNodeR.alpha = 1;
+                        
+                        gameScene.addChild(NewNodeL);
+                        gameScene.addChild(NewNodeR);
+                    }
+                    
+                    let L = LBigNodes.popLast();
+                    let R = RBigNodes.popLast();
+                    L!.removeFromParent();
+                    R!.removeFromParent();
+                }
                 //Total power is less towards bottom player!
                 curPowerVal += 1;
                 
@@ -156,6 +222,37 @@ class PlayField
                 curPowerVal += 1;
                 if(cp == 0)
                 {
+                    if(LPowerNodes.count == rows()/2-2)
+                    {
+                        for n in LPowerNodes
+                        {
+                            n.removeFromParent();
+                        }
+                        for n in RPowerNodes
+                        {
+                            n.removeFromParent();
+                        }
+                        LPowerNodes = [];
+                        RPowerNodes = [];
+                        let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw*2/3-4, height: Bw/2-4));
+                        let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw*2/3-4, height: Bw/2-4));
+                        
+                        LBigNodes.append(NewNodeL);
+                        RBigNodes.append(NewNodeR);
+                        
+                        let pY = -CGFloat(LBigNodes.count)*Bw/2+Bw/4;
+                        
+                        //Total power is towards bottom player
+                        NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
+                        NewNodeR.position = CGPoint(x: Bw*3,y:pY);
+                        
+                        NewNodeL.zPosition = 10;
+                        NewNodeR.zPosition = 10;
+                        
+                        gameScene.addChild(NewNodeL);
+                        gameScene.addChild(NewNodeR);
+                    }
+                    
                     let Bw = BlockRush.BlockWidth;
                     let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
                     let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
@@ -192,6 +289,35 @@ class PlayField
             }
             else
             {
+                if(LPowerNodes.count == 0)
+                {
+                    for _ in 1...rows()/2-2
+                    {
+                        let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
+                        let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
+                        
+                        LPowerNodes.append(NewNodeL)
+                        RPowerNodes.append(NewNodeR);
+                        
+                        let pY = CGFloat(LPowerNodes.count)*Bw/4-Bw/8;
+                        
+                        //Total power is towards bottom player
+                        NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
+                        NewNodeR.position = CGPoint(x: Bw*3,y:pY);
+                        
+                        NewNodeL.alpha = 1;
+                        NewNodeR.alpha = 1;
+                        
+                        gameScene.addChild(NewNodeL);
+                        gameScene.addChild(NewNodeR);
+                    }
+                    
+                    let L = LBigNodes.popLast();
+                    let R = RBigNodes.popLast();
+                    L!.removeFromParent();
+                    R!.removeFromParent();
+                }
+                
                 //Total power is less towards bottom player!
                 curPowerVal -= 1;
                 
@@ -285,14 +411,55 @@ class PlayField
         return linkDamage;
     }
     
+    func DetectBottomPlayerLoss() -> Bool
+    {
+        /*
+        for j in 0...columns()-1
+        {
+            for i in rows()/2...rows()-1
+            {
+                if(Field[i][j] == nil)
+                {
+                    continue columnLoop;
+                }
+                
+                if(moveAmount <= lockCondition)
+                {
+                    
+                }
+            }
+            player.hasLost = true;
+            print("Bottom player loss detected");
+        }
+         */
+        return false;
+    }
+    
+    func DetectTopPlayerLoss() -> Bool
+    {
+        return false;
+    }
+    
     func StackMove(player: Player) -> Bool
     {
         if(movePower < 0)
         {
             if(player === playerBottom)
             {
+                
                 movePower += 1;
                 moveAmount -= 1;
+                
+                let lockCondition = (4-rows())*4
+                
+                if(moveAmount <= lockCondition)
+                {
+                    moveAmount = lockCondition;
+                    player.hasLost = true;
+                    //print("BottomPlayer Loses!");
+                }
+                
+                player.hasLost = DetectBottomPlayerLoss();
                 
                 fieldNode.position = CGPoint(x: 0, y: BlockRush.BlockWidth*CGFloat(moveAmount)/32);
                 
@@ -309,6 +476,17 @@ class PlayField
             {
                 movePower -= 1;
                 moveAmount += 1;
+                
+                let lockCondition = (rows()-4)*4
+                
+                if(moveAmount >= lockCondition)
+                {
+                    moveAmount = lockCondition;
+                    player.hasLost = true;
+                    //print("TopPlayer Loses!");
+                }
+                
+                player.hasLost = DetectTopPlayerLoss();
                 
                 fieldNode.position = CGPoint(x: 0, y: BlockRush.BlockWidth*CGFloat(moveAmount)/32);
                 
@@ -504,6 +682,9 @@ class PlayField
             cX += b.nod.position.x / cN;
             cY += b.nod.position.y / cN;
         }
+        
+        cX += fieldNode.position.x;
+        cY += fieldNode.position.y;
         
         let Bw = BlockRush.BlockWidth;
         let BaseNode = SKNode();
