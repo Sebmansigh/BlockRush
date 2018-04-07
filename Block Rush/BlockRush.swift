@@ -15,6 +15,9 @@ final class BlockRush
     public static var BlockWidth: CGFloat = 0;
     public static let BlockColors: [UIColor] = [UIColor.blue,UIColor.green,UIColor.red];
     
+    public static var GameWidth: CGFloat = 0;
+    public static var GameHeight: CGFloat = 0;
+    
     public static func CalculateDamage(chainLevel: Int, blocksCleared: Int) -> Int
     {
         let ClearVal: Int;

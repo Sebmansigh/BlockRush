@@ -14,6 +14,7 @@ class PlayField
     var GameFrame: Int;
     var GameReady: Bool;
     let CenterBar: SKSpriteNode;
+    let BackBar: SKSpriteNode;
     var TopMatches: [Int: Set<Block> ];
     var BtmMatches: [Int: Set<Block> ]
     var NilMatches: [Int: Set<Block> ];
@@ -48,11 +49,16 @@ class PlayField
         Field = Array<Array<Block?>>(repeating: inArr, count:cols);
         CenterBar = SKSpriteNode(texture: nil,
                                  color: .white,
-                                 size: CGSize(width: BlockRush.BlockWidth*6, height: 8));
+                                 size: CGSize(width: BlockRush.BlockWidth*6, height: BlockRush.BlockWidth/16));
+        BackBar = SKSpriteNode(texture: nil,
+                                 color: .gray,
+                                 size: CGSize(width: BlockRush.BlockWidth*6, height: BlockRush.BlockWidth/16));
         fieldNode.addChild(CenterBar);
         scene.addChild(fieldNode);
+        scene.addChild(BackBar);
         gameScene = scene;
         CenterBar.zPosition = 2;
+        BackBar.zPosition = -1;
         
         LPowerNodes = [];
         RPowerNodes = [];

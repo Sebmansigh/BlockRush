@@ -59,7 +59,11 @@ class GameScene: SKScene
         }
         */
         //*
-        BlockRush.BlockWidth = frame.width * 0.12;
+        
+        BlockRush.GameWidth = UIScreen.main.nativeBounds.width;
+        BlockRush.GameHeight = min(UIScreen.main.nativeBounds.height,UIScreen.main.nativeBounds.width*2);
+        
+        BlockRush.BlockWidth = min(BlockRush.GameWidth * 0.12,BlockRush.GameHeight/14);
         
         var seed: UInt64 = 0;
         arc4random_buf(&seed, MemoryLayout.size(ofValue: seed))
@@ -112,11 +116,11 @@ class GameScene: SKScene
     {
         if(touch == TopTouch)
         {
-            TTarget = 2+Int(touch.location(in: self).x / BlockRush.BlockWidth);
+            TTarget = 2+Int(ceil(touch.location(in: self).x / BlockRush.BlockWidth));
         }
         else if(touch == BottomTouch)
         {
-            BTarget = 2+Int(touch.location(in: self).x / BlockRush.BlockWidth);
+            BTarget = 2+Int(ceil(touch.location(in: self).x / BlockRush.BlockWidth));
         }
     }
     

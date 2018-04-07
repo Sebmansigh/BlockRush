@@ -22,8 +22,8 @@ class TopPlayer: Player
     {
         for i in 0...pieceQueue.count()-1
         {
-            let sX = -scene.frame.width * 0.45;
-            let sY = -scene.frame.height * (CGFloat(i-4)/10.0);
+            let sX = -BlockRush.GameWidth * 0.45;
+            let sY = -BlockRush.GameHeight * (CGFloat(i-4)/10.0);
             let CenterPt = CGPoint(x: sX, y: sY);
             pieceQueue.peek(i).SceneAdd(scene: scene, position: CenterPt);
         }
@@ -51,9 +51,9 @@ class TopPlayer: Player
     {
         let pX = BlockRush.BlockWidth/2 + BlockRush.BlockWidth*CGFloat(n-3);
         readyPiece?.FrontBlock.nod.position = CGPoint(x: pX,
-                                                      y:scene.frame.height/2-BlockRush.BlockWidth);
+                                                      y:BlockRush.GameHeight/2-BlockRush.BlockWidth);
         readyPiece?.RearBlock.nod.position = CGPoint(x: pX,
-                                                     y:scene.frame.height/2-BlockRush.BlockWidth/2);
+                                                     y:BlockRush.GameHeight/2-BlockRush.BlockWidth/2);
     }
     
     override func Execute(input: Input, field: PlayField)
