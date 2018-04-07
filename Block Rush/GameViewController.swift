@@ -14,9 +14,11 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let view = self.view as! SKView? {
+        if let view = self.view as! SKView?
+        {
             // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
+            if let scene = SKScene(fileNamed: "MainMenuScene")
+            {
                 // Set the scale mode to scale to fit the window
                 scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
                                     height: UIScreen.main.nativeBounds.height);

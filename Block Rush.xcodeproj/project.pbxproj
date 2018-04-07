@@ -26,6 +26,11 @@
 		A80CDA12206C382700AA579B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA11206C382700AA579B /* Player.swift */; };
 		A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80FE7012072BAE000E73E36 /* TopPlayer.swift */; };
 		A80FE7042072D8E900E73E36 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80FE7032072D8E900E73E36 /* Block.swift */; };
+		A8C395CF2079546D00D57AE0 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */; };
+		A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C395D02079548F00D57AE0 /* MainMenuScene.swift */; };
+		A8C395D320795A5C00D57AE0 /* MenuOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C395D220795A5C00D57AE0 /* MenuOption.swift */; };
+		A8C395D520795A9600D57AE0 /* GameMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C395D420795A9600D57AE0 /* GameMenu.swift */; };
+		A8C395D720795B3B00D57AE0 /* MenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C395D620795B3B00D57AE0 /* MenuAction.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +76,11 @@
 		A80CDA11206C382700AA579B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		A80FE7012072BAE000E73E36 /* TopPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPlayer.swift; sourceTree = "<group>"; };
 		A80FE7032072D8E900E73E36 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
+		A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
+		A8C395D02079548F00D57AE0 /* MainMenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
+		A8C395D220795A5C00D57AE0 /* MenuOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuOption.swift; sourceTree = "<group>"; };
+		A8C395D420795A9600D57AE0 /* GameMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMenu.swift; sourceTree = "<group>"; };
+		A8C395D620795B3B00D57AE0 /* MenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuAction.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +149,11 @@
 				A80539F320686FA40059562D /* Piece.swift */,
 				A80FE7032072D8E900E73E36 /* Block.swift */,
 				A80539F120686CC60059562D /* CustomCollections.swift */,
+				A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */,
+				A8C395D02079548F00D57AE0 /* MainMenuScene.swift */,
+				A8C395D220795A5C00D57AE0 /* MenuOption.swift */,
+				A8C395D420795A9600D57AE0 /* GameMenu.swift */,
+				A8C395D620795B3B00D57AE0 /* MenuAction.swift */,
 			);
 			path = "Block Rush";
 			sourceTree = "<group>";
@@ -271,6 +286,7 @@
 				A80539BE20685A650059562D /* GameScene.sks in Resources */,
 				A80539C920685A650059562D /* Assets.xcassets in Resources */,
 				A80539CC20685A650059562D /* LaunchScreen.storyboard in Resources */,
+				A8C395CF2079546D00D57AE0 /* MainMenuScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,9 +312,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				A80CDA12206C382700AA579B /* Player.swift in Sources */,
+				A8C395D720795B3B00D57AE0 /* MenuAction.swift in Sources */,
+				A8C395D320795A5C00D57AE0 /* MenuOption.swift in Sources */,
 				A80CDA10206C14EC00AA579B /* Input.swift in Sources */,
 				A80FE7042072D8E900E73E36 /* Block.swift in Sources */,
 				A80539F0206863990059562D /* BottomPlayer.swift in Sources */,
+				A8C395D520795A9600D57AE0 /* GameMenu.swift in Sources */,
 				A80539C220685A650059562D /* GameScene.swift in Sources */,
 				A80539F6206961420059562D /* BlockRush.swift in Sources */,
 				A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */,
@@ -307,6 +326,7 @@
 				A80539F220686CC60059562D /* CustomCollections.swift in Sources */,
 				A80539C420685A650059562D /* GameViewController.swift in Sources */,
 				A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */,
+				A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */,
 				A80539BC20685A650059562D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
