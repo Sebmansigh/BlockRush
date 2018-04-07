@@ -72,7 +72,7 @@ class GameScene: SKScene
         backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
         backgroundGrid?.fillColor = UIColor.black;
         self.addChild(backgroundGrid!);
-        playField = PlayField(cols:6, rows:44, playerTop:playerTop!, playerBottom:playerBottom!, scene:self);
+        playField = PlayField(cols:6, rows:46, playerTop:playerTop!, playerBottom:playerBottom!, scene:self);
         
         backgroundGrid?.zPosition = -1;
         //*/
