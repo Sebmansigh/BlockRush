@@ -43,19 +43,25 @@ class GameMenu: MenuOption
         super.init(title: title);
     }
     
-    func showBackButton()
+    func showBackButton(_ onClose: @escaping ()->Void)
     {
         Back = MenuAction(title: "Back")
         {
+            onClose();
             self.superMenu!.show(node: self.inNode!);
         }
         Back!.superMenu = self;
         
         let BackBtn = Back!.FetchButton();
         BackBtn.position.x = -BlockRush.GameWidth/4;
-        BackBtn.position.y = -BlockRush.GameHeight*3/8;
-        BackBtn.width = BlockRush.GameWidth*3/8;
+        BackBtn.position.y = -BlockRush.GameHeight*7/16;
+        BackBtn.width = BlockRush.GameWidth*7/16;
         inNode!.addChild(BackBtn);
+    }
+    
+    func showBackButton()
+    {
+        showBackButton() {};
     }
     
     func show(node: SKNode)
@@ -66,7 +72,7 @@ class GameMenu: MenuOption
         for i in 0...options.count-1
         {
             let subnode = options[i].FetchButton();
-            let targetY = CGFloat(-i)*Bh/12
+            let targetY = CGFloat(-i)*Bh/10
             node.addChild(subnode);
             subnode.position.y = targetY - Bh;
             subnode.run(.move(to: CGPoint(x:0,y:targetY), duration: 1));

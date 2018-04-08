@@ -10,30 +10,6 @@ import GameplayKit
 
 class GameScene: SKScene
 {
-    class TouchDevice: InputDevice
-    {
-        public var pendingInput: [Input] = [];
-        
-        public override init() {super.init();}
-        
-        internal override func CanEval() -> Bool
-        {
-            return true;
-        }
-        
-        internal override func Eval() -> UInt8
-        {
-            var ret: UInt8 = 0;
-            for I in pendingInput
-            {
-                ret |= I.rawValue;
-            }
-            pendingInput = [];
-            return ret;
-        }
-    }
-    
-    
     let BDevice = TouchDevice();
     let TDevice = TouchDevice();
     var BTarget: Int? = nil;

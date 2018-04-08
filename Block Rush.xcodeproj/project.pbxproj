@@ -23,6 +23,7 @@
 		A80539F8206963DC0059562D /* PlayField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80539F7206963DC0059562D /* PlayField.swift */; };
 		A8071BD82079A2C100EC3272 /* SoundMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BD72079A2C100EC3272 /* SoundMenu.swift */; };
 		A8071BDA2079A4B900EC3272 /* ControlMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BD92079A4B900EC3272 /* ControlMenu.swift */; };
+		A8071BDC2079D5B900EC3272 /* TouchDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDB2079D5B900EC3272 /* TouchDevice.swift */; };
 		A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0D206C0FB800AA579B /* InputDevice.swift */; };
 		A80CDA10206C14EC00AA579B /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0F206C14EC00AA579B /* Input.swift */; };
 		A80CDA12206C382700AA579B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA11206C382700AA579B /* Player.swift */; };
@@ -75,6 +76,7 @@
 		A80539F7206963DC0059562D /* PlayField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayField.swift; sourceTree = "<group>"; };
 		A8071BD72079A2C100EC3272 /* SoundMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundMenu.swift; sourceTree = "<group>"; };
 		A8071BD92079A4B900EC3272 /* ControlMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlMenu.swift; sourceTree = "<group>"; };
+		A8071BDB2079D5B900EC3272 /* TouchDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDevice.swift; sourceTree = "<group>"; };
 		A80CDA0D206C0FB800AA579B /* InputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevice.swift; sourceTree = "<group>"; };
 		A80CDA0F206C14EC00AA579B /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		A80CDA11206C382700AA579B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				A80539BB20685A650059562D /* AppDelegate.swift */,
 				A80539BD20685A650059562D /* GameScene.sks */,
 				A80539C120685A650059562D /* GameScene.swift */,
+				A8071BDB2079D5B900EC3272 /* TouchDevice.swift */,
 				A80539F5206961420059562D /* BlockRush.swift */,
 				A80539F7206963DC0059562D /* PlayField.swift */,
 				A80539C320685A650059562D /* GameViewController.swift */,
@@ -324,6 +327,7 @@
 				A80FE7042072D8E900E73E36 /* Block.swift in Sources */,
 				A80539F0206863990059562D /* BottomPlayer.swift in Sources */,
 				A8C395D520795A9600D57AE0 /* GameMenu.swift in Sources */,
+				A8071BDC2079D5B900EC3272 /* TouchDevice.swift in Sources */,
 				A80539C220685A650059562D /* GameScene.swift in Sources */,
 				A80539F6206961420059562D /* BlockRush.swift in Sources */,
 				A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */,

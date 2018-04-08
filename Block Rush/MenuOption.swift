@@ -7,6 +7,7 @@
 
 import Foundation
 import SpriteKit
+import UIKit
 
 class MenuOption
 {
@@ -15,6 +16,8 @@ class MenuOption
         let BGnode: SKSpriteNode;
         let Tnode : SKLabelNode;
         let owner: MenuOption;
+        var confirming = false;
+        
         var width: CGFloat
         {
             get
@@ -57,24 +60,45 @@ class MenuOption
             fatalError("init(coder:) has not been implemented.");
         }
         
+        var validTouches: Set<UITouch> = [];
+        
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
         {
+            validTouches.formUnion(touches);
             Highlight();
         }
         
         override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
         {
-            
+            for t in touches
+            {
+                if(!nodes(at: t.location(in: self)).contains(BGnode))
+                {
+                    touchesCancelled([t], with: event)
+                }
+            }
         }
         
         override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
         {
-            Confirm();
+            if(!touches.intersection(validTouches).isEmpty)
+            {
+                if(!confirming)
+                {
+                    confirming = true;
+                    validTouches = [];
+                    Confirm();
+                }
+            }
         }
         
         override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?)
         {
-            Dehighlight();
+            validTouches.subtract(touches)
+            if(validTouches.isEmpty)
+            {
+                Dehighlight();
+            }
         }
         
         func Highlight()
@@ -111,6 +135,9 @@ class MenuOption
         if(Btn != nil)
         {
             Btn!.removeFromParent();
+            Btn!.confirming = false;
+            Btn!.Dehighlight();
+            Btn!.removeAllActions();
             return Btn!;
         }
         Btn = ButtonNode(owner: self);
@@ -124,8 +151,7 @@ class MenuOption
                                     .wait(forDuration: 0.125),
                                     .run(Btn!.Highlight),
                                     .wait(forDuration: 0.125)]), count: 2),
-                            .wait(forDuration: 0.5),
-                            .run(Btn!.Dehighlight)]))
+                            .wait(forDuration: 0.5)]))
         {
             let _ = self.FetchButton();
             self.EvalPress();
