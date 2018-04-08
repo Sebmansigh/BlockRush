@@ -147,8 +147,15 @@ class MenuOption
         return Btn!;
     }
     
+    static var confirming = false;
     func Confirm()
     {
+        if(MenuOption.confirming)
+        {
+            return;
+        }
+        print("HI!");
+        MenuOption.confirming = true;
         superMenu!.hideSiblings(self);
         Btn!.run(.sequence([.repeat(.sequence([.run(Btn!.Dehighlight),
                                     .wait(forDuration: 0.125),
@@ -158,6 +165,7 @@ class MenuOption
         {
             let _ = self.FetchButton();
             self.EvalPress();
+            MenuOption.confirming = false;
         };
     }
     

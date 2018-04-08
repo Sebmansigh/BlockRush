@@ -10,7 +10,16 @@ import SpriteKit
 
 final class BlockRush
 {
-    public static var Settings: [Setting:SettingOptions] = [:];
+    public static var Settings: [Setting:SettingOption] = [:];
+    
+    public static func Initialize()
+    {
+        loadSettings();
+        GameWidth = UIScreen.main.nativeBounds.width;
+        GameHeight = min(UIScreen.main.nativeBounds.height,UIScreen.main.nativeBounds.width*2);
+        
+        BlockWidth = min(GameWidth * 0.12,GameHeight/14);
+    }
     
     public static func loadSettings()
     {
@@ -28,9 +37,13 @@ final class BlockRush
                 
                 for Str in StoredSettings
                 {
-                    let Data = Str.components(separatedBy: "=");
-                    Settings[S[Data[0]]!] = .From(Data[1]);
+                    if(Str != "")
+                    {
+                        let Data = Str.components(separatedBy: "=");
+                        Settings[S[Data[0]]!] = .From(Data[1]);
+                    }
                 }
+                print("Settings Loaded");
             }
             catch
             {
@@ -46,7 +59,7 @@ final class BlockRush
                 Settings[s] = Setting.getDefault(s);
             }
             
-            print("\(s)=\(Settings[s]!.rawValue)")
+            //print("\(s)=\(Settings[s]!.rawValue)")
         }
     }
     
@@ -66,6 +79,7 @@ final class BlockRush
             do
             {
                 try settingsString.write(to: fileURL, atomically: true, encoding: .utf8);
+                print("Settings Saved");
             }
             catch
             {

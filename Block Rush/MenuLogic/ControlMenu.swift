@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class SoundMenu: GameMenu
+class ControlMenu: GameMenu
 {
     required init(title: String)
     {
@@ -19,6 +19,6 @@ class SoundMenu: GameMenu
     {
         inNode = node;
         GameMenu.titleNode.text = title;
-        showBackButton();
+        showBackButton(BlockRush.saveSettings);
     }
 }

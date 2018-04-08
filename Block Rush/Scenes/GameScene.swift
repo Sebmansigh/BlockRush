@@ -27,15 +27,6 @@ class GameScene: SKScene
         {
             return;
         }
-        /*
-         
-        for i in 4...16
-        {
-            print(BlockRush.CalculateDamage(chainLevel: 2, blocksCleared: i));
-        }
-        */
-        //*
-        
         
         var seed: UInt64 = 0;
         arc4random_buf(&seed, MemoryLayout.size(ofValue: seed))

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GameKit
 
 enum Setting: EnumCollection
 {
@@ -59,18 +58,18 @@ enum Setting: EnumCollection
     case SoundEffectVolume;
     case BackgroundMusicVolume;
     
-    static func getDefault(_ s:Setting) -> SettingOptions
+    static func getDefault(_ s:Setting) -> SettingOption
     {
         switch s
         {
         case .BottomPlayerControlType, .TopPlayerControlType:
-            return SettingOptions.ControlType.TouchA;
+            return SettingOption.ControlType.TouchA;
             
         case .SoundEffectVolume:
-            return .Volume(100);
+            return .Volume(80);
             
         case .BackgroundMusicVolume:
-            return .Volume(80);
+            return .Volume(100);
             
         default:
             return .None;
@@ -78,56 +77,4 @@ enum Setting: EnumCollection
     }
     
     
-}
-
-struct SettingOptions: OptionSet
-{
-    let rawValue: UInt8;
-    
-    static let None = SettingOptions(rawValue: 0b0000_0000);
-    
-    internal init(rawValue n: UInt8)
-    {
-        rawValue = n;
-    }
-    
-    static func From(_ s:String) -> SettingOptions
-    {
-        return SettingOptions(rawValue: UInt8(s)!);
-    }
-    
-    
-    class ControlType
-    {
-        private init(){}
-        
-        static let TouchA         = SettingOptions(rawValue: 0b0000_0001);
-        static let TouchB         = SettingOptions(rawValue: 0b0000_0010);
-        static let TouchC         = SettingOptions(rawValue: 0b0000_0100);
-        /*
-        static let KeyboardA      = SettingOptions(rawValue: 0b0000_1000);
-        static let KeyboardB      = SettingOptions(rawValue: 0b0001_0000);
-        static let KeyboardCustom = SettingOptions(rawValue: 0b0010_0000);
-        */
-        static let GamepadDefault = SettingOptions(rawValue: 0b0100_0000);
-        static let GamepadCustom  = SettingOptions(rawValue: 0b1000_0000);
-    }
-    
-    static func Volume(_ x: Int) -> SettingOptions
-    {
-        if(x < 0)
-        {
-            return SettingOptions(rawValue:0);
-        }
-        else if(x > 100)
-        {
-            return SettingOptions(rawValue:100);
-        }
-        return SettingOptions(rawValue:UInt8(x))
-    }
-    
-    static func Button(_ e:GCControllerElement) -> SettingOptions
-    {
-        return SettingOptions(rawValue:0);
-    }
 }

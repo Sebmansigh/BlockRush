@@ -26,6 +26,8 @@
 		A8071BDC2079D5B900EC3272 /* TouchDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDB2079D5B900EC3272 /* TouchDevice.swift */; };
 		A8071BDE2079DF7400EC3272 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDD2079DF7400EC3272 /* Settings.swift */; };
 		A8071BE02079F4BE00EC3272 /* EnumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */; };
+		A8071BE2207AA4DA00EC3272 /* MenuSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */; };
+		A8071BE9207AD39D00EC3272 /* SettingsOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BE8207AD39D00EC3272 /* SettingsOption.swift */; };
 		A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0D206C0FB800AA579B /* InputDevice.swift */; };
 		A80CDA10206C14EC00AA579B /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0F206C14EC00AA579B /* Input.swift */; };
 		A80CDA12206C382700AA579B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA11206C382700AA579B /* Player.swift */; };
@@ -81,6 +83,8 @@
 		A8071BDB2079D5B900EC3272 /* TouchDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDevice.swift; sourceTree = "<group>"; };
 		A8071BDD2079DF7400EC3272 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumCollection.swift; sourceTree = "<group>"; };
+		A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSlider.swift; sourceTree = "<group>"; };
+		A8071BE8207AD39D00EC3272 /* SettingsOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOption.swift; sourceTree = "<group>"; };
 		A80CDA0D206C0FB800AA579B /* InputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevice.swift; sourceTree = "<group>"; };
 		A80CDA0F206C14EC00AA579B /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		A80CDA11206C382700AA579B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -141,34 +145,18 @@
 		A80539BA20685A650059562D /* Block Rush */ = {
 			isa = PBXGroup;
 			children = (
-				A80539F5206961420059562D /* BlockRush.swift */,
-				A80539BB20685A650059562D /* AppDelegate.swift */,
-				A80539C320685A650059562D /* GameViewController.swift */,
-				A80539BD20685A650059562D /* GameScene.sks */,
-				A80539C120685A650059562D /* GameScene.swift */,
-				A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */,
-				A8C395D02079548F00D57AE0 /* MainMenuScene.swift */,
-				A8071BDB2079D5B900EC3272 /* TouchDevice.swift */,
-				A80539F7206963DC0059562D /* PlayField.swift */,
-				A80539C520685A650059562D /* Main.storyboard */,
-				A80539C820685A650059562D /* Assets.xcassets */,
-				A80539CA20685A650059562D /* LaunchScreen.storyboard */,
-				A80539CD20685A650059562D /* Info.plist */,
-				A80CDA11206C382700AA579B /* Player.swift */,
-				A80539EF206863990059562D /* BottomPlayer.swift */,
-				A80FE7012072BAE000E73E36 /* TopPlayer.swift */,
-				A80CDA0D206C0FB800AA579B /* InputDevice.swift */,
-				A80CDA0F206C14EC00AA579B /* Input.swift */,
-				A80539F320686FA40059562D /* Piece.swift */,
-				A80FE7032072D8E900E73E36 /* Block.swift */,
-				A80539F120686CC60059562D /* CustomCollections.swift */,
-				A8071BD72079A2C100EC3272 /* SoundMenu.swift */,
-				A8071BD92079A4B900EC3272 /* ControlMenu.swift */,
-				A8C395D220795A5C00D57AE0 /* MenuOption.swift */,
-				A8071BDD2079DF7400EC3272 /* Settings.swift */,
-				A8C395D420795A9600D57AE0 /* GameMenu.swift */,
-				A8C395D620795B3B00D57AE0 /* MenuAction.swift */,
 				A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */,
+				A80539F120686CC60059562D /* CustomCollections.swift */,
+				A80539F5206961420059562D /* BlockRush.swift */,
+				A80539CD20685A650059562D /* Info.plist */,
+				A80539BB20685A650059562D /* AppDelegate.swift */,
+				A8071BEA207AD47A00EC3272 /* StoryboardLogic */,
+				A8071BE7207AD36000EC3272 /* SettingsLogic */,
+				A8071BE3207AD26800EC3272 /* Scenes */,
+				A8071BE6207AD2F400EC3272 /* GameLogic */,
+				A8071BE5207AD2C600EC3272 /* InputLogic */,
+				A8071BEB207AD4A200EC3272 /* MenuLogic */,
+				A80539C820685A650059562D /* Assets.xcassets */,
 			);
 			path = "Block Rush";
 			sourceTree = "<group>";
@@ -189,6 +177,80 @@
 				A80539E320685A650059562D /* Info.plist */,
 			);
 			path = "Block RushUITests";
+			sourceTree = "<group>";
+		};
+		A8071BE3207AD26800EC3272 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				A8071BE4207AD28700EC3272 /* SceneFiles */,
+				A8C395D02079548F00D57AE0 /* MainMenuScene.swift */,
+				A80539C120685A650059562D /* GameScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		A8071BE4207AD28700EC3272 /* SceneFiles */ = {
+			isa = PBXGroup;
+			children = (
+				A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */,
+				A80539BD20685A650059562D /* GameScene.sks */,
+			);
+			path = SceneFiles;
+			sourceTree = "<group>";
+		};
+		A8071BE5207AD2C600EC3272 /* InputLogic */ = {
+			isa = PBXGroup;
+			children = (
+				A80CDA0F206C14EC00AA579B /* Input.swift */,
+				A80CDA0D206C0FB800AA579B /* InputDevice.swift */,
+				A8071BDB2079D5B900EC3272 /* TouchDevice.swift */,
+			);
+			path = InputLogic;
+			sourceTree = "<group>";
+		};
+		A8071BE6207AD2F400EC3272 /* GameLogic */ = {
+			isa = PBXGroup;
+			children = (
+				A80539F7206963DC0059562D /* PlayField.swift */,
+				A80CDA11206C382700AA579B /* Player.swift */,
+				A80539EF206863990059562D /* BottomPlayer.swift */,
+				A80FE7012072BAE000E73E36 /* TopPlayer.swift */,
+				A80539F320686FA40059562D /* Piece.swift */,
+				A80FE7032072D8E900E73E36 /* Block.swift */,
+			);
+			path = GameLogic;
+			sourceTree = "<group>";
+		};
+		A8071BE7207AD36000EC3272 /* SettingsLogic */ = {
+			isa = PBXGroup;
+			children = (
+				A8071BDD2079DF7400EC3272 /* Settings.swift */,
+				A8071BE8207AD39D00EC3272 /* SettingsOption.swift */,
+			);
+			path = SettingsLogic;
+			sourceTree = "<group>";
+		};
+		A8071BEA207AD47A00EC3272 /* StoryboardLogic */ = {
+			isa = PBXGroup;
+			children = (
+				A80539CA20685A650059562D /* LaunchScreen.storyboard */,
+				A80539C520685A650059562D /* Main.storyboard */,
+				A80539C320685A650059562D /* GameViewController.swift */,
+			);
+			path = StoryboardLogic;
+			sourceTree = "<group>";
+		};
+		A8071BEB207AD4A200EC3272 /* MenuLogic */ = {
+			isa = PBXGroup;
+			children = (
+				A8C395D220795A5C00D57AE0 /* MenuOption.swift */,
+				A8C395D620795B3B00D57AE0 /* MenuAction.swift */,
+				A8C395D420795A9600D57AE0 /* GameMenu.swift */,
+				A8071BD92079A4B900EC3272 /* ControlMenu.swift */,
+				A8071BD72079A2C100EC3272 /* SoundMenu.swift */,
+				A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */,
+			);
+			path = MenuLogic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -331,10 +393,12 @@
 				A8C395D320795A5C00D57AE0 /* MenuOption.swift in Sources */,
 				A80CDA10206C14EC00AA579B /* Input.swift in Sources */,
 				A8071BE02079F4BE00EC3272 /* EnumCollection.swift in Sources */,
+				A8071BE9207AD39D00EC3272 /* SettingsOption.swift in Sources */,
 				A80FE7042072D8E900E73E36 /* Block.swift in Sources */,
 				A80539F0206863990059562D /* BottomPlayer.swift in Sources */,
 				A8C395D520795A9600D57AE0 /* GameMenu.swift in Sources */,
 				A8071BDC2079D5B900EC3272 /* TouchDevice.swift in Sources */,
+				A8071BE2207AA4DA00EC3272 /* MenuSlider.swift in Sources */,
 				A80539C220685A650059562D /* GameScene.swift in Sources */,
 				A80539F6206961420059562D /* BlockRush.swift in Sources */,
 				A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */,

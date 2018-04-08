@@ -12,17 +12,15 @@ class MainMenuScene: SKScene
 {
     var Menu: GameMenu? = nil;
     var titleNode: SKLabelNode? = nil;
+    var loaded = false;
     
     override func sceneDidLoad()
     {
-        BlockRush.GameWidth = UIScreen.main.nativeBounds.width;
-        BlockRush.GameHeight = min(UIScreen.main.nativeBounds.height,UIScreen.main.nativeBounds.width*2);
-        
-        BlockRush.BlockWidth = min(BlockRush.GameWidth * 0.12,BlockRush.GameHeight/14);
-        
-        //
-        
         backgroundColor = .black
+        if(loaded)
+        {
+            return;
+        }
         
         titleNode = SKLabelNode(text: "BLOCK RUSH");
         titleNode!.position.y = CGFloat(BlockRush.GameHeight/4);
@@ -61,6 +59,7 @@ class MainMenuScene: SKScene
                          ]);
         
         Menu!.show(node: self);
+        loaded = true;
     }
     
     func touchDown(touch: UITouch)
