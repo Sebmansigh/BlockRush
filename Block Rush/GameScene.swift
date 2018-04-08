@@ -60,10 +60,6 @@ class GameScene: SKScene
         */
         //*
         
-        BlockRush.GameWidth = UIScreen.main.nativeBounds.width;
-        BlockRush.GameHeight = min(UIScreen.main.nativeBounds.height,UIScreen.main.nativeBounds.width*2);
-        
-        BlockRush.BlockWidth = min(BlockRush.GameWidth * 0.12,BlockRush.GameHeight/14);
         
         var seed: UInt64 = 0;
         arc4random_buf(&seed, MemoryLayout.size(ofValue: seed))

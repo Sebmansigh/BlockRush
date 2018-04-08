@@ -62,12 +62,12 @@ class Player
     
     func SceneUpdate()
     {
-        //Must override.
+        fatalError("SceneUpdate() not implemented by a subclass");
     }
     
     func Ready(_ p: Piece)
     {
-        //Must override.
+        fatalError("Ready(Piece) not implemented by a subclass");
     }
     
     func MoveToColumn(_ n:Int)
@@ -89,7 +89,7 @@ class Player
     
     func PositionToColumn(_ n:Int)
     {
-        //Must override.
+        fatalError("PositionToColumn(Int) not implemented by a subclass");
     }
     
     func ReadyNext()
@@ -102,7 +102,7 @@ class Player
     
     func Play(_ field: PlayField)
     {
-        //Must override
+        fatalError("Play(PlayField) not implemented by a subclass");
     }
     
     func Freeze()
@@ -129,7 +129,7 @@ class Player
     
     func Execute(input: Input,field: PlayField)
     {
-        //Must override.
+        fatalError("Execute(input:field:) not implemented by a subclass");
     }
     
     //Executes this player's inputs up to a frame number.

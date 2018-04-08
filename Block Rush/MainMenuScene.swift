@@ -11,12 +11,29 @@ import SpriteKit
 class MainMenuScene: SKScene
 {
     var Menu: GameMenu? = nil;
+    var titleNode: SKLabelNode? = nil;
     
     override func sceneDidLoad()
     {
-            backgroundColor = .black
+        BlockRush.GameWidth = UIScreen.main.nativeBounds.width;
+        BlockRush.GameHeight = min(UIScreen.main.nativeBounds.height,UIScreen.main.nativeBounds.width*2);
+        
+        BlockRush.BlockWidth = min(BlockRush.GameWidth * 0.12,BlockRush.GameHeight/14);
+        
+        //
+        
+        backgroundColor = .black
+        
+        titleNode = SKLabelNode(text: "BLOCK RUSH");
+        titleNode!.position.y = CGFloat(BlockRush.GameHeight/4);
+        titleNode!.verticalAlignmentMode = .bottom;
+        
+        titleNode!.fontColor = .white;
+        titleNode!.fontSize = min(BlockRush.GameWidth/7,BlockRush.GameHeight/12);
+        titleNode!.fontName = "Avenir-Black";
+        addChild(titleNode!);
             
-        Menu = GameMenu(title: "Main",
+        Menu = GameMenu(title: "main",
                         menuOptions:
                         [MenuAction(title:"Play") {
                                 if let scene = SKScene(fileNamed: "GameScene")
@@ -26,19 +43,24 @@ class MainMenuScene: SKScene
                                                         height: UIScreen.main.nativeBounds.height);
                                     scene.scaleMode = .aspectFit
                                     
-                                    self.view?.presentScene(scene);
+                                    self.view!.presentScene(scene);
                                 }
                             },
                          GameMenu(title:"Lessons",
                                   menuOptions:
                                   [GameMenu(title: "Tutorial"),
-                                   GameMenu(title: "Beginner"),
-                                   GameMenu(title: "Intermediate"),
+                                   GameMenu(title: "Novice"),
+                                   GameMenu(title: "Adept"),
                                    GameMenu(title: "Expert")
                                   ]),
-                         GameMenu(title:"Settings")
+                         GameMenu(title:"Settings",
+                                  menuOptions:
+                                    [SoundMenu(title: "Sound"),
+                                     ControlMenu(title: "Controls")
+                                    ])
                          ]);
-        Menu!.showImmediate(node: self);
+        
+        Menu!.show(node: self);
     }
     
     func touchDown(touch: UITouch)

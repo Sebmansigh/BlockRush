@@ -21,6 +21,8 @@
 		A80539F420686FA40059562D /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80539F320686FA40059562D /* Piece.swift */; };
 		A80539F6206961420059562D /* BlockRush.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80539F5206961420059562D /* BlockRush.swift */; };
 		A80539F8206963DC0059562D /* PlayField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80539F7206963DC0059562D /* PlayField.swift */; };
+		A8071BD82079A2C100EC3272 /* SoundMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BD72079A2C100EC3272 /* SoundMenu.swift */; };
+		A8071BDA2079A4B900EC3272 /* ControlMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BD92079A4B900EC3272 /* ControlMenu.swift */; };
 		A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0D206C0FB800AA579B /* InputDevice.swift */; };
 		A80CDA10206C14EC00AA579B /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0F206C14EC00AA579B /* Input.swift */; };
 		A80CDA12206C382700AA579B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA11206C382700AA579B /* Player.swift */; };
@@ -71,6 +73,8 @@
 		A80539F320686FA40059562D /* Piece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
 		A80539F5206961420059562D /* BlockRush.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockRush.swift; sourceTree = "<group>"; };
 		A80539F7206963DC0059562D /* PlayField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayField.swift; sourceTree = "<group>"; };
+		A8071BD72079A2C100EC3272 /* SoundMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundMenu.swift; sourceTree = "<group>"; };
+		A8071BD92079A4B900EC3272 /* ControlMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlMenu.swift; sourceTree = "<group>"; };
 		A80CDA0D206C0FB800AA579B /* InputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevice.swift; sourceTree = "<group>"; };
 		A80CDA0F206C14EC00AA579B /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		A80CDA11206C382700AA579B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -151,6 +155,8 @@
 				A80539F120686CC60059562D /* CustomCollections.swift */,
 				A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */,
 				A8C395D02079548F00D57AE0 /* MainMenuScene.swift */,
+				A8071BD72079A2C100EC3272 /* SoundMenu.swift */,
+				A8071BD92079A4B900EC3272 /* ControlMenu.swift */,
 				A8C395D220795A5C00D57AE0 /* MenuOption.swift */,
 				A8C395D420795A9600D57AE0 /* GameMenu.swift */,
 				A8C395D620795B3B00D57AE0 /* MenuAction.swift */,
@@ -325,8 +331,10 @@
 				A80539F8206963DC0059562D /* PlayField.swift in Sources */,
 				A80539F220686CC60059562D /* CustomCollections.swift in Sources */,
 				A80539C420685A650059562D /* GameViewController.swift in Sources */,
+				A8071BDA2079A4B900EC3272 /* ControlMenu.swift in Sources */,
 				A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */,
 				A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */,
+				A8071BD82079A2C100EC3272 /* SoundMenu.swift in Sources */,
 				A80539BC20685A650059562D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
