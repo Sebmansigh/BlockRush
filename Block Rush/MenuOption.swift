@@ -64,8 +64,11 @@ class MenuOption
         
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
         {
-            validTouches.formUnion(touches);
-            Highlight();
+            if(!confirming)
+            {
+                validTouches.formUnion(touches);
+                Highlight();
+            }
         }
         
         override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)

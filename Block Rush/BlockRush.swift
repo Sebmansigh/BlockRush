@@ -10,6 +10,70 @@ import SpriteKit
 
 final class BlockRush
 {
+    public static var Settings: [Setting:SettingOptions] = [:];
+    
+    public static func loadSettings()
+    {
+        //Load settings from input file
+        
+        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        {
+            let fileURL = dir.appendingPathComponent(".settings");
+            do
+            {
+                let SettingsFileString = try String(contentsOf: fileURL,encoding: .utf8);
+                let StoredSettings = SettingsFileString.components(separatedBy: .newlines);
+                
+                let S = Setting.NameMap();
+                
+                for Str in StoredSettings
+                {
+                    let Data = Str.components(separatedBy: "=");
+                    Settings[S[Data[0]]!] = .From(Data[1]);
+                }
+            }
+            catch
+            {
+                print("Error loading settings");
+            }
+        }
+        
+        //Assign default values for settings that weren't found
+        for s in Setting.All()
+        {
+            if(Settings[s] == nil)
+            {
+                Settings[s] = Setting.getDefault(s);
+            }
+            
+            print("\(s)=\(Settings[s]!.rawValue)")
+        }
+    }
+    
+    public static func saveSettings()
+    {
+        var settingsString = "";
+        for s in Setting.All()
+        {
+            settingsString.append(Setting.Name(s));
+            settingsString.append("=");
+            settingsString.append(String(Settings[s]!.rawValue));
+            settingsString.append("\n");
+        }
+        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        {
+            let fileURL = dir.appendingPathComponent(".settings");
+            do
+            {
+                try settingsString.write(to: fileURL, atomically: true, encoding: .utf8);
+            }
+            catch
+            {
+                print("Error saving settings");
+            }
+        }
+    }
+    
     private init(){}
     
     public static var BlockWidth: CGFloat = 0;
