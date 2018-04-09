@@ -447,7 +447,7 @@ class GameScene: SKScene
             let TFrame = playerTop!   .runTo(targetFrame: playField!.GameFrame,playField: playField!);
             // If neither player is less than 15 frames behind
             if((playField!.GameFrame - BFrame) < 15 && (playField!.GameFrame - TFrame < 15))
-            //if(BFrame == TFrame)
+            
             {
                 playField!.AdvanceFrame();
                 

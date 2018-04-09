@@ -24,14 +24,13 @@ class ControlMenu: GameMenu
                                    options: ControlTypeOptions)
         {
             BlockRush.Settings[.TopPlayerControlType] = $0;
-            print($0.rawValue);
         };
+        
         BottomSelector = MenuSelector(title: "Bottom Player",
                                       initialValue: BlockRush.Settings[.BottomPlayerControlType]!,
                                       options: ControlTypeOptions)
         {
             BlockRush.Settings[.BottomPlayerControlType] = $0;
-            print($0.rawValue);
         };
         BottomSelector.position.y = -BlockRush.GameHeight/5;
         
@@ -48,9 +47,9 @@ class ControlMenu: GameMenu
         
         showBackButton()
         {
-                let _ = self.TopSelector.Fetch();
-                let _ = self.BottomSelector.Fetch();
-                BlockRush.saveSettings();
+            let _ = self.TopSelector.Fetch();
+            let _ = self.BottomSelector.Fetch();
+            BlockRush.saveSettings();
         };
     }
 }

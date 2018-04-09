@@ -120,7 +120,6 @@ class MenuSlider: SKNode
                 Snode.position.x *= Bw*3/4
                 
                 Action(value);
-                print("Slide end; value = "+String(value));
                 validTouch = nil;
                 Dehighlight();
                 break;
@@ -139,7 +138,6 @@ class MenuSlider: SKNode
             if(t == validTouch!)
             {
                 //revert to initial position.
-                print("Slide end.");
                 validTouch = nil;
                 Dehighlight();
                 break;
