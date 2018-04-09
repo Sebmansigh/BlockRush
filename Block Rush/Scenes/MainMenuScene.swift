@@ -43,7 +43,7 @@ class MainMenuScene: SKScene
                                                                height: UIScreen.main.nativeBounds.height);
                                            scene.scaleMode = .aspectFit
                                        
-                                           self.view!.presentScene(scene);
+                                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
                                        }
                                    },
                                    GameMenu(title:"VS Computer"),
