@@ -154,7 +154,6 @@ class MenuOption
         {
             return;
         }
-        print("HI!");
         MenuOption.confirming = true;
         superMenu!.hideSiblings(self);
         Btn!.run(.sequence([.repeat(.sequence([.run(Btn!.Dehighlight),

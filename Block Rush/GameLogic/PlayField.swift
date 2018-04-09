@@ -100,7 +100,7 @@ class PlayField
                 curPowerVal -= 1;
                 if(cp == 0)
                 {
-                    if(LPowerNodes.count == rows()/2-2)
+                    if(LPowerNodes.count == rows()/2-3)
                     {
                         for n in LPowerNodes
                         {
@@ -169,7 +169,7 @@ class PlayField
             {
                 if(LPowerNodes.count == 0)
                 {
-                    for _ in 1...rows()/2-2
+                    for _ in 1...rows()/2-3
                     {
                         let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
                         let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
@@ -228,7 +228,7 @@ class PlayField
                 curPowerVal += 1;
                 if(cp == 0)
                 {
-                    if(LPowerNodes.count == rows()/2-2)
+                    if(LPowerNodes.count == rows()/2-3)
                     {
                         for n in LPowerNodes
                         {
@@ -297,7 +297,7 @@ class PlayField
             {
                 if(LPowerNodes.count == 0)
                 {
-                    for _ in 1...rows()/2-2
+                    for _ in 1...rows()/2-3
                     {
                         let NewNodeL = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
                         let NewNodeR = SKSpriteNode(color: .yellow, size: CGSize(width: Bw/2-4, height: Bw/4-4));
@@ -456,7 +456,7 @@ class PlayField
                 movePower += 1;
                 moveAmount -= 1;
                 
-                let lockCondition = (4-rows())*4
+                let lockCondition = (6-rows())*4
                 
                 if(moveAmount <= lockCondition)
                 {
@@ -483,7 +483,7 @@ class PlayField
                 movePower -= 1;
                 moveAmount += 1;
                 
-                let lockCondition = (rows()-4)*4
+                let lockCondition = (rows()-6)*4
                 
                 if(moveAmount >= lockCondition)
                 {

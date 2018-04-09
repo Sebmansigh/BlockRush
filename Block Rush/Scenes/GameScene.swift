@@ -62,14 +62,100 @@ class GameScene: SKScene
         {
             TopTouch = touch;
             TopStartPos = pos;
-            TTarget = 2+Int(round(pos.x / BlockRush.BlockWidth));
+            
+            let loc = touch.location(in: self);
+            switch BlockRush.Settings[.TopPlayerControlType]!
+            {
+                
+            case SettingOption.ControlType.TouchSlide:
+                TTarget = 2+Int(ceil(loc.x / BlockRush.BlockWidth));
+                
+            case SettingOption.ControlType.TouchTap:
+                if(loc.x > BlockRush.BlockWidth*3)
+                {
+                    TDevice.pendingInput.append(.LEFT)
+                }
+                else if(loc.x < BlockRush.BlockWidth * -3)
+                {
+                    TDevice.pendingInput.append(.RIGHT)
+                }
+                else
+                {
+                    BottomTouch  = nil;
+                    if(loc.y <= BlockRush.BlockWidth*5)
+                    {
+                        TDevice.pendingInput.append(.PLAY)
+                    }
+                    else
+                    {
+                        TDevice.pendingInput.append(.FLIP)
+                    }
+                }
+                
+            case SettingOption.ControlType.TouchHybrid:
+                if(loc.y <= BlockRush.BlockWidth*5)
+                {
+                    TDevice.pendingInput.append(.PLAY);
+                    TopTouch = nil;
+                }
+                else
+                {
+                    TTarget = 2+Int(ceil(loc.x / BlockRush.BlockWidth));
+                }
+                
+            default:
+                break; //Non-touch control type
+            }
             TopTouchFrames = 0;
         }
         else if(pos.y < 0)
         {
             BottomTouch = touch;
             BottomStartPos = pos;
-            BTarget = 2+Int(round(pos.x / BlockRush.BlockWidth));
+            
+            let loc = touch.location(in: self);
+            switch BlockRush.Settings[.BottomPlayerControlType]!
+            {
+                
+            case SettingOption.ControlType.TouchSlide:
+                BTarget = 2+Int(ceil(loc.x / BlockRush.BlockWidth));
+                
+            case SettingOption.ControlType.TouchTap:
+                if(loc.x > BlockRush.BlockWidth*3)
+                {
+                    BDevice.pendingInput.append(.RIGHT)
+                }
+                else if(loc.x < BlockRush.BlockWidth * -3)
+                {
+                    BDevice.pendingInput.append(.LEFT)
+                }
+                else
+                {
+                    BottomTouch  = nil;
+                    if(loc.y >= -BlockRush.BlockWidth*5)
+                    {
+                        BDevice.pendingInput.append(.PLAY)
+                    }
+                    else
+                    {
+                        BDevice.pendingInput.append(.FLIP)
+                    }
+                }
+                
+            case SettingOption.ControlType.TouchHybrid:
+                if(loc.y >= -BlockRush.BlockWidth*5)
+                {
+                    BDevice.pendingInput.append(.PLAY);
+                    BottomTouch = nil;
+                }
+                else
+                {
+                    BTarget = 2+Int(ceil(loc.x / BlockRush.BlockWidth));
+                }
+                
+            default:
+                break; //Non-touch control type
+            }
             BottomTouchFrames = 0;
         }
     }
@@ -79,11 +165,47 @@ class GameScene: SKScene
     {
         if(touch == TopTouch)
         {
-            TTarget = 2+Int(ceil(touch.location(in: self).x / BlockRush.BlockWidth));
+            let loc = touch.location(in: self);
+            switch BlockRush.Settings[.TopPlayerControlType]!
+            {
+                
+            case SettingOption.ControlType.TouchSlide:
+                TTarget = 2+Int(ceil(loc.x / BlockRush.BlockWidth));
+                
+            case SettingOption.ControlType.TouchTap:
+                if(!(loc.x > BlockRush.BlockWidth*3) && !(loc.x < BlockRush.BlockWidth * -3))
+                {
+                    TopTouch = nil;
+                }
+                
+            case SettingOption.ControlType.TouchHybrid:
+                TTarget = 2+Int(ceil(loc.x / BlockRush.BlockWidth));
+                
+            default:
+                break; //Non-touch control type
+            }
         }
         else if(touch == BottomTouch)
         {
-            BTarget = 2+Int(ceil(touch.location(in: self).x / BlockRush.BlockWidth));
+            let loc = touch.location(in: self);
+            switch BlockRush.Settings[.BottomPlayerControlType]!
+            {
+                
+            case SettingOption.ControlType.TouchSlide:
+                BTarget = 2+Int(ceil(loc.x / BlockRush.BlockWidth));
+                
+            case SettingOption.ControlType.TouchTap:
+                if(!(loc.x > BlockRush.BlockWidth*3) && !(loc.x < BlockRush.BlockWidth * -3))
+                {
+                    BottomTouch = nil;
+                }
+                
+            case SettingOption.ControlType.TouchHybrid:
+                BTarget = 2+Int(ceil(loc.x / BlockRush.BlockWidth));
+                
+            default:
+                break; //Non-touch control type
+            }
         }
     }
     
@@ -92,30 +214,70 @@ class GameScene: SKScene
         let pos = touch.location(in: self);
         if(touch == TopTouch && playerTop != nil)
         {
-            TTarget = nil;
+            switch BlockRush.Settings[.TopPlayerControlType]!
+            {
+                
+            case SettingOption.ControlType.TouchSlide:
+                if(TopStartPos.y-pos.y > BlockRush.BlockWidth*1.5)
+                {
+                    TDevice.pendingInput.append(.PLAY);
+                }
+                else if(TopTouchFrames < 10)
+                {
+                    TDevice.pendingInput.append(.FLIP);
+                }
+                TTarget = nil;
+                TopTouchFrames = 0;
+                
+            case SettingOption.ControlType.TouchTap:
+                TopTouch = nil;
+                
+            case SettingOption.ControlType.TouchHybrid:
+                if(TopTouchFrames < 10)
+                {
+                    TDevice.pendingInput.append(.FLIP);
+                }
+                TopTouch = nil;
+                TopTouchFrames = 0;
+                
+            default:
+                break; //Non-touch control type
+            }
             TopTouch = nil;
-            if(TopStartPos.y-pos.y > BlockRush.BlockWidth*1.5)
-            {
-                TDevice.pendingInput.append(Input.PLAY);
-            }
-            else if(TopTouchFrames < 10)
-            {
-                TDevice.pendingInput.append(Input.FLIP);
-            }
         }
         else if(touch == BottomTouch && playerBottom != nil)
         {
-            BTarget = nil;
-            BottomTouch = nil;
-            if(pos.y-BottomStartPos.y > BlockRush.BlockWidth*1.5)
+            switch BlockRush.Settings[.BottomPlayerControlType]!
             {
-                BDevice.pendingInput.append(Input.PLAY);
-            }
-            else if(BottomTouchFrames < 10)
-            {
-                BDevice.pendingInput.append(Input.FLIP);
+                
+            case SettingOption.ControlType.TouchSlide:
+                if(pos.y-BottomStartPos.y > BlockRush.BlockWidth*1.5)
+                {
+                    BDevice.pendingInput.append(.PLAY);
+                }
+                else if(BottomTouchFrames < 10)
+                {
+                    BDevice.pendingInput.append(.FLIP);
+                }
+                BTarget = nil;
+                BottomTouchFrames = 0;
+                
+            case SettingOption.ControlType.TouchTap:
+                BottomTouch = nil;
+                
+            case SettingOption.ControlType.TouchHybrid:
+                if(BottomTouchFrames < 10)
+                {
+                    BDevice.pendingInput.append(.FLIP);
+                }
+                BTarget = nil;
+                BottomTouchFrames = 0;
+                
+            default:
+                break; //Non-touch control type
             }
         }
+        BottomTouch = nil;
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -143,36 +305,144 @@ class GameScene: SKScene
     {
         if(playField != nil && playField!.GameReady)
         {
-            if(BottomTouch != nil)
+            switch BlockRush.Settings[.BottomPlayerControlType]!
             {
-                BottomTouchFrames += 1;
-                if(BTarget != playerBottom!.columnOver)
+                
+            case SettingOption.ControlType.TouchSlide:
+                if(BottomTouch != nil)
                 {
-                    if(BTarget! < playerBottom!.columnOver)
+                    BottomTouchFrames += 1;
+                    if(BTarget != playerBottom!.columnOver)
                     {
-                        BDevice.pendingInput.append(Input.LEFT);
-                    }
-                    else
-                    {
-                        BDevice.pendingInput.append(Input.RIGHT);
+                        if(BTarget! < playerBottom!.columnOver)
+                        {
+                            BDevice.pendingInput.append(.LEFT);
+                        }
+                        else
+                        {
+                            BDevice.pendingInput.append(.RIGHT);
+                        }
                     }
                 }
-            }
-            if(TopTouch != nil)
-            {
-                TopTouchFrames += 1;
-                if(TTarget != playerTop!.columnOver)
+                
+            case SettingOption.ControlType.TouchTap:
+                if(BottomTouch != nil)
                 {
-                    if(TTarget! < playerTop!.columnOver)
+                    BottomTouchFrames += 1;
+                    let loc = BottomTouch!.location(in: self);
+                    if(BottomTouchFrames == 20)
                     {
-                        TDevice.pendingInput.append(Input.RIGHT);
-                    }
-                    else
-                    {
-                        TDevice.pendingInput.append(Input.LEFT);
+                        if(loc.x > BlockRush.BlockWidth*3)
+                        {
+                            BDevice.pendingInput.append(.RIGHT)
+                        }
+                        else if(loc.x < BlockRush.BlockWidth * -3)
+                        {
+                            BDevice.pendingInput.append(.LEFT)
+                        }
+                        else
+                        {
+                            BottomTouch = nil;
+                            break;
+                        }
+                        BottomTouchFrames = 17;
                     }
                 }
+                
+            case SettingOption.ControlType.TouchHybrid:
+                if(BottomTouch != nil)
+                {
+                    BottomTouchFrames += 1;
+                    if(BTarget != playerBottom!.columnOver)
+                    {
+                        if(BTarget! < playerBottom!.columnOver)
+                        {
+                            BDevice.pendingInput.append(.LEFT);
+                        }
+                        else
+                        {
+                            BDevice.pendingInput.append(.RIGHT);
+                        }
+                    }
+                }
+                
+            default:
+                break; //Non-touch control type
             }
+            
+        
+            switch BlockRush.Settings[.TopPlayerControlType]!
+            {
+                
+            case SettingOption.ControlType.TouchSlide:
+                if(TopTouch != nil)
+                {
+                    TopTouchFrames += 1;
+                    if(TTarget != playerTop!.columnOver)
+                    {
+                        if(TTarget! < playerTop!.columnOver)
+                        {
+                            TDevice.pendingInput.append(.RIGHT);
+                        }
+                        else
+                        {
+                            TDevice.pendingInput.append(.LEFT);
+                        }
+                    }
+                    
+                }
+                
+            case SettingOption.ControlType.TouchTap:
+                if(TopTouch != nil)
+                {
+                    TopTouchFrames += 1;
+                    let loc = TopTouch!.location(in: self);
+                    if(TopTouchFrames == 20)
+                    {
+                        if(loc.x > BlockRush.BlockWidth*3)
+                        {
+                            TDevice.pendingInput.append(.LEFT)
+                        }
+                        else if(loc.x < BlockRush.BlockWidth * -3)
+                        {
+                            TDevice.pendingInput.append(.RIGHT)
+                        }
+                        else
+                        {
+                            TopTouch = nil;
+                            break;
+                        }
+                        TopTouchFrames = 17;
+                    }
+                }
+                
+            case SettingOption.ControlType.TouchHybrid:
+                if(TopTouch != nil)
+                {
+                    TopTouchFrames += 1;
+                    if(TTarget != playerTop!.columnOver)
+                    {
+                        if(TTarget! < playerTop!.columnOver)
+                        {
+                            TDevice.pendingInput.append(.RIGHT);
+                        }
+                        else
+                        {
+                            TDevice.pendingInput.append(.LEFT);
+                        }
+                    }
+                    
+                }
+                
+            default:
+                break; //Non-touch control type
+            }
+            
+            
+            
+            
+            //Run game
+            
             let BFrame = playerBottom!.runTo(targetFrame: playField!.GameFrame,playField: playField!);
             let TFrame = playerTop!   .runTo(targetFrame: playField!.GameFrame,playField: playField!);
             // If neither player is less than 15 frames behind

@@ -27,7 +27,8 @@
 		A8071BDE2079DF7400EC3272 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDD2079DF7400EC3272 /* Settings.swift */; };
 		A8071BE02079F4BE00EC3272 /* EnumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */; };
 		A8071BE2207AA4DA00EC3272 /* MenuSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */; };
-		A8071BE9207AD39D00EC3272 /* SettingsOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BE8207AD39D00EC3272 /* SettingsOption.swift */; };
+		A8071BE9207AD39D00EC3272 /* SettingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BE8207AD39D00EC3272 /* SettingOption.swift */; };
+		A8071BED207AD81E00EC3272 /* MenuSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BEC207AD81E00EC3272 /* MenuSelector.swift */; };
 		A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0D206C0FB800AA579B /* InputDevice.swift */; };
 		A80CDA10206C14EC00AA579B /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA0F206C14EC00AA579B /* Input.swift */; };
 		A80CDA12206C382700AA579B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA11206C382700AA579B /* Player.swift */; };
@@ -84,7 +85,8 @@
 		A8071BDD2079DF7400EC3272 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumCollection.swift; sourceTree = "<group>"; };
 		A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSlider.swift; sourceTree = "<group>"; };
-		A8071BE8207AD39D00EC3272 /* SettingsOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOption.swift; sourceTree = "<group>"; };
+		A8071BE8207AD39D00EC3272 /* SettingOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOption.swift; sourceTree = "<group>"; };
+		A8071BEC207AD81E00EC3272 /* MenuSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSelector.swift; sourceTree = "<group>"; };
 		A80CDA0D206C0FB800AA579B /* InputDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDevice.swift; sourceTree = "<group>"; };
 		A80CDA0F206C14EC00AA579B /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
 		A80CDA11206C382700AA579B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -225,7 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				A8071BDD2079DF7400EC3272 /* Settings.swift */,
-				A8071BE8207AD39D00EC3272 /* SettingsOption.swift */,
+				A8071BE8207AD39D00EC3272 /* SettingOption.swift */,
 			);
 			path = SettingsLogic;
 			sourceTree = "<group>";
@@ -249,6 +251,7 @@
 				A8071BD92079A4B900EC3272 /* ControlMenu.swift */,
 				A8071BD72079A2C100EC3272 /* SoundMenu.swift */,
 				A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */,
+				A8071BEC207AD81E00EC3272 /* MenuSelector.swift */,
 			);
 			path = MenuLogic;
 			sourceTree = "<group>";
@@ -393,7 +396,8 @@
 				A8C395D320795A5C00D57AE0 /* MenuOption.swift in Sources */,
 				A80CDA10206C14EC00AA579B /* Input.swift in Sources */,
 				A8071BE02079F4BE00EC3272 /* EnumCollection.swift in Sources */,
-				A8071BE9207AD39D00EC3272 /* SettingsOption.swift in Sources */,
+				A8071BE9207AD39D00EC3272 /* SettingOption.swift in Sources */,
+				A8071BED207AD81E00EC3272 /* MenuSelector.swift in Sources */,
 				A80FE7042072D8E900E73E36 /* Block.swift in Sources */,
 				A80539F0206863990059562D /* BottomPlayer.swift in Sources */,
 				A8C395D520795A9600D57AE0 /* GameMenu.swift in Sources */,

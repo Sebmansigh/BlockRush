@@ -8,7 +8,7 @@
 import Foundation
 import GameKit
 
-struct SettingOption: OptionSet
+struct SettingOption: OptionSet, Hashable
 {
     let rawValue: UInt8;
     
@@ -29,9 +29,9 @@ struct SettingOption: OptionSet
     {
         private init(){}
         
-        static let TouchA         = SettingOption(rawValue: 0b0000_0001);
-        static let TouchB         = SettingOption(rawValue: 0b0000_0010);
-        static let TouchC         = SettingOption(rawValue: 0b0000_0100);
+        static let TouchSlide     = SettingOption(rawValue: 0b0000_0001);
+        static let TouchTap       = SettingOption(rawValue: 0b0000_0010);
+        static let TouchHybrid    = SettingOption(rawValue: 0b0000_0100);
         /*
          static let KeyboardA      = SettingOption(rawValue: 0b0000_1000);
          static let KeyboardB      = SettingOption(rawValue: 0b0001_0000);

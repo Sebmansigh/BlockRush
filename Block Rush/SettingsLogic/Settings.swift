@@ -63,13 +63,13 @@ enum Setting: EnumCollection
         switch s
         {
         case .BottomPlayerControlType, .TopPlayerControlType:
-            return SettingOption.ControlType.TouchA;
+            return SettingOption.ControlType.TouchSlide;
             
         case .SoundEffectVolume:
-            return .Volume(80);
+            return .Volume(100);
             
         case .BackgroundMusicVolume:
-            return .Volume(100);
+            return .Volume(80);
             
         default:
             return .None;
