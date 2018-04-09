@@ -13,8 +13,17 @@ class PlayField
     var Field: [[Block?]]
     var GameFrame: Int;
     var GameReady: Bool;
+    
     let CenterBar: SKSpriteNode;
     let BackBar: SKSpriteNode;
+    var TopColumns: [SKSpriteNode];
+    var GhostTopFront: SKSpriteNode?;
+    var GhostTopRear: SKSpriteNode?;
+    var BottomColumns: [SKSpriteNode];
+    var GhostBottomFront: SKSpriteNode?;
+    var GhostBottomRear: SKSpriteNode?;
+    
+    
     var TopMatches: [Int: Set<Block> ];
     var BtmMatches: [Int: Set<Block> ]
     var NilMatches: [Int: Set<Block> ];
@@ -47,6 +56,9 @@ class PlayField
         
         let inArr = Array<Block?>(repeating: nil, count:rows);
         Field = Array<Array<Block?>>(repeating: inArr, count:cols);
+        
+        
+        
         CenterBar = SKSpriteNode(texture: nil,
                                  color: .white,
                                  size: CGSize(width: BlockRush.BlockWidth*6, height: BlockRush.BlockWidth/16));
@@ -54,8 +66,6 @@ class PlayField
                                  color: .gray,
                                  size: CGSize(width: BlockRush.BlockWidth*6, height: BlockRush.BlockWidth/16));
         fieldNode.addChild(CenterBar);
-        scene.addChild(fieldNode);
-        scene.addChild(BackBar);
         gameScene = scene;
         CenterBar.zPosition = 2;
         BackBar.zPosition = -1;
@@ -65,6 +75,30 @@ class PlayField
         LBigNodes = [];
         RBigNodes = [];
         curPowerVal = 0;
+        
+        TopColumns = [];
+        GhostTopFront = nil;
+        GhostTopRear = nil;
+        BottomColumns = [];
+        GhostBottomFront = nil;
+        GhostBottomRear = nil;
+        for i in 0...columns()-1
+        {
+            let Tc = SKSpriteNode(color: .white, size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth*5));
+            Tc.alpha = 0;
+            Tc.position.x = GetPosition(column: i);
+            Tc.position.y = BlockRush.BlockWidth*2.5;
+            scene.addChild(Tc);
+            TopColumns.append(Tc);
+            let Bc = SKSpriteNode(color: .white, size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth*5));
+            Bc.alpha = 0;
+            Bc.position.x = GetPosition(column: i);
+            Bc.position.y = -BlockRush.BlockWidth*2.5;
+            scene.addChild(Bc);
+            BottomColumns.append(Bc);
+        }
+        scene.addChild(fieldNode);
+        scene.addChild(BackBar);
     }
     
     func columns() -> Int
@@ -399,12 +433,45 @@ class PlayField
     
     func GetPosition(column:Int,row:Int) -> CGPoint
     {
-        let offsetRows = CGFloat(rows())/2;
         
-        let pX = BlockRush.BlockWidth/2 + BlockRush.BlockWidth * CGFloat(column-3);
-        let pY = BlockRush.BlockWidth * ((offsetRows-CGFloat(row))/2-0.25);
+        let pX = GetPosition(column: column);
+        let pY = GetPosition(row: row);
         
         return CGPoint(x: pX, y: pY);
+    }
+    func GetPosition(column:Int) -> CGFloat
+    {
+        return BlockRush.BlockWidth/2 + BlockRush.BlockWidth * CGFloat(column-3);
+    }
+    func GetPosition(row:Int) -> CGFloat
+    {
+        let offsetRows = CGFloat(rows())/2;
+        return BlockRush.BlockWidth * ((offsetRows-CGFloat(row))/2-0.25);
+    }
+    
+    func GetPositionTopNext(column:Int,add:Int) -> CGPoint
+    {
+        for i in 0...rows()/2-1
+        {
+            if(Field[column][i] != nil)
+            {
+                return GetPosition(column:column, row:i-add);
+            }
+        }
+        return GetPosition(column:column, row:rows()/2-add);
+    }
+    
+    func GetPositionBottomNext(column:Int,add:Int) -> CGPoint
+    {
+        for i in (rows()/2...rows()-1).reversed()
+        {
+            if(Field[column][i] != nil)
+            {
+                return GetPosition(column:column, row:i+add);
+            }
+        }
+        
+        return GetPosition(column:column, row:rows()/2+add-1);
     }
     
     func EvalChain(player: Player, numMatched: Int) -> Int
@@ -467,7 +534,19 @@ class PlayField
                 
                 player.hasLost = DetectBottomPlayerLoss();
                 
-                fieldNode.position = CGPoint(x: 0, y: BlockRush.BlockWidth*CGFloat(moveAmount)/32);
+                let yPos = BlockRush.BlockWidth*CGFloat(moveAmount)/32;
+                fieldNode.position = CGPoint(x: 0, y: yPos);
+                
+                for i in 0...columns()-1
+                {
+                    let Tc = TopColumns[i];
+                    Tc.position.y  =  BlockRush.BlockWidth*2.5+yPos/2;
+                    Tc.size.height =  BlockRush.BlockWidth*5-yPos;
+                    
+                    let Bc = BottomColumns[i];
+                    Bc.position.y  = -BlockRush.BlockWidth*2.5+yPos/2;
+                    Bc.size.height =  BlockRush.BlockWidth*5+yPos;
+                }
                 
                 return true;
             }
@@ -494,7 +573,19 @@ class PlayField
                 
                 player.hasLost = DetectTopPlayerLoss();
                 
-                fieldNode.position = CGPoint(x: 0, y: BlockRush.BlockWidth*CGFloat(moveAmount)/32);
+                let yPos = BlockRush.BlockWidth*CGFloat(moveAmount)/32;
+                fieldNode.position = CGPoint(x: 0, y: yPos);
+                
+                for i in 0...columns()-1
+                {
+                    let Tc = TopColumns[i];
+                    Tc.position.y  =  BlockRush.BlockWidth*2.5+yPos/2;
+                    Tc.size.height =  BlockRush.BlockWidth*5-yPos;
+                    
+                    let Bc = BottomColumns[i];
+                    Bc.position.y  = -BlockRush.BlockWidth*2.5+yPos/2;
+                    Bc.size.height =  BlockRush.BlockWidth*5+yPos;
+                }
                 
                 return true;
             }
@@ -529,6 +620,95 @@ class PlayField
         }
         AnimPower();
         
+        let Tr = (playerTop.readyPiece != nil)
+        let Br = (playerBottom.readyPiece != nil)
+        
+        for i in 0...columns()-1
+        {
+            let Tc = TopColumns[i];
+            let Bc = BottomColumns[i];
+            if(Tr && i == playerTop.columnOver)
+            {
+                Tc.alpha = 0.2;
+            }
+            else
+            {
+                Tc.alpha = 0;
+            }
+            
+            if(Br && i == playerBottom.columnOver)
+            {
+                Bc.alpha = 0.2;
+            }
+            else
+            {
+                Bc.alpha = 0;
+            }
+            
+        }
+        
+        
+        if(Tr)
+        {
+            let P = playerTop.readyPiece!
+            GhostTopFront?.removeFromParent();
+            GhostTopRear?.removeFromParent();
+            GhostTopFront = SKSpriteNode(color: BlockRush.BlockColors[P.FrontBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostTopRear = SKSpriteNode(color: BlockRush.BlockColors[P.RearBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            
+            GhostTopFront!.position = GetPositionTopNext(column: playerTop.columnOver,add: 1);
+            GhostTopRear! .position = GetPositionTopNext(column: playerTop.columnOver,add: 2);
+            
+            GhostTopFront!.position.y += fieldNode.position.y;
+            GhostTopRear! .position.y += fieldNode.position.y;
+            
+            GhostTopFront!.alpha = 0.5;
+            GhostTopRear!.alpha = 0.5;
+            
+            GhostTopFront!.zPosition = 9;
+            GhostTopRear!.zPosition = 9;
+            
+            gameScene.addChild(GhostTopFront!);
+            gameScene.addChild(GhostTopRear!);
+        }
+        else
+        {
+            GhostTopFront?.removeFromParent();
+            GhostTopRear?.removeFromParent();
+            GhostTopFront = nil;
+            GhostTopRear = nil;
+        }
+        
+        if(Br)
+        {
+            let P = playerBottom.readyPiece!
+            GhostBottomFront?.removeFromParent();
+            GhostBottomRear?.removeFromParent();
+            GhostBottomFront = SKSpriteNode(color: BlockRush.BlockColors[P.FrontBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostBottomRear = SKSpriteNode(color: BlockRush.BlockColors[P.RearBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            
+            GhostBottomFront!.position = GetPositionBottomNext(column: playerBottom.columnOver,add: 1);
+            GhostBottomRear! .position = GetPositionBottomNext(column: playerBottom.columnOver,add: 2);
+            
+            GhostBottomFront!.position.y += fieldNode.position.y;
+            GhostBottomRear! .position.y += fieldNode.position.y;
+            
+            GhostBottomFront!.alpha = 0.5;
+            GhostBottomRear!.alpha = 0.5;
+            
+            GhostBottomFront!.zPosition = 9;
+            GhostBottomRear!.zPosition = 9;
+            
+            gameScene.addChild(GhostBottomFront!);
+            gameScene.addChild(GhostBottomRear!);
+        }
+        else
+        {
+            GhostBottomFront?.removeFromParent();
+            GhostBottomRear?.removeFromParent();
+            GhostBottomFront = nil;
+            GhostBottomRear = nil;
+        }
         //
         GameFrame += 1;
     }

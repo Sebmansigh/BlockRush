@@ -33,17 +33,23 @@ class MainMenuScene: SKScene
             
         Menu = GameMenu(title: "main",
                         menuOptions:
-                        [MenuAction(title:"Play") {
-                                if let scene = SKScene(fileNamed: "GameScene")
-                                {
-                                    // Set the scale mode to scale to fit the window
-                                    scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
-                                                        height: UIScreen.main.nativeBounds.height);
-                                    scene.scaleMode = .aspectFit
-                                    
-                                    self.view!.presentScene(scene);
-                                }
-                            },
+                        [GameMenu(title:"Play",
+                                  menuOptions:
+                                  [MenuAction(title:"VS Local") {
+                                       if let scene = SKScene(fileNamed: "GameScene")
+                                       {
+                                           // Set the scale mode to scale to fit the window
+                                           scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                                               height: UIScreen.main.nativeBounds.height);
+                                           scene.scaleMode = .aspectFit
+                                       
+                                           self.view!.presentScene(scene);
+                                       }
+                                   },
+                                   GameMenu(title:"VS Computer"),
+                                   GameMenu(title:"VS Bluetooth"),
+                                   GameMenu(title:"VS Online")
+                                  ]),
                          GameMenu(title:"Lessons",
                                   menuOptions:
                                   [GameMenu(title: "Tutorial"),
