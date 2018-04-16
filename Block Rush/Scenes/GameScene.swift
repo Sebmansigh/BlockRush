@@ -45,7 +45,7 @@ class GameScene: SKScene
     
     override func didMove(to view: SKView)
     {
-        
+        sceneDidLoad();
     }
     
     var TopTouch: UITouch? = nil;
@@ -447,10 +447,44 @@ class GameScene: SKScene
             let TFrame = playerTop!   .runTo(targetFrame: playField!.GameFrame,playField: playField!);
             // If neither player is less than 15 frames behind
             if((playField!.GameFrame - BFrame) < 15 && (playField!.GameFrame - TFrame < 15))
-            
             {
+                if(playField!.GameFrame <= 200)
+                {
+                    if((playField!.GameFrame-20) % 60 == 0)
+                    {
+                        let n = 3 - (playField!.GameFrame-20)/60;
+                        let Str: String;
+                        if(n == 0)
+                        {
+                            Str = "GO!";
+                        }
+                        else
+                        {
+                            Str = String(n);
+                        }
+                        
+                        let Bnode = SKLabelNode(text: Str);
+                        Bnode.fontName = "Avenir-Black";
+                        Bnode.fontSize = BlockRush.GameHeight/4;
+                        Bnode.verticalAlignmentMode = .center;
+                        if(n == 0)
+                        {
+                            Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 2, duration: 1)]));
+                        }
+                        else
+                        {
+                            Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 0.5, duration: 1)]));
+                        }
+                        
+                        let Tnode = Bnode.copy() as! SKLabelNode;
+                        Tnode.position.y =  BlockRush.GameHeight/6;
+                        Bnode.position.y = -BlockRush.GameHeight/6;
+                        Tnode.zRotation = .pi;
+                        addChild(Bnode);
+                        addChild(Tnode);
+                    }
+                }
                 playField!.AdvanceFrame();
-                
             }
         }
         else

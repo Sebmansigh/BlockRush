@@ -22,10 +22,10 @@ class GameViewController: UIViewController {
                 // Set the scale mode to scale to fit the window
                 scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
                                     height: UIScreen.main.nativeBounds.height);
-                scene.scaleMode = .aspectFit
+                scene.scaleMode = .aspectFit;
                 
                 // Present the scene
-                view.presentScene(scene)
+                view.presentScene(scene);
             }
             
             view.ignoresSiblingOrder = true
@@ -37,7 +37,7 @@ class GameViewController: UIViewController {
     }
 
     override var shouldAutorotate: Bool {
-        return true
+        return true;
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -51,5 +51,9 @@ class GameViewController: UIViewController {
 
     override var prefersStatusBarHidden: Bool {
         return true;
+    }
+    
+    override func preferredScreenEdgesDeferringSystemGestures() -> UIRectEdge {
+        return .left
     }
 }

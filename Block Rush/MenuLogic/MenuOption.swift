@@ -48,7 +48,8 @@ class MenuOption
             
             Tnode.fontName = "Avenir-Heavy";
             Tnode.fontSize = Bh/14-Mw;
-            Tnode.verticalAlignmentMode = .center;
+            Tnode.position.y = -Bh/52
+            Tnode.verticalAlignmentMode = .baseline;
             Tnode.fontColor = .white;
             
             addChild(BGnode);

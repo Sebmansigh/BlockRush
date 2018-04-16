@@ -16,12 +16,11 @@ class MainMenuScene: SKScene
     
     override func sceneDidLoad()
     {
-        backgroundColor = .black
+        backgroundColor = .black;
         if(loaded)
         {
             return;
         }
-        
         titleNode = SKLabelNode(text: "BLOCK RUSH");
         titleNode!.position.y = CGFloat(BlockRush.GameHeight/4);
         titleNode!.verticalAlignmentMode = .bottom;
@@ -41,9 +40,9 @@ class MainMenuScene: SKScene
                                            // Set the scale mode to scale to fit the window
                                            scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
                                                                height: UIScreen.main.nativeBounds.height);
-                                           scene.scaleMode = .aspectFit
+                                           scene.scaleMode = .aspectFit;
                                        
-                                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+                                           self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
                                        }
                                    },
                                    GameMenu(title:"VS Computer"),
@@ -66,6 +65,12 @@ class MainMenuScene: SKScene
         
         Menu!.show(node: self);
         loaded = true;
+    }
+    
+    override func didMove(to view: SKView)
+    {
+        //view.presentScene(self);
+        sceneDidLoad();
     }
     
     func touchDown(touch: UITouch)
