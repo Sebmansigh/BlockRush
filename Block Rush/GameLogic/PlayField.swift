@@ -13,6 +13,7 @@ class PlayField
     var Field: [[Block?]]
     var GameFrame: Int;
     var GameReady: Bool;
+    var GameOver: Bool;
     
     let CenterBar: SKSpriteNode;
     let BackBar: SKSpriteNode;
@@ -29,7 +30,7 @@ class PlayField
     var NilMatches: [Int: Set<Block> ];
     var playerTop: Player;
     var playerBottom: Player;
-    var gameScene: SKScene;
+    var gameScene: GameScene;
     var fieldNode: SKNode;
     var movePower: Int;
     var moveAmount: Int;
@@ -39,11 +40,18 @@ class PlayField
     var RBigNodes: [SKSpriteNode];
     var curPowerVal: Int;
     
+    
+    var TopStackHeight:[Int];
+    var BottomStackHeight:[Int];
+    
+    var Loser: Player? = nil;
+    
     init(cols:Int, rows:Int, playerTop t:Player, playerBottom b: Player, scene:SKScene)
     {
         fieldNode = SKNode();
         GameFrame = 0;
         GameReady = false;
+        GameOver = false;
         
         TopMatches = [:];
         BtmMatches = [:];
@@ -66,7 +74,7 @@ class PlayField
                                  color: .gray,
                                  size: CGSize(width: BlockRush.BlockWidth*6, height: BlockRush.BlockWidth/16));
         fieldNode.addChild(CenterBar);
-        gameScene = scene;
+        gameScene = scene as! GameScene;
         CenterBar.zPosition = 2;
         BackBar.zPosition = -1;
         
@@ -82,6 +90,11 @@ class PlayField
         BottomColumns = [];
         GhostBottomFront = nil;
         GhostBottomRear = nil;
+        
+        TopStackHeight = [Int](repeating: 0, count: rows);
+        BottomStackHeight = [Int](repeating: 0, count: rows);
+        
+        
         for i in 0...columns()-1
         {
             let Tc = SKSpriteNode(color: .white, size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth*5));
@@ -99,6 +112,7 @@ class PlayField
         }
         scene.addChild(fieldNode);
         scene.addChild(BackBar);
+        
     }
     
     func columns() -> Int
@@ -123,37 +137,59 @@ class PlayField
         return ret;
     }
     
+    
     func getStackHeight(column: Int, player: Player) -> Int
     {
         if(player === playerTop)
         {
-            let max = rows()/2-1;
-            for i in (0...max).reversed()
-            {
-                if(Field[column][i] == nil)
-                {
-                    return max-i;
-                }
-            }
-            return max+1;
+            return TopStackHeight[column];
         }
         else if(player === playerBottom)
         {
-            let max = rows()-1;
-            let min = rows()/2;
+            return BottomStackHeight[column];
             
-            for i in min...max
-            {
-                if(Field[column][i] == nil)
-                {
-                    return i-min;
-                }
-            }
-            return max-min+1;
         }
         else
         {
             fatalError("Recieved neither top nor bottom player for getStackHeight");
+        }
+    }
+    
+    func RecalculateStackHeights()
+    {
+        for column in 0...columns()-1
+        {
+            //Top
+            do
+            {
+                let max = rows()/2-1;
+                TopStackHeight[column] = max+1;
+                for i in (0...max).reversed()
+                {
+                    if(Field[column][i] == nil)
+                    {
+                        TopStackHeight[column] = max-i;
+                        break;
+                    }
+                }
+            }
+            
+            //Bottom
+            do
+            {
+                let max = rows()-1;
+                let min = rows()/2;
+
+                BottomStackHeight[column] = max-min+1;
+                for i in min...max
+                {
+                    if(Field[column][i] == nil)
+                    {
+                        BottomStackHeight[column] = i-min;
+                        break;
+                    }
+                }
+            }
         }
     }
     
@@ -519,42 +555,106 @@ class PlayField
         return GetPosition(column:column, row:rows()/2+add-1);
     }
     
+    func TopBlockAtColumn(column: Int, player: Player) -> Block?
+    {
+        if(player === playerTop)
+        {
+            var prevBlock:Block? = nil;
+            for j in (0...rows()/2-1).reversed()
+            {
+                let thisBlock = Field[column][j]
+                if(thisBlock == nil)
+                {
+                    return prevBlock;
+                }
+                else
+                {
+                    prevBlock = thisBlock;
+                }
+            }
+            return prevBlock;
+        }
+        else// if(player === playerBottom)
+        {
+            var prevBlock:Block? = nil;
+            for j in (rows()/2...rows()-1)
+            {
+                let thisBlock = Field[column][j]
+                if(thisBlock == nil)
+                {
+                    return prevBlock;
+                }
+                else
+                {
+                    prevBlock = thisBlock;
+                }
+            }
+            return prevBlock;
+        }
+    }
+    
     func EvalChain(player: Player, numMatched: Int) -> Int
     {
         player.chainLevel += 1;
         let linkDamage = BlockRush.CalculateDamage(chainLevel: player.chainLevel, blocksCleared: numMatched)
         
         player.storedPower += linkDamage;
+        player.GainTime(300*player.chainLevel-150);
         //
         return linkDamage;
     }
     
+    func DetectPlayerLoss(player: Player) -> Bool
+    {
+        if(player === playerTop)
+        {
+            return DetectTopPlayerLoss();
+        }
+        else if(player === playerBottom)
+        {
+            return DetectBottomPlayerLoss();
+        }
+        else
+        {
+            fatalError("Tried to detect the loss of neither the top nor bottom players.");
+        }
+    }
+    
     func DetectBottomPlayerLoss() -> Bool
     {
-        /*
-        for j in 0...columns()-1
+        let Sdata = getSurfaceData(playerBottom);
+        //
+        let Smax = 10.0+Double(moveAmount)/16;
+        
+        let ALLOWZONE = 1.0;
+        
+        for i in 0...columns()-1
         {
-            for i in rows()/2...rows()-1
+            let Datai:Double = Double(Sdata[i]);
+            if(Datai >= Smax+ALLOWZONE)
             {
-                if(Field[i][j] == nil)
-                {
-                    continue columnLoop;
-                }
-                
-                if(moveAmount <= lockCondition)
-                {
-                    
-                }
+                return true;
             }
-            player.hasLost = true;
-            print("Bottom player loss detected");
         }
-         */
         return false;
     }
     
     func DetectTopPlayerLoss() -> Bool
     {
+        let Sdata = getSurfaceData(playerTop);
+        //
+        let Smax = 10.0-Double(moveAmount)/16;
+        
+        let ALLOWZONE = 1.0;
+        
+        for i in 0...columns()-1
+        {
+            let Datai:Double = Double(Sdata[i]);
+            if(Datai >= Smax+ALLOWZONE)
+            {
+                return true;
+            }
+        }
         return false;
     }
     
@@ -564,20 +664,17 @@ class PlayField
         {
             if(player === playerBottom)
             {
-                
                 movePower += 1;
                 moveAmount -= 1;
                 
-                let lockCondition = (6-rows())*4
+                let lockCondition = (6-rows())*4;
                 
                 if(moveAmount <= lockCondition)
                 {
                     moveAmount = lockCondition;
-                    player.hasLost = true;
                     //print("BottomPlayer Loses!");
                 }
                 
-                player.hasLost = DetectBottomPlayerLoss();
                 
                 let yPos = BlockRush.BlockWidth*CGFloat(moveAmount)/32;
                 fieldNode.position = CGPoint(x: 0, y: yPos);
@@ -612,11 +709,7 @@ class PlayField
                 if(moveAmount >= lockCondition)
                 {
                     moveAmount = lockCondition;
-                    player.hasLost = true;
-                    //print("TopPlayer Loses!");
                 }
-                
-                player.hasLost = DetectTopPlayerLoss();
                 
                 let yPos = BlockRush.BlockWidth*CGFloat(moveAmount)/32;
                 fieldNode.position = CGPoint(x: 0, y: yPos);
@@ -665,6 +758,10 @@ class PlayField
         }
         AnimPower();
         
+        //DebugTools.TimeExecution("Stack Height Recalculation.")
+        RecalculateStackHeights();
+        
+        
         let Tr = (playerTop.readyPiece != nil)
         let Br = (playerBottom.readyPiece != nil)
         
@@ -691,11 +788,46 @@ class PlayField
             }
             
         }
+        let Tdata = getSurfaceData(playerTop);
+        let Bdata = getSurfaceData(playerBottom);
+        //
+        let Tmax = 10.0-Double(moveAmount)/16;
+        let Bmax = 10.0+Double(moveAmount)/16;
+        
+        let DANGERZONE = 2.5;
+        
+        for i in 0...columns()-1
+        {
+            let redFactor = CGFloat((sin(Double(DoFrame) * Double.pi / 2 / 30 )+1)/2)
+            var Datai:Double = Double(Tdata[i]);
+            var c = TopColumns[i];
+            if(Datai > Tmax-DANGERZONE)
+            {
+                c.color = UIColor(red:redFactor,green:0,blue:0,alpha:1);
+                c.alpha = 1;
+            }
+            else
+            {
+                c.color = .white;
+            }
+            c = BottomColumns[i];
+            Datai = Double(Bdata[i]);
+            if(Datai > Bmax-DANGERZONE)
+            {
+                c.color = UIColor(red:redFactor,green:0,blue:0,alpha:1);
+                c.alpha = 1;
+            }
+            else
+            {
+                c.color = .white;
+            }
+        }
+        
         
         
         if(Tr)
         {
-            let P = playerTop.readyPiece!
+            let P = playerTop.readyPiece!;
             GhostTopFront?.removeFromParent();
             GhostTopRear?.removeFromParent();
             GhostTopFront = SKSpriteNode(color: BlockRush.BlockColors[P.FrontBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
@@ -814,6 +946,7 @@ class PlayField
             var DirMatched: Set<Block> = [];
             let x = v.0;
             let y = v.1;
+            
             for i in 0...(columns()-1-3*x)
             {
                 let s: [Int];
@@ -1015,7 +1148,10 @@ class PlayField
                                 Field[I][J+1]?.CreditTop = CreditTop;
                             }
                         }
-                        block.nod.removeFromParent();
+                        if(block.nod.parent != nil)
+                        {
+                            block.nod.removeFromParent();
+                        }
                     }
                 }
             }
@@ -1116,11 +1252,27 @@ class PlayField
                     Field[i][jFrom] = nil;
                     
                     Field[i][jTo] = block;
-                    block.nod.position = GetPosition(column:i,row:jTo);block.iPos = i;
+                    block.nod.position = GetPosition(column:i,row:jTo);
+                    block.iPos = i;
                     block.jPos = jTo;
                 }
             }
         }
         return ret;
+    }
+    
+    func acceptDefeat(player: Player)
+    {
+        //print(player);
+        if(Loser != nil && Loser! !== player)
+        {
+            Loser = nil;
+        }
+        else
+        {
+            GameOver = true;
+            Loser = player;
+            gameScene.ReadyEndOfGame();
+        }
     }
 }

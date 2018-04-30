@@ -36,6 +36,6 @@ class Block:Hashable
     }
     var hashValue: Int
     {
-        return (initCol*initCol*initCol)+(nod.hashValue)+LockFrame;
+        return nod.hashValue;
     }
 }

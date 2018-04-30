@@ -11,12 +11,13 @@ import GameKit
 
 class BottomPlayer: Player
 {
-    /*
     public override init(rngSeed: UInt64, scene: SKScene, device: InputDevice)
     {
         super.init(rngSeed: rngSeed, scene: scene, device: device);
+        timeGaugeNode.zRotation = .pi;
+        timeGaugeNode.position.x *= -1;
+        timeGaugeNode.position.y *= -1;
     }
-    */
     
     override func SceneUpdate()
     {
@@ -27,6 +28,7 @@ class BottomPlayer: Player
             let CenterPt = CGPoint(x: sX, y: sY);
             pieceQueue.peek(i).SceneAdd(scene: scene, position: CenterPt,reversed:true);
         }
+        TimeGaugeUpdate();
     }
     
     override func Ready(_ p: Piece)

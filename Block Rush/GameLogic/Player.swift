@@ -22,9 +22,13 @@ class Player
     internal var readyPiece: Piece?;
     internal var nextFrame: Int;     //The frame at which to deliver the player's next piece
     internal var pieceQueue: Queue<Piece>;
+    internal var timeGaugeNode: SKSpriteNode;
+    internal var timeGaugeBar: SKSpriteNode;
     private var frozen: Bool;
     public var columnOver = 3;
     public var hasLost = false;
+    public var timeLeft = 1800;
+    
     
     //UI LOGIC
     internal var scene: SKScene;
@@ -45,6 +49,16 @@ class Player
         storedPower = 0;
         //
         
+        timeGaugeNode = SKSpriteNode(color: .gray,
+                                 size: CGSize(width:BlockRush.BlockWidth/2, height: BlockRush.GameHeight/3));
+        timeGaugeBar = timeGaugeNode.copy() as! SKSpriteNode;
+        timeGaugeBar.color = .green;
+        
+        timeGaugeNode.position.x =  BlockRush.GameWidth * 0.45;
+        timeGaugeNode.position.y = -BlockRush.GameHeight * (-0.3);
+        
+        //
+        
         inputDevice.player = self;
         
         for _ in 0...4
@@ -52,6 +66,8 @@ class Player
             GeneratePiece();
         }
         
+        timeGaugeNode.addChild(timeGaugeBar);
+        scene.addChild(timeGaugeNode);
         SceneUpdate();
     }
     
@@ -65,6 +81,32 @@ class Player
     func SceneUpdate()
     {
         fatalError("SceneUpdate() not implemented by a subclass");
+    }
+    
+    func TimeGaugeUpdate()
+    {
+        let ys = CGFloat(timeLeft)/1800
+        timeGaugeBar.yScale = ys;
+        timeGaugeBar.position.y = timeGaugeNode.size.height/2*(1-ys);
+        
+        timeGaugeNode.color = .gray;
+        
+        if(timeLeft <= 300)
+        {
+            timeGaugeBar.color = .red;
+            if(curFrame % 30 == 0)
+            {
+                timeGaugeNode.color = .red;
+            }
+        }
+        else if(timeLeft <= 600)
+        {
+            timeGaugeBar.color = .yellow;
+        }
+        else
+        {
+            timeGaugeBar.color = .green;
+        }
     }
     
     func Ready(_ p: Piece)
@@ -96,6 +138,8 @@ class Player
     
     func ReadyNext()
     {
+        GainTime(180);
+        
         let p = pieceQueue.dequeue();
         Ready(p);
         GeneratePiece();
@@ -139,6 +183,15 @@ class Player
         fatalError("Execute(input:field:) not implemented by a subclass");
     }
     
+    func GainTime(_ t: Int)
+    {
+        timeLeft += t;
+        if(timeLeft > 1800)
+        {
+            timeLeft = 1800;
+        }
+    }
+    
     //Executes this player's inputs up to a frame number.
     //Returns the most recent successful frame (if some frames haven't arrived yet) up to the passed in Int.
     func runTo(targetFrame: Int,playField: PlayField) -> Int
@@ -146,10 +199,23 @@ class Player
         //print("STARTING AT FRAME "+String(curFrame)+"; RUNNING TO FRAME "+String(targetFrame));
         while(inputDevice.CanEval() && curFrame < targetFrame)
         {
+            if(readyPiece != nil)
+            {
+                timeLeft -= 1;
+            }
+            
             inputDevice.EvalFrame();
             if(curFrame == nextFrame && !frozen)
             {
-                ReadyNext();
+                hasLost = playField.DetectPlayerLoss(player: self);
+                if(hasLost)
+                {
+                    playField.acceptDefeat(player: self);
+                }
+                else
+                {
+                    ReadyNext();
+                }
             }
             
             if(curFrame+1 == nextFrame && !frozen)
@@ -168,6 +234,11 @@ class Player
                 }
             }
             //
+            if(timeLeft <= 0)
+            {
+                Execute(input: .PLAY, field: playField);
+                timeLeft = 0;
+            }
             
             SceneUpdate();
             curFrame += 1;

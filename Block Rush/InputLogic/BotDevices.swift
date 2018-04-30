@@ -29,8 +29,9 @@ final class BotDevice
                 return 0;
             }
             FrameCt += 1;
-            //
             var ret = Input.NONE;
+            
+            //
             var t = 0;
             var min = playField!.rows();
             
@@ -43,11 +44,40 @@ final class BotDevice
                     min = surfaceData[i];
                 }
             }
-            if(FrameCt % 20 == 0)
+            var inputRate = 60;
+            if(player!.timeLeft < 500)
             {
+                inputRate = 50;
+            }
+            if(player!.timeLeft < 200)
+            {
+                inputRate = 30;
+            }
+            if(FrameCt % inputRate == 0)
+            {
+                //print("Surface state before input: "+String(describing: surfaceData));
                 if(player!.columnOver == t)
                 {
-                    ret = Input.PLAY;
+                    if(player!.readyPiece == nil)
+                    {
+                        return 0;
+                    }
+                    else if let r = player!.readyPiece
+                    {
+                        let AtCol = playField!.TopBlockAtColumn(column: t, player: player!)?.col;
+                        if(r.FrontBlock.col == AtCol)
+                        {
+                            ret = Input.PLAY;
+                        }
+                        else if(r.RearBlock.col == AtCol)
+                        {
+                            ret = Input.FLIP;
+                        }
+                        else
+                        {
+                            ret = Input.PLAY;
+                        }
+                    }
                 }
                 else if(player!.columnOver < t)
                 {
@@ -72,7 +102,6 @@ final class BotDevice
                     }
                 }
             }
-            
             //
             return ret.rawValue;
         }

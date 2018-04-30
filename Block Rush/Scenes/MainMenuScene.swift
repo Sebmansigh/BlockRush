@@ -59,7 +59,7 @@ class MainMenuScene: SKScene
                                   [MenuAction(title:"VS Local", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .Local)),
                                    GameMenu(title:"VS Bot",
                                             menuOptions:
-                                            [MenuAction(title:"Novice Bot", action: toGameScene(bottomPlayerType: .BotNovice, topPlayerType: .BotNovice)),
+                                            [MenuAction(title:"Novice Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotNovice)),
                                              MenuAction(title:"Adept Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotAdept)),
                                              MenuAction(title:"Expert Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotExpert)),
                                              MenuAction(title:"Master Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotMaster))

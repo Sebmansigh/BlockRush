@@ -24,6 +24,10 @@ class GameScene: SKScene
     public var BottomPlayerType: PlayerType = .None;
     public var TopPlayerType: PlayerType = .None;
     
+    var EndGame = false;
+    
+    var MenuNode: SKNode?;
+    
     override func sceneDidLoad()
     {
         if(BottomPlayerType == .None && TopPlayerType == .None)
@@ -34,6 +38,51 @@ class GameScene: SKScene
         {
             return;
         }
+        
+        let Menu = GameMenu(title: "main",
+                            menuOptions:
+                            [
+                                MenuAction(title: "Play Again")
+                                {
+                                    if let scene = SKScene(fileNamed: "GameScene") as? GameScene
+                                    {
+                                        // Set the scale mode to scale to fit the window
+                                        scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                                            height: UIScreen.main.nativeBounds.height);
+                                        scene.scaleMode = .aspectFit;
+                                        
+                                        scene.BottomPlayerType = self.BottomPlayerType;
+                                        scene.TopPlayerType = self.TopPlayerType;
+                                        
+                                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+                                    }
+                                    else
+                                    {
+                                        fatalError("Could not load GameScene.");
+                                    }
+                                },
+                                MenuAction(title: "Main Menu")
+                                {
+                                    if let scene = SKScene(fileNamed: "MainMenuScene")
+                                    {
+                                        // Set the scale mode to scale to fit the window
+                                        scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                                            height: UIScreen.main.nativeBounds.height);
+                                        scene.scaleMode = .aspectFit;
+                                        
+                                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+                                    }
+                                    else
+                                    {
+                                        fatalError("Could not load MainMenuScene.");
+                                    }
+                                }
+                            ]);
+        MenuNode = SKSpriteNode(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.6),
+                                size: CGSize(width: BlockRush.ScreenWidth, height: BlockRush.ScreenHeight));
+        MenuNode!.zPosition = 100;
+        Menu.show(node: MenuNode!);
+        
         
         var seed: UInt64 = 0;
         arc4random_buf(&seed, MemoryLayout.size(ofValue: seed))
@@ -348,193 +397,301 @@ class GameScene: SKScene
     
     override func update(_ currentTime: TimeInterval)
     {
-        if(playField != nil && playField!.GameReady)
+        if(EndGame)
         {
-            switch BlockRush.Settings[.BottomPlayerControlType]!
+            if(playField!.Loser === playerTop)
             {
-                
-            case SettingOption.ControlType.TouchSlide:
-                if(BottomTouch != nil)
-                {
-                    BottomTouchFrames += 1;
-                    if(BTarget != playerBottom!.columnOver)
-                    {
-                        if(BTarget! < playerBottom!.columnOver)
-                        {
-                            BDevice.pendingInput.append(.LEFT);
-                        }
-                        else
-                        {
-                            BDevice.pendingInput.append(.RIGHT);
-                        }
-                    }
-                }
-                
-            case SettingOption.ControlType.TouchTap:
-                if(BottomTouch != nil)
-                {
-                    BottomTouchFrames += 1;
-                    let loc = BottomTouch!.location(in: self);
-                    if(BottomTouchFrames == 20)
-                    {
-                        if(loc.x > BlockRush.BlockWidth*3)
-                        {
-                            BDevice.pendingInput.append(.RIGHT)
-                        }
-                        else if(loc.x < BlockRush.BlockWidth * -3)
-                        {
-                            BDevice.pendingInput.append(.LEFT)
-                        }
-                        else
-                        {
-                            BottomTouch = nil;
-                            break;
-                        }
-                        BottomTouchFrames = 17;
-                    }
-                }
-                
-            case SettingOption.ControlType.TouchHybrid:
-                if(BottomTouch != nil)
-                {
-                    BottomTouchFrames += 1;
-                    if(BTarget != playerBottom!.columnOver)
-                    {
-                        if(BTarget! < playerBottom!.columnOver)
-                        {
-                            BDevice.pendingInput.append(.LEFT);
-                        }
-                        else
-                        {
-                            BDevice.pendingInput.append(.RIGHT);
-                        }
-                    }
-                }
-                
-            default:
-                break; //Non-touch control type
+                PlayLoseEffect(top: true);
+                PlayWinEffect(top: false);
             }
+            else if(playField!.Loser === playerBottom)
+            {
+                PlayLoseEffect(top: false);
+                PlayWinEffect(top: true);
+            }
+            else
+            {
+                PlayLoseEffect(top: true);
+                PlayLoseEffect(top: false);
+            }
+            EndGame = false;
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0)
+            {
+                self.addChild(self.MenuNode!);
+                
+                self.MenuNode!.run(.fadeIn(withDuration: 1));
+            };
             
+        }
+        if(playField != nil)
+        {
+            if(playField!.GameOver)
+            {
+                //Do things
+            }
+            else if(playField!.GameReady)
+            {
+                switch BlockRush.Settings[.BottomPlayerControlType]!
+                {
+                    
+                case SettingOption.ControlType.TouchSlide:
+                    if(BottomTouch != nil)
+                    {
+                        BottomTouchFrames += 1;
+                        if(BTarget != playerBottom!.columnOver)
+                        {
+                            if(BTarget! < playerBottom!.columnOver)
+                            {
+                                BDevice.pendingInput.append(.LEFT);
+                            }
+                            else
+                            {
+                                BDevice.pendingInput.append(.RIGHT);
+                            }
+                        }
+                    }
+                    
+                case SettingOption.ControlType.TouchTap:
+                    if(BottomTouch != nil)
+                    {
+                        BottomTouchFrames += 1;
+                        let loc = BottomTouch!.location(in: self);
+                        if(BottomTouchFrames == 20)
+                        {
+                            if(loc.x > BlockRush.BlockWidth*3)
+                            {
+                                BDevice.pendingInput.append(.RIGHT)
+                            }
+                            else if(loc.x < BlockRush.BlockWidth * -3)
+                            {
+                                BDevice.pendingInput.append(.LEFT)
+                            }
+                            else
+                            {
+                                BottomTouch = nil;
+                                break;
+                            }
+                            BottomTouchFrames = 17;
+                        }
+                    }
+                    
+                case SettingOption.ControlType.TouchHybrid:
+                    if(BottomTouch != nil)
+                    {
+                        BottomTouchFrames += 1;
+                        if(BTarget != playerBottom!.columnOver)
+                        {
+                            if(BTarget! < playerBottom!.columnOver)
+                            {
+                                BDevice.pendingInput.append(.LEFT);
+                            }
+                            else
+                            {
+                                BDevice.pendingInput.append(.RIGHT);
+                            }
+                        }
+                    }
+                    
+                default:
+                    break; //Non-touch control type
+                }
+                
+            
+                switch BlockRush.Settings[.TopPlayerControlType]!
+                {
+                    
+                case SettingOption.ControlType.TouchSlide:
+                    if(TopTouch != nil)
+                    {
+                        TopTouchFrames += 1;
+                        if(TTarget != playerTop!.columnOver)
+                        {
+                            if(TTarget! < playerTop!.columnOver)
+                            {
+                                TDevice.pendingInput.append(.RIGHT);
+                            }
+                            else
+                            {
+                                TDevice.pendingInput.append(.LEFT);
+                            }
+                        }
+                        
+                    }
+                    
+                case SettingOption.ControlType.TouchTap:
+                    if(TopTouch != nil)
+                    {
+                        TopTouchFrames += 1;
+                        let loc = TopTouch!.location(in: self);
+                        if(TopTouchFrames == 20)
+                        {
+                            if(loc.x > BlockRush.BlockWidth*3)
+                            {
+                                TDevice.pendingInput.append(.LEFT)
+                            }
+                            else if(loc.x < BlockRush.BlockWidth * -3)
+                            {
+                                TDevice.pendingInput.append(.RIGHT)
+                            }
+                            else
+                            {
+                                TopTouch = nil;
+                                break;
+                            }
+                            TopTouchFrames = 17;
+                        }
+                    }
+                    
+                case SettingOption.ControlType.TouchHybrid:
+                    if(TopTouch != nil)
+                    {
+                        TopTouchFrames += 1;
+                        if(TTarget != playerTop!.columnOver)
+                        {
+                            if(TTarget! < playerTop!.columnOver)
+                            {
+                                TDevice.pendingInput.append(.RIGHT);
+                            }
+                            else
+                            {
+                                TDevice.pendingInput.append(.LEFT);
+                            }
+                        }
+                        
+                    }
+                    
+                default:
+                    break; //Non-touch control type
+                }
+                
+                
+                
+                
+                //Run game
+                
+                let BFrame = playerBottom!.runTo(targetFrame: playField!.GameFrame,playField: playField!);
+                let TFrame = playerTop!   .runTo(targetFrame: playField!.GameFrame,playField: playField!);
+                // If neither player is less than 15 frames behind
+                if((playField!.GameFrame - BFrame) < 15 && (playField!.GameFrame - TFrame < 15))
+                {
+                    if(playField!.GameFrame <= 200)
+                    {
+                        if((playField!.GameFrame-20) % 60 == 0)
+                        {
+                            let n = 3 - (playField!.GameFrame-20)/60;
+                            let Str: String;
+                            if(n == 0)
+                            {
+                                Str = "GO!";
+                            }
+                            else
+                            {
+                                Str = String(n);
+                            }
+                            
+                            let Bnode = SKLabelNode(text: Str);
+                            Bnode.fontName = "Avenir-Black";
+                            Bnode.fontSize = BlockRush.GameHeight/4;
+                            Bnode.verticalAlignmentMode = .center;
+                            if(n == 0)
+                            {
+                                Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 2.0, duration: 1)]));
+                            }
+                            else
+                            {
+                                Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 0.5, duration: 1)]));
+                            }
+                            
+                            let Tnode = Bnode.copy() as! SKLabelNode;
+                            Tnode.position.y =  BlockRush.GameHeight/6;
+                            Bnode.position.y = -BlockRush.GameHeight/6;
+                            Tnode.zRotation = .pi;
+                            addChild(Bnode);
+                            addChild(Tnode);
+                        }
+                    }
+                    playField!.AdvanceFrame();
+                }
+            }
+            else
+            {
+                print("Game is not ready!");
+            }
+        }
+    }
+    
+    func ReadyEndOfGame()
+    {
+        EndGame = true;
+    }
+    
+    func PlayWinEffect(top: Bool)
+    {
+        let GroupNode = SKNode();
+        let BGNode = SKSpriteNode(color: .red, size: CGSize(width: BlockRush.GameWidth, height: BlockRush.BlockWidth*2));
+        let TextNode = SKLabelNode(text: "WINNER!");
+        TextNode.fontName = "Avenir-Black";
+        TextNode.fontSize = BlockRush.BlockWidth*1.25;
+        TextNode.verticalAlignmentMode = .center;
+        TextNode.fontColor = .yellow;
         
-            switch BlockRush.Settings[.TopPlayerControlType]!
-            {
-                
-            case SettingOption.ControlType.TouchSlide:
-                if(TopTouch != nil)
-                {
-                    TopTouchFrames += 1;
-                    if(TTarget != playerTop!.columnOver)
-                    {
-                        if(TTarget! < playerTop!.columnOver)
-                        {
-                            TDevice.pendingInput.append(.RIGHT);
-                        }
-                        else
-                        {
-                            TDevice.pendingInput.append(.LEFT);
-                        }
-                    }
-                    
-                }
-                
-            case SettingOption.ControlType.TouchTap:
-                if(TopTouch != nil)
-                {
-                    TopTouchFrames += 1;
-                    let loc = TopTouch!.location(in: self);
-                    if(TopTouchFrames == 20)
-                    {
-                        if(loc.x > BlockRush.BlockWidth*3)
-                        {
-                            TDevice.pendingInput.append(.LEFT)
-                        }
-                        else if(loc.x < BlockRush.BlockWidth * -3)
-                        {
-                            TDevice.pendingInput.append(.RIGHT)
-                        }
-                        else
-                        {
-                            TopTouch = nil;
-                            break;
-                        }
-                        TopTouchFrames = 17;
-                    }
-                }
-                
-            case SettingOption.ControlType.TouchHybrid:
-                if(TopTouch != nil)
-                {
-                    TopTouchFrames += 1;
-                    if(TTarget != playerTop!.columnOver)
-                    {
-                        if(TTarget! < playerTop!.columnOver)
-                        {
-                            TDevice.pendingInput.append(.RIGHT);
-                        }
-                        else
-                        {
-                            TDevice.pendingInput.append(.LEFT);
-                        }
-                    }
-                    
-                }
-                
-            default:
-                break; //Non-touch control type
-            }
-            
-            
-            
-            
-            //Run game
-            
-            let BFrame = playerBottom!.runTo(targetFrame: playField!.GameFrame,playField: playField!);
-            let TFrame = playerTop!   .runTo(targetFrame: playField!.GameFrame,playField: playField!);
-            // If neither player is less than 15 frames behind
-            if((playField!.GameFrame - BFrame) < 15 && (playField!.GameFrame - TFrame < 15))
-            {
-                if(playField!.GameFrame <= 200)
-                {
-                    if((playField!.GameFrame-20) % 60 == 0)
-                    {
-                        let n = 3 - (playField!.GameFrame-20)/60;
-                        let Str: String;
-                        if(n == 0)
-                        {
-                            Str = "GO!";
-                        }
-                        else
-                        {
-                            Str = String(n);
-                        }
-                        
-                        let Bnode = SKLabelNode(text: Str);
-                        Bnode.fontName = "Avenir-Black";
-                        Bnode.fontSize = BlockRush.GameHeight/4;
-                        Bnode.verticalAlignmentMode = .center;
-                        if(n == 0)
-                        {
-                            Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 2.0, duration: 1)]));
-                        }
-                        else
-                        {
-                            Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 0.5, duration: 1)]));
-                        }
-                        
-                        let Tnode = Bnode.copy() as! SKLabelNode;
-                        Tnode.position.y =  BlockRush.GameHeight/6;
-                        Bnode.position.y = -BlockRush.GameHeight/6;
-                        Tnode.zRotation = .pi;
-                        addChild(Bnode);
-                        addChild(Tnode);
-                    }
-                }
-                playField!.AdvanceFrame();
-            }
+        GroupNode.addChild(BGNode);
+        GroupNode.addChild(TextNode);
+        
+        if(top)
+        {
+            GroupNode.position.y = BlockRush.GameHeight/4;
+            GroupNode.zRotation = .pi;
         }
         else
         {
-            print("Game is not ready!");
+            GroupNode.position.y = -BlockRush.GameHeight/4;
         }
+        GroupNode.zPosition = 10;
+        self.addChild(GroupNode);
+        
+        //
+        
+        BGNode.run(.fadeIn(withDuration: 0.2))
+        {
+            TextNode.run(.sequence( [
+                            .fadeIn(withDuration: 0.1),
+                            .repeatForever(
+                                .sequence(
+                                    [.scale(by: 1.25, duration: 0.5),
+                                     .scale(by: 0.80, duration: 0.5)]
+                                )
+                            )
+                        ]
+                    )
+                );
+        };
+        
+    }
+    
+    func PlayLoseEffect(top: Bool)
+    {
+        let GroupNode = SKNode();
+        let BGNode = SKSpriteNode(color: .blue, size: CGSize(width: BlockRush.GameWidth, height: BlockRush.BlockWidth*2));
+        let TextNode = SKLabelNode(text: "LOSER...");
+        TextNode.fontName = "Avenir-Black";
+        TextNode.fontSize = BlockRush.BlockWidth*1.25;
+        TextNode.verticalAlignmentMode = .center;
+        TextNode.fontColor = .purple;
+        
+        GroupNode.addChild(BGNode);
+        GroupNode.addChild(TextNode);
+        
+        if(top)
+        {
+            GroupNode.position.y = BlockRush.GameHeight/4;
+            GroupNode.zRotation = .pi;
+        }
+        else
+        {
+            GroupNode.position.y = -BlockRush.GameHeight/4;
+        }
+        GroupNode.zPosition = 10;
+        self.addChild(GroupNode);
     }
 }

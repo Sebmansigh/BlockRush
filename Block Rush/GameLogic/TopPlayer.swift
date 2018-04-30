@@ -11,6 +11,7 @@ import GameKit
 
 class TopPlayer: Player
 {
+    
     /*
      public override init(rngSeed: UInt64, scene: SKScene, device: InputDevice)
      {
@@ -27,6 +28,7 @@ class TopPlayer: Player
             let CenterPt = CGPoint(x: sX, y: sY);
             pieceQueue.peek(i).SceneAdd(scene: scene, position: CenterPt);
         }
+        TimeGaugeUpdate();
     }
     
     override func Ready(_ p: Piece)

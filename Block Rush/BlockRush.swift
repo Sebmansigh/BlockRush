@@ -15,6 +15,10 @@ final class BlockRush
     public static func Initialize()
     {
         loadSettings();
+        
+        ScreenWidth = UIScreen.main.nativeBounds.width;
+        ScreenHeight = UIScreen.main.nativeBounds.height;
+        
         GameWidth = UIScreen.main.nativeBounds.width;
         GameHeight = min(UIScreen.main.nativeBounds.height,UIScreen.main.nativeBounds.width*2);
         
@@ -91,7 +95,13 @@ final class BlockRush
     private init(){}
     
     public static var BlockWidth: CGFloat = 0;
-    public static let BlockColors: [UIColor] = [UIColor.blue,UIColor.green,UIColor.red];
+    public static let BlockColors: [UIColor] = [
+        UIColor(red:1,green:0.3,blue:0.3,alpha:1),
+        UIColor(red:0.3,green:1,blue:0.3,alpha:1),
+        UIColor(red:0.3,green:0.3,blue:1,alpha:1)];
+    
+    public static var ScreenWidth: CGFloat = 0;
+    public static var ScreenHeight: CGFloat = 0;
     
     public static var GameWidth: CGFloat = 0;
     public static var GameHeight: CGFloat = 0;
