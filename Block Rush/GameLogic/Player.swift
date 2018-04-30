@@ -57,6 +57,14 @@ class Player
         timeGaugeNode.position.x =  BlockRush.GameWidth * 0.45;
         timeGaugeNode.position.y = -BlockRush.GameHeight * (-0.3);
         
+        let timeLabelNode = SKLabelNode(text:"TIME");
+        timeLabelNode.fontName = "Avenir-Black";
+        timeLabelNode.fontSize = BlockRush.BlockWidth*2/7;
+        timeLabelNode.position.y = timeGaugeNode.size.height/2;
+        timeLabelNode.zRotation = .pi;
+        timeLabelNode.verticalAlignmentMode = .top;
+        
+        timeLabelNode.fontColor = .white;
         //
         
         inputDevice.player = self;
@@ -67,6 +75,7 @@ class Player
         }
         
         timeGaugeNode.addChild(timeGaugeBar);
+        timeGaugeNode.addChild(timeLabelNode);
         scene.addChild(timeGaugeNode);
         SceneUpdate();
     }

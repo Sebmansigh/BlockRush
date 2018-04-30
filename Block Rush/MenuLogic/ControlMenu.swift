@@ -40,7 +40,6 @@ class ControlMenu: GameMenu
     override func show(node: SKNode)
     {
         inNode = node;
-        GameMenu.titleNode.text = title;
         
         node.addChild(TopSelector.Fetch());
         node.addChild(BottomSelector.Fetch());

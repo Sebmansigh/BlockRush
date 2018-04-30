@@ -44,14 +44,14 @@ final class BotDevice
                     min = surfaceData[i];
                 }
             }
-            var inputRate = 60;
+            var inputRate = 100;
             if(player!.timeLeft < 500)
             {
-                inputRate = 50;
+                inputRate = 70;
             }
             if(player!.timeLeft < 200)
             {
-                inputRate = 30;
+                inputRate = 40;
             }
             if(FrameCt % inputRate == 0)
             {

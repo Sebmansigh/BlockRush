@@ -35,7 +35,7 @@ class SoundMenu: GameMenu
     override func show(node: SKNode)
     {
         inNode = node;
-        GameMenu.titleNode.text = title;
+        titleNode.text = title;
         
         node.addChild(BGMslider.Fetch());
         node.addChild(SFXslider.Fetch());

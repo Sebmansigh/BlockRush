@@ -12,7 +12,8 @@ class GameMenu: MenuOption
 {
     internal let options: [MenuOption];
     internal var inNode: SKNode? = nil;
-    static let titleNode = SKLabelNode(text: "!");
+    let titleNode = SKLabelNode(text: "!");
+    static var currentTitleNode: SKLabelNode? = nil;
     var Back: MenuAction?;
     
     init(title: String, menuOptions: [MenuOption])
@@ -77,24 +78,25 @@ class GameMenu: MenuOption
             subnode.position.y = targetY - Bh;
             subnode.run(.move(to: CGPoint(x:0,y:targetY), duration: 1));
         }
-        let tn = GameMenu.titleNode
-        if(tn.text == "!")
+        if(titleNode.text == "!")
         {
-            tn.text = "";
-            tn.position.y = Bh/8;
-            tn.fontName = "Avenir-Black";
-            tn.fontSize = Bh/10;
-            node.addChild(tn);
+            titleNode.text = "";
+            titleNode.position.y = Bh/8;
+            titleNode.fontName = "Avenir-Black";
+            titleNode.fontSize = Bh/10;
         }
         if(title == "main")
         {
-            tn.text = "";
+            titleNode.text = "";
         }
         else
         {
-            tn.text = title;
+            titleNode.text = title;
             showBackButton();
         }
+        GameMenu.currentTitleNode?.removeFromParent();
+        GameMenu.currentTitleNode = titleNode;
+        node.addChild(titleNode);
     }
     
     func hideSiblings(_ highlight: MenuOption)
