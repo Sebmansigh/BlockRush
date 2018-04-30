@@ -12,6 +12,8 @@ struct Input : OptionSet
     
     let rawValue: UInt8;
     
+    static let NONE   = Input(rawValue: 0b0000_0000);
+    
     static let LEFT   = Input(rawValue: 0b0000_0001);
     static let RIGHT  = Input(rawValue: 0b0000_0010);
     static let FLIP   = Input(rawValue: 0b0000_0100);

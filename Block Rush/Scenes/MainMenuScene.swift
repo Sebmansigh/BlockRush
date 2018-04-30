@@ -14,6 +14,28 @@ class MainMenuScene: SKScene
     var titleNode: SKLabelNode? = nil;
     var loaded = false;
     
+    private func toGameScene(bottomPlayerType: PlayerType,topPlayerType: PlayerType) ->( () -> Void )
+    {
+        return {
+            if let scene = SKScene(fileNamed: "GameScene") as? GameScene
+            {
+                // Set the scale mode to scale to fit the window
+                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                    height: UIScreen.main.nativeBounds.height);
+                scene.scaleMode = .aspectFit;
+                
+                scene.BottomPlayerType = bottomPlayerType;
+                scene.TopPlayerType = topPlayerType;
+                
+                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+            }
+            else
+            {
+                fatalError("Could not load GameScene.");
+            }
+        };
+    }
+    
     override func sceneDidLoad()
     {
         backgroundColor = .black;
@@ -34,18 +56,14 @@ class MainMenuScene: SKScene
                         menuOptions:
                         [GameMenu(title:"Play",
                                   menuOptions:
-                                  [MenuAction(title:"VS Local") {
-                                       if let scene = SKScene(fileNamed: "GameScene")
-                                       {
-                                           // Set the scale mode to scale to fit the window
-                                           scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
-                                                               height: UIScreen.main.nativeBounds.height);
-                                           scene.scaleMode = .aspectFit;
-                                       
-                                           self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
-                                       }
-                                   },
-                                   GameMenu(title:"VS Computer"),
+                                  [MenuAction(title:"VS Local", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .Local)),
+                                   GameMenu(title:"VS Bot",
+                                            menuOptions:
+                                            [MenuAction(title:"Novice Bot", action: toGameScene(bottomPlayerType: .BotNovice, topPlayerType: .BotNovice)),
+                                             MenuAction(title:"Adept Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotAdept)),
+                                             MenuAction(title:"Expert Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotExpert)),
+                                             MenuAction(title:"Master Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotMaster))
+                                            ]),
                                    GameMenu(title:"VS Bluetooth"),
                                    GameMenu(title:"VS Online")
                                   ]),

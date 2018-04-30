@@ -10,8 +10,8 @@ import GameplayKit
 
 class GameScene: SKScene
 {
-    let BDevice = TouchDevice();
-    let TDevice = TouchDevice();
+    private let BDevice = TouchDevice();
+    private let TDevice = TouchDevice();
     var BTarget: Int? = nil;
     var TTarget: Int? = nil;
     
@@ -21,8 +21,15 @@ class GameScene: SKScene
     
     var playField : PlayField? = nil;
     
+    public var BottomPlayerType: PlayerType = .None;
+    public var TopPlayerType: PlayerType = .None;
+    
     override func sceneDidLoad()
     {
+        if(BottomPlayerType == .None && TopPlayerType == .None)
+        {
+            return;
+        }
         if(playField != nil)
         {
             return;
@@ -30,12 +37,50 @@ class GameScene: SKScene
         
         var seed: UInt64 = 0;
         arc4random_buf(&seed, MemoryLayout.size(ofValue: seed))
-        playerTop = TopPlayer(rngSeed: seed, scene:self, device: TDevice);
-        playerBottom = BottomPlayer(rngSeed: seed, scene:self, device: BDevice);
+        
+        let TopDevice: InputDevice;
+        switch TopPlayerType
+        {
+        case .Local:
+            TopDevice = TDevice;
+        case .BotNovice:
+            TopDevice = BotDevice.Novice();
+        case .BotAdept:
+            TopDevice = BotDevice.Adept();
+        case .BotExpert:
+            TopDevice = BotDevice.Expert();
+        case .BotMaster:
+            TopDevice = BotDevice.Master();
+        default:
+            fatalError("Unkown Top Player Type: "+String(describing: TopPlayerType));
+        }
+        
+        let BottomDevice: InputDevice;
+        switch BottomPlayerType
+        {
+        case .Local:
+            BottomDevice = BDevice;
+        case .BotNovice:
+            BottomDevice = BotDevice.Novice();
+        case .BotAdept:
+            BottomDevice = BotDevice.Adept();
+        case .BotExpert:
+            BottomDevice = BotDevice.Expert();
+        case .BotMaster:
+            BottomDevice = BotDevice.Master();
+        default:
+            fatalError("Unkown Bottom Player Type: "+String(describing: TopPlayerType));
+        }
+        
+        playerTop = TopPlayer(rngSeed: seed, scene:self, device: TopDevice);
+        playerBottom = BottomPlayer(rngSeed: seed, scene:self, device: BottomDevice);
+        
         backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
         backgroundGrid?.fillColor = UIColor.black;
         self.addChild(backgroundGrid!);
         playField = PlayField(cols:6, rows:46, playerTop:playerTop!, playerBottom:playerBottom!, scene:self);
+        TopDevice.playField = playField;
+        BottomDevice.playField = playField;
         
         backgroundGrid?.zPosition = -1;
         //*/
@@ -469,7 +514,7 @@ class GameScene: SKScene
                         Bnode.verticalAlignmentMode = .center;
                         if(n == 0)
                         {
-                            Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 2, duration: 1)]));
+                            Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 2.0, duration: 1)]));
                         }
                         else
                         {

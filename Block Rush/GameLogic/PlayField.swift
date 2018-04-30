@@ -112,6 +112,51 @@ class PlayField
     }
     
     
+    //returns an array of stack heights for the given player. Indecies are column numbers.
+    func getSurfaceData(_ player: Player) -> [Int]
+    {
+        var ret: [Int] = Array<Int>(repeating: 0, count: columns());
+        for i in 0...columns()-1
+        {
+            ret[i] = getStackHeight(column: i, player: player);
+        }
+        return ret;
+    }
+    
+    func getStackHeight(column: Int, player: Player) -> Int
+    {
+        if(player === playerTop)
+        {
+            let max = rows()/2-1;
+            for i in (0...max).reversed()
+            {
+                if(Field[column][i] == nil)
+                {
+                    return max-i;
+                }
+            }
+            return max+1;
+        }
+        else if(player === playerBottom)
+        {
+            let max = rows()-1;
+            let min = rows()/2;
+            
+            for i in min...max
+            {
+                if(Field[column][i] == nil)
+                {
+                    return i-min;
+                }
+            }
+            return max-min+1;
+        }
+        else
+        {
+            fatalError("Recieved neither top nor bottom player for getStackHeight");
+        }
+    }
+    
     func AnimPower()
     {
         let targetPowVal = playerBottom.storedPower-playerTop.storedPower+movePower;

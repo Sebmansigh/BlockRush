@@ -11,6 +11,8 @@ class InputDevice
 {
     internal var inputLog: [UInt8] = [];
     internal var curInput: UInt8 = 0;
+    public var player: Player? = nil;
+    public var playField: PlayField? = nil;
     
     internal init() {};
     

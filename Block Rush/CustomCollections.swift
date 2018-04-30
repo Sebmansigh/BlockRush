@@ -25,6 +25,11 @@ class Queue<T>
         data.append(item);
     }
     
+    func isEmpty() -> Bool
+    {
+        return data.count == 0;
+    }
+    
     func dequeue() -> T
     {
         return data.removeFirst();

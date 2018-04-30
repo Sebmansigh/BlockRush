@@ -45,6 +45,8 @@ class Player
         storedPower = 0;
         //
         
+        inputDevice.player = self;
+        
         for _ in 0...4
         {
             GeneratePiece();
@@ -125,6 +127,11 @@ class Player
         {
             return 0;
         }
+    }
+    
+    func isFrozen() -> Bool
+    {
+        return frozen;
     }
     
     func Execute(input: Input,field: PlayField)
