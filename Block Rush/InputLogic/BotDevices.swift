@@ -53,6 +53,9 @@ final class BotDevice
             {
                 inputRate = 40;
             }
+            
+            //inputRate = 2;
+            
             if(FrameCt % inputRate == 0)
             {
                 //print("Surface state before input: "+String(describing: surfaceData));

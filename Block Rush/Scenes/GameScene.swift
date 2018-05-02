@@ -39,6 +39,8 @@ class GameScene: SKScene
             return;
         }
         
+        BlockRush.SoundScene = self;
+        
         let Menu = GameMenu(title: "main",
                             menuOptions:
                             [

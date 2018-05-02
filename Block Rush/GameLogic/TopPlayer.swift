@@ -45,6 +45,7 @@ class TopPlayer: Player
     override func Play(_ field: PlayField)
     {
         field.PushTop(column: columnOver, piece: readyPiece!, frame:curFrame);
+        BlockRush.PlaySound(name: "PlaySnap");
         readyPiece = nil;
         nextFrame = curFrame + 30;
     }
@@ -63,13 +64,13 @@ class TopPlayer: Player
         switch(input)
         {
         case .LEFT:
-            if(columnOver != 5)
+            if(readyPiece != nil && columnOver != 5)
             {
                 MoveToColumn(columnOver+1);
                 BlockRush.PlaySound(name: "MoveTick");
             }
         case .RIGHT:
-            if(columnOver != 0)
+            if(readyPiece != nil && columnOver != 0)
             {
                 MoveToColumn(columnOver-1);
                 BlockRush.PlaySound(name: "MoveTick");

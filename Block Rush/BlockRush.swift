@@ -147,17 +147,29 @@ final class BlockRush
         return ClearVal * chainLevel;
     }
     
-    static let Sounds: [String: SoundPlayer] =
+    static let Sounds: [String: SKAction] =
     [
-        "MoveTick" : SoundPlayer(file: "MoveTick.caf",players: 1)
+        "MatchBoom": SKAction.playSoundFileNamed("MatchBoom.wav", waitForCompletion: false),
+        "MoveTick" : SKAction.playSoundFileNamed("MoveTick.wav", waitForCompletion: false),
+        "PlaySnap" : SKAction.playSoundFileNamed("PlaySnap.wav", waitForCompletion: false),
+        
+        "Chain1"   : SKAction.playSoundFileNamed("Chain1.wav", waitForCompletion: false),
+        "Chain2"   : SKAction.playSoundFileNamed("Chain2.wav", waitForCompletion: false),
+        "Chain3"   : SKAction.playSoundFileNamed("Chain3.wav", waitForCompletion: false),
+        "Chain4"   : SKAction.playSoundFileNamed("Chain4.wav", waitForCompletion: false),
+        "Chain5"   : SKAction.playSoundFileNamed("Chain5.wav", waitForCompletion: false),
+        "Chain6"   : SKAction.playSoundFileNamed("Chain6.wav", waitForCompletion: false),
+        "Chain7"   : SKAction.playSoundFileNamed("Chain7.wav", waitForCompletion: false),
     ];
+    
+    public static var SoundScene: SKScene? = nil;
     
     static func PlaySound(name:String)
     {
-        let SfxVolume = Float(Settings[ .SoundEffectVolume ]!.rawValue)/100.0;
+        //let SfxVolume = Float(Settings[ .SoundEffectVolume ]!.rawValue)/100.0;
         
-        let Player = Sounds[name]!
+        let action = Sounds[name]!.copy() as! SKAction;
         
-        Player.play(volume: SfxVolume);
+        SoundScene!.run(action);
     }
 }

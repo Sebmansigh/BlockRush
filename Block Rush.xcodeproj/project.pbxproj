@@ -35,8 +35,16 @@
 		A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80FE7012072BAE000E73E36 /* TopPlayer.swift */; };
 		A80FE7042072D8E900E73E36 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80FE7032072D8E900E73E36 /* Block.swift */; };
 		A83507052096C8E600DC7C37 /* DebugTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83507042096C8E600DC7C37 /* DebugTools.swift */; };
-		A83507072097D34B00DC7C37 /* MoveTick.wav in Resources */ = {isa = PBXBuildFile; fileRef = A83507062097D34A00DC7C37 /* MoveTick.wav */; };
-		A8C386D3209A294500DB58D4 /* SoundRepeater.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C386D2209A294500DB58D4 /* SoundRepeater.swift */; };
+		A8C386D8209A405D00DB58D4 /* MoveTick.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386D7209A405D00DB58D4 /* MoveTick.wav */; };
+		A8C386DA209A43D800DB58D4 /* PlaySnap.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386D9209A43D800DB58D4 /* PlaySnap.wav */; };
+		A8C386DC209A47C300DB58D4 /* MatchBoom.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386DB209A47C300DB58D4 /* MatchBoom.wav */; };
+		A8C386DE209A4F6C00DB58D4 /* Chain1.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386DD209A4F6C00DB58D4 /* Chain1.wav */; };
+		A8C386E5209A51BC00DB58D4 /* Chain6.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386DF209A51BC00DB58D4 /* Chain6.wav */; };
+		A8C386E6209A51BC00DB58D4 /* Chain4.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E0209A51BC00DB58D4 /* Chain4.wav */; };
+		A8C386E7209A51BC00DB58D4 /* Chain2.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E1209A51BC00DB58D4 /* Chain2.wav */; };
+		A8C386E8209A51BC00DB58D4 /* Chain3.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E2209A51BC00DB58D4 /* Chain3.wav */; };
+		A8C386E9209A51BC00DB58D4 /* Chain7.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E3209A51BC00DB58D4 /* Chain7.wav */; };
+		A8C386EA209A51BC00DB58D4 /* Chain5.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E4209A51BC00DB58D4 /* Chain5.wav */; };
 		A8C395CF2079546D00D57AE0 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */; };
 		A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C395D02079548F00D57AE0 /* MainMenuScene.swift */; };
 		A8C395D320795A5C00D57AE0 /* MenuOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C395D220795A5C00D57AE0 /* MenuOption.swift */; };
@@ -99,9 +107,16 @@
 		A80FE7012072BAE000E73E36 /* TopPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPlayer.swift; sourceTree = "<group>"; };
 		A80FE7032072D8E900E73E36 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		A83507042096C8E600DC7C37 /* DebugTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTools.swift; sourceTree = "<group>"; };
-		A83507062097D34A00DC7C37 /* MoveTick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MoveTick.wav; sourceTree = "<group>"; };
-		A8C386D2209A294500DB58D4 /* SoundRepeater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundRepeater.swift; sourceTree = "<group>"; };
-		A8C386D4209A385100DB58D4 /* MoveTick.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MoveTick.caf; sourceTree = "<group>"; };
+		A8C386D7209A405D00DB58D4 /* MoveTick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MoveTick.wav; sourceTree = "<group>"; };
+		A8C386D9209A43D800DB58D4 /* PlaySnap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = PlaySnap.wav; sourceTree = "<group>"; };
+		A8C386DB209A47C300DB58D4 /* MatchBoom.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MatchBoom.wav; sourceTree = "<group>"; };
+		A8C386DD209A4F6C00DB58D4 /* Chain1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain1.wav; sourceTree = "<group>"; };
+		A8C386DF209A51BC00DB58D4 /* Chain6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain6.wav; sourceTree = "<group>"; };
+		A8C386E0209A51BC00DB58D4 /* Chain4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain4.wav; sourceTree = "<group>"; };
+		A8C386E1209A51BC00DB58D4 /* Chain2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain2.wav; sourceTree = "<group>"; };
+		A8C386E2209A51BC00DB58D4 /* Chain3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain3.wav; sourceTree = "<group>"; };
+		A8C386E3209A51BC00DB58D4 /* Chain7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain7.wav; sourceTree = "<group>"; };
+		A8C386E4209A51BC00DB58D4 /* Chain5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain5.wav; sourceTree = "<group>"; };
 		A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
 		A8C395D02079548F00D57AE0 /* MainMenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		A8C395D220795A5C00D57AE0 /* MenuOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuOption.swift; sourceTree = "<group>"; };
@@ -167,7 +182,6 @@
 				A80539F5206961420059562D /* BlockRush.swift */,
 				A80539CD20685A650059562D /* Info.plist */,
 				A80539BB20685A650059562D /* AppDelegate.swift */,
-				A8C386D1209A28CE00DB58D4 /* AudioLogic */,
 				A8071BEA207AD47A00EC3272 /* StoryboardLogic */,
 				A8071BE7207AD36000EC3272 /* SettingsLogic */,
 				A8071BE3207AD26800EC3272 /* Scenes */,
@@ -278,18 +292,18 @@
 		A83507082097D36800DC7C37 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				A8C386D4209A385100DB58D4 /* MoveTick.caf */,
-				A83507062097D34A00DC7C37 /* MoveTick.wav */,
+				A8C386E1209A51BC00DB58D4 /* Chain2.wav */,
+				A8C386E2209A51BC00DB58D4 /* Chain3.wav */,
+				A8C386E0209A51BC00DB58D4 /* Chain4.wav */,
+				A8C386E4209A51BC00DB58D4 /* Chain5.wav */,
+				A8C386DF209A51BC00DB58D4 /* Chain6.wav */,
+				A8C386E3209A51BC00DB58D4 /* Chain7.wav */,
+				A8C386DD209A4F6C00DB58D4 /* Chain1.wav */,
+				A8C386D7209A405D00DB58D4 /* MoveTick.wav */,
+				A8C386D9209A43D800DB58D4 /* PlaySnap.wav */,
+				A8C386DB209A47C300DB58D4 /* MatchBoom.wav */,
 			);
 			path = Sounds;
-			sourceTree = "<group>";
-		};
-		A8C386D1209A28CE00DB58D4 /* AudioLogic */ = {
-			isa = PBXGroup;
-			children = (
-				A8C386D2209A294500DB58D4 /* SoundRepeater.swift */,
-			);
-			path = AudioLogic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -399,11 +413,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				A80539C720685A650059562D /* Main.storyboard in Resources */,
+				A8C386DE209A4F6C00DB58D4 /* Chain1.wav in Resources */,
+				A8C386E9209A51BC00DB58D4 /* Chain7.wav in Resources */,
+				A8C386EA209A51BC00DB58D4 /* Chain5.wav in Resources */,
 				A80539BE20685A650059562D /* GameScene.sks in Resources */,
+				A8C386E7209A51BC00DB58D4 /* Chain2.wav in Resources */,
+				A8C386E5209A51BC00DB58D4 /* Chain6.wav in Resources */,
 				A80539C920685A650059562D /* Assets.xcassets in Resources */,
+				A8C386DC209A47C300DB58D4 /* MatchBoom.wav in Resources */,
+				A8C386E8209A51BC00DB58D4 /* Chain3.wav in Resources */,
 				A80539CC20685A650059562D /* LaunchScreen.storyboard in Resources */,
-				A83507072097D34B00DC7C37 /* MoveTick.wav in Resources */,
+				A8C386D8209A405D00DB58D4 /* MoveTick.wav in Resources */,
 				A8C395CF2079546D00D57AE0 /* MainMenuScene.sks in Resources */,
+				A8C386E6209A51BC00DB58D4 /* Chain4.wav in Resources */,
+				A8C386DA209A43D800DB58D4 /* PlaySnap.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +472,6 @@
 				A80539F8206963DC0059562D /* PlayField.swift in Sources */,
 				A80539F220686CC60059562D /* CustomCollections.swift in Sources */,
 				A80539C420685A650059562D /* GameViewController.swift in Sources */,
-				A8C386D3209A294500DB58D4 /* SoundRepeater.swift in Sources */,
 				A8071BDA2079A4B900EC3272 /* ControlMenu.swift in Sources */,
 				A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */,
 				A8D1D7FF2095381E004004EA /* PlayerType.swift in Sources */,

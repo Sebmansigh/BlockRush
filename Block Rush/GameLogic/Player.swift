@@ -210,7 +210,7 @@ class Player
         {
             if(readyPiece != nil)
             {
-                timeLeft -= 1;
+                //timeLeft -= 1;
             }
             
             inputDevice.EvalFrame();

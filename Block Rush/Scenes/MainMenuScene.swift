@@ -43,6 +43,9 @@ class MainMenuScene: SKScene
         {
             return;
         }
+        BlockRush.SoundScene = self;
+        BlockRush.PlaySound(name: "PlaySnap");
+        
         titleNode = SKLabelNode(text: "BLOCK RUSH");
         titleNode!.position.y = CGFloat(BlockRush.GameHeight/4);
         titleNode!.verticalAlignmentMode = .bottom;

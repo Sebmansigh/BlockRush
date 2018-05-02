@@ -892,6 +892,7 @@ class PlayField
     
     func ApplyMatch(blocks: [Block],frame: Int, creditTop: Bool?)
     {
+        BlockRush.PlaySound(name: "Chain1");
         for block in blocks
         {
             block.nod.size.width*=1.2;
@@ -1038,6 +1039,7 @@ class PlayField
     
     func CreateChainEffect(blocks: Set<Block>,creditTop:Bool,chainLevel:Int)
     {
+        
         let cN = CGFloat(blocks.count);
         var cX: CGFloat = 0;
         var cY: CGFloat = 0;
@@ -1116,6 +1118,25 @@ class PlayField
                         p = playerBottom;
                     }
                     linkDamage = EvalChain(player: p, numMatched: S.count);
+                    
+                    switch p.chainLevel
+                    {
+                    case 1:
+                        BlockRush.PlaySound(name: "Chain1");
+                    case 2:
+                        BlockRush.PlaySound(name: "Chain2");
+                    case 3:
+                        BlockRush.PlaySound(name: "Chain3");
+                    case 4:
+                        BlockRush.PlaySound(name: "Chain4");
+                    case 5:
+                        BlockRush.PlaySound(name: "Chain5");
+                    case 6:
+                        BlockRush.PlaySound(name: "Chain6");
+                    default:
+                        BlockRush.PlaySound(name: "Chain7");
+                    }
+                    
                     print(String(p.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
                     CreateChainEffect(blocks: S, creditTop: CreditTop!, chainLevel: p.chainLevel);
                 }
