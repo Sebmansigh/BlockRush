@@ -14,7 +14,7 @@ class MainMenuScene: SKScene
     var titleNode: SKLabelNode? = nil;
     var loaded = false;
     
-    private func toGameScene(bottomPlayerType: PlayerType,topPlayerType: PlayerType) ->( () -> Void )
+    private func toGameScene(bottomPlayerType: PlayerType,topPlayerType: PlayerType) -> ( () -> Void )
     {
         return {
             if let scene = SKScene(fileNamed: "GameScene") as? GameScene

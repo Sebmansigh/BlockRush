@@ -31,9 +31,9 @@ class Player
     
     
     //UI LOGIC
-    internal var scene: SKScene;
+    internal var scene: GameScene;
     
-    internal init(rngSeed: UInt64, scene s: SKScene, device: InputDevice)
+    internal init(rngSeed: UInt64, scene s: GameScene, device: InputDevice)
     {
         let source = GKMersenneTwisterRandomSource(seed: rngSeed);
         generator = GKRandomDistribution(randomSource: source, lowestValue: 0, highestValue: BlockRush.BlockColors.count-1);

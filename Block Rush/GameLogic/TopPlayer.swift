@@ -13,7 +13,7 @@ class TopPlayer: Player
 {
     
     /*
-     public override init(rngSeed: UInt64, scene: SKScene, device: InputDevice)
+     public override init(rngSeed: UInt64, scene: GameScene, device: InputDevice)
      {
      super.init(rngSeed: rngSeed, scene: scene, device: device);
      }
@@ -63,9 +63,17 @@ class TopPlayer: Player
         switch(input)
         {
         case .LEFT:
-            MoveToColumn(columnOver+1);
+            if(columnOver != 5)
+            {
+                MoveToColumn(columnOver+1);
+                BlockRush.PlaySound(name: "MoveTick");
+            }
         case .RIGHT:
-            MoveToColumn(columnOver-1);
+            if(columnOver != 0)
+            {
+                MoveToColumn(columnOver-1);
+                BlockRush.PlaySound(name: "MoveTick");
+            }
         case .FLIP:
             readyPiece?.Flip()
         case .PLAY:

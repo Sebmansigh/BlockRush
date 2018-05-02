@@ -146,4 +146,18 @@ final class BlockRush
         
         return ClearVal * chainLevel;
     }
+    
+    static let Sounds: [String: SoundPlayer] =
+    [
+        "MoveTick" : SoundPlayer(file: "MoveTick.caf",players: 1)
+    ];
+    
+    static func PlaySound(name:String)
+    {
+        let SfxVolume = Float(Settings[ .SoundEffectVolume ]!.rawValue)/100.0;
+        
+        let Player = Sounds[name]!
+        
+        Player.play(volume: SfxVolume);
+    }
 }
