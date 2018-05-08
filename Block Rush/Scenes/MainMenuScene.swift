@@ -14,9 +14,15 @@ class MainMenuScene: SKScene
     var titleNode: SKLabelNode? = nil;
     var loaded = false;
     
+    deinit
+    {
+        print("Deallocated MainMenuScene");
+    }
+    
     private func toGameScene(bottomPlayerType: PlayerType,topPlayerType: PlayerType) -> ( () -> Void )
     {
         return {
+            [unowned self] in
             if let scene = SKScene(fileNamed: "GameScene") as? GameScene
             {
                 // Set the scale mode to scale to fit the window

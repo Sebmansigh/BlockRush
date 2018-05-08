@@ -31,7 +31,7 @@ class Player
     
     
     //UI LOGIC
-    internal var scene: GameScene;
+    internal unowned var scene: GameScene;
     
     internal init(rngSeed: UInt64, scene s: GameScene, device: InputDevice)
     {

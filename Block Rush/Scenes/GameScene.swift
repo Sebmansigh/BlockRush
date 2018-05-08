@@ -28,6 +28,12 @@ class GameScene: SKScene
     var EndGame = false;
     
     var MenuNode: SKNode?;
+    var Menu: GameMenu?;
+    
+    deinit
+    {
+        print("Deallocated GameScene");
+    }
     
     override func sceneDidLoad()
     {
@@ -42,49 +48,6 @@ class GameScene: SKScene
         
         BlockRush.SoundScene = self;
         
-        let Menu = GameMenu(title: "main",
-                            menuOptions:
-                            [
-                                MenuAction(title: "Play Again")
-                                {
-                                    if let scene = SKScene(fileNamed: "GameScene") as? GameScene
-                                    {
-                                        // Set the scale mode to scale to fit the window
-                                        scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
-                                                            height: UIScreen.main.nativeBounds.height);
-                                        scene.scaleMode = .aspectFit;
-                                        
-                                        scene.BottomPlayerType = self.BottomPlayerType;
-                                        scene.TopPlayerType = self.TopPlayerType;
-                                        
-                                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
-                                    }
-                                    else
-                                    {
-                                        fatalError("Could not load GameScene.");
-                                    }
-                                },
-                                MenuAction(title: "Main Menu")
-                                {
-                                    if let scene = SKScene(fileNamed: "MainMenuScene")
-                                    {
-                                        // Set the scale mode to scale to fit the window
-                                        scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
-                                                            height: UIScreen.main.nativeBounds.height);
-                                        scene.scaleMode = .aspectFit;
-                                        
-                                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
-                                    }
-                                    else
-                                    {
-                                        fatalError("Could not load MainMenuScene.");
-                                    }
-                                }
-                            ]);
-        MenuNode = SKSpriteNode(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.6),
-                                size: CGSize(width: BlockRush.ScreenWidth, height: BlockRush.ScreenHeight));
-        MenuNode!.zPosition = 100;
-        Menu.show(node: MenuNode!);
         
         
         let TopDevice: InputDevice;
@@ -133,6 +96,56 @@ class GameScene: SKScene
         
         backgroundGrid?.zPosition = -1;
         //*/
+        
+        
+        Menu = GameMenu(title: "main",
+                        menuOptions:
+            [
+                MenuAction(title: "Play Again")
+                {
+                    [unowned self] in
+                    if let scene = SKScene(fileNamed: "GameScene") as? GameScene
+                    {
+                        // Set the scale mode to scale to fit the window
+                        scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                            height: UIScreen.main.nativeBounds.height);
+                        scene.scaleMode = .aspectFit;
+                        
+                        scene.BottomPlayerType = self.BottomPlayerType;
+                        scene.TopPlayerType = self.TopPlayerType;
+                        
+                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+                    }
+                    else
+                    {
+                        fatalError("Could not load GameScene.");
+                    }
+                },
+                MenuAction(title: "Main Menu")
+                {
+                    [unowned self] in
+                    if let scene = SKScene(fileNamed: "MainMenuScene")
+                    {
+                        // Set the scale mode to scale to fit the window
+                        scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                            height: UIScreen.main.nativeBounds.height);
+                        scene.scaleMode = .aspectFit;
+                        
+                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+                    }
+                    else
+                    {
+                        fatalError("Could not load MainMenuScene.");
+                    }
+                }
+            ]);
+        MenuNode = SKSpriteNode(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.6),
+                                size: CGSize(width: BlockRush.ScreenWidth, height: BlockRush.ScreenHeight));
+        MenuNode!.zPosition = 100;
+        Menu!.show(node: MenuNode!);
+        
+        //
+        
         
         playField!.GameReady = true;
     }

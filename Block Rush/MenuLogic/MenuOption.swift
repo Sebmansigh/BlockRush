@@ -11,11 +11,64 @@ import UIKit
 
 class MenuOption
 {
+    var title: String;
+    weak var superMenu: GameMenu?;
+    private var Btn: ButtonNode?;
+    
+    deinit
+    {
+        print("Deallocated MenuOption "+title);
+    }
+    
+    required init(title t: String)
+    {
+        title = t;
+    }
+    
+    func FetchButton() -> ButtonNode
+    {
+        if(Btn != nil)
+        {
+            Btn!.removeFromParent();
+            Btn!.confirming = false;
+            Btn!.Dehighlight();
+            Btn!.removeAllActions();
+            return Btn!;
+        }
+        Btn = ButtonNode(owner: self);
+        return Btn!;
+    }
+    
+    static var confirming = false;
+    func Confirm()
+    {
+        if(MenuOption.confirming)
+        {
+            return;
+        }
+        MenuOption.confirming = true;
+        superMenu!.hideSiblings(self);
+        Btn!.run(.sequence([.repeat(.sequence([.run(Btn!.Dehighlight),
+                                    .wait(forDuration: 0.125),
+                                    .run(Btn!.Highlight),
+                                    .wait(forDuration: 0.125)]), count: 2),
+                            .wait(forDuration: 0.5)]))
+        {
+            let _ = self.FetchButton();
+            self.EvalPress();
+            MenuOption.confirming = false;
+        };
+    }
+    
+    func EvalPress()
+    {
+        fatalError("Confirm() not implemented by a subclass");
+    }
     class ButtonNode: SKSpriteNode
     {
         let BGnode: SKSpriteNode;
         let Tnode : SKLabelNode;
-        let owner: MenuOption;
+        unowned let owner: MenuOption;
         var confirming = false;
         
         var width: CGFloat
@@ -123,54 +176,5 @@ class MenuOption
         {
             owner.Confirm();
         }
-    }
-    
-    var title: String;
-    var superMenu: GameMenu?;
-    private var Btn: ButtonNode?;
-    
-    required init(title t: String)
-    {
-        title = t;
-    }
-    
-    func FetchButton() -> ButtonNode
-    {
-        if(Btn != nil)
-        {
-            Btn!.removeFromParent();
-            Btn!.confirming = false;
-            Btn!.Dehighlight();
-            Btn!.removeAllActions();
-            return Btn!;
-        }
-        Btn = ButtonNode(owner: self);
-        return Btn!;
-    }
-    
-    static var confirming = false;
-    func Confirm()
-    {
-        if(MenuOption.confirming)
-        {
-            return;
-        }
-        MenuOption.confirming = true;
-        superMenu!.hideSiblings(self);
-        Btn!.run(.sequence([.repeat(.sequence([.run(Btn!.Dehighlight),
-                                    .wait(forDuration: 0.125),
-                                    .run(Btn!.Highlight),
-                                    .wait(forDuration: 0.125)]), count: 2),
-                            .wait(forDuration: 0.5)]))
-        {
-            let _ = self.FetchButton();
-            self.EvalPress();
-            MenuOption.confirming = false;
-        };
-    }
-    
-    func EvalPress()
-    {
-        fatalError("Confirm() not implemented by a subclass");
     }
 }

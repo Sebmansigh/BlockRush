@@ -28,9 +28,9 @@ class PlayField
     var TopMatches: [Int: Set<Block> ];
     var BtmMatches: [Int: Set<Block> ]
     var NilMatches: [Int: Set<Block> ];
-    var playerTop: Player;
-    var playerBottom: Player;
-    var gameScene: GameScene;
+    unowned var playerTop: Player;
+    unowned var playerBottom: Player;
+    unowned var gameScene: GameScene;
     var fieldNode: SKNode;
     var movePower: Int;
     var moveAmount: Int;

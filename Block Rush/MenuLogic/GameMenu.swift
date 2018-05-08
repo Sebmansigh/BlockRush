@@ -11,7 +11,7 @@ import SpriteKit
 class GameMenu: MenuOption
 {
     internal let options: [MenuOption];
-    internal var inNode: SKNode? = nil;
+    internal weak var inNode: SKNode? = nil;
     let titleNode = SKLabelNode(text: "!");
     static var currentTitleNode: SKLabelNode? = nil;
     var Back: MenuAction?;
@@ -48,6 +48,7 @@ class GameMenu: MenuOption
     {
         Back = MenuAction(title: "Back")
         {
+            [unowned self] in
             onClose();
             self.superMenu!.show(node: self.inNode!);
         }
