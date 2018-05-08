@@ -26,6 +26,7 @@ class MainMenuScene: SKScene
                 
                 scene.BottomPlayerType = bottomPlayerType;
                 scene.TopPlayerType = topPlayerType;
+                arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
                 
                 self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
             }

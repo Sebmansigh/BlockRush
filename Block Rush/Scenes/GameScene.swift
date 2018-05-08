@@ -23,6 +23,7 @@ class GameScene: SKScene
     
     public var BottomPlayerType: PlayerType = .None;
     public var TopPlayerType: PlayerType = .None;
+    public var InitialSeed: UInt64 = 0;
     
     var EndGame = false;
     
@@ -86,9 +87,6 @@ class GameScene: SKScene
         Menu.show(node: MenuNode!);
         
         
-        var seed: UInt64 = 0;
-        arc4random_buf(&seed, MemoryLayout.size(ofValue: seed))
-        
         let TopDevice: InputDevice;
         switch TopPlayerType
         {
@@ -123,8 +121,8 @@ class GameScene: SKScene
             fatalError("Unkown Bottom Player Type: "+String(describing: TopPlayerType));
         }
         
-        playerTop = TopPlayer(rngSeed: seed, scene:self, device: TopDevice);
-        playerBottom = BottomPlayer(rngSeed: seed, scene:self, device: BottomDevice);
+        playerTop = TopPlayer(rngSeed: InitialSeed, scene:self, device: TopDevice);
+        playerBottom = BottomPlayer(rngSeed: InitialSeed, scene:self, device: BottomDevice);
         
         backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
         backgroundGrid?.fillColor = UIColor.black;
