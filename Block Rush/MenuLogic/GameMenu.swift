@@ -10,6 +10,9 @@ import SpriteKit
 
 class GameMenu: MenuOption
 {
+    public static var focusMenu: GameMenu? = nil;
+    public var focusIndex: Int? = nil;
+    
     internal let options: [MenuOption];
     internal weak var inNode: SKNode? = nil;
     let titleNode = SKLabelNode(text: "!");
@@ -68,6 +71,7 @@ class GameMenu: MenuOption
     
     func show(node: SKNode)
     {
+        GameMenu.focusMenu = self;
         let Bh = BlockRush.GameHeight;
         inNode = node;
         
@@ -78,6 +82,10 @@ class GameMenu: MenuOption
             node.addChild(subnode);
             subnode.position.y = targetY - Bh;
             subnode.run(.move(to: CGPoint(x:0,y:targetY), duration: 1));
+        }
+        if let i = focusIndex
+        {
+            options[i].RefButton()?.Highlight();
         }
         if(titleNode.text == "!")
         {
@@ -120,4 +128,70 @@ class GameMenu: MenuOption
         show(node: superMenu!.inNode!);
     }
     
+    func MenuUp()
+    {
+        if let i = focusIndex
+        {
+            options[i].RefButton()?.Dehighlight();
+            focusIndex = (i+options.count-1) % options.count;
+            options[focusIndex!].RefButton()?.Highlight();
+        }
+        else
+        {
+            options[0].RefButton()?.Highlight();
+            focusIndex = 0;
+        }
+    }
+    
+    func MenuDown()
+    {
+        if let i = focusIndex
+        {
+            options[i].RefButton()?.Dehighlight();
+            focusIndex = (i+1) % options.count;
+            options[focusIndex!].RefButton()?.Highlight();
+        }
+        else
+        {
+            options[0].RefButton()?.Highlight();
+            focusIndex = 0;
+        }
+    }
+    
+    func MenuLeft()
+    {
+        //No Default functionality
+    }
+    
+    func MenuRight()
+    {
+        //No Default functionality
+    }
+    
+    func MenuChoose()
+    {
+        let i: Int;
+        if(focusIndex == nil)
+        {
+            i = 0;
+        }
+        else
+        {
+            i = focusIndex!;
+        }
+        let o = options[i];
+        o.Confirm();
+        if let m = o as? GameMenu
+        {
+            if(m.focusIndex == nil)
+            {
+                m.focusIndex = 0;
+            }
+        }
+    }
+    
+    func MenuBackChoose()
+    {
+        Back?.Confirm();
+    }
 }

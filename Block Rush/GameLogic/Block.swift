@@ -22,6 +22,7 @@ class Block:Hashable
     var LockFrame: Int = -1;
     var iPos = -1;
     var jPos = -1;
+    var debugLabel: SKLabelNode? = nil;//SKLabelNode(fontNamed: "Avenir");
     init(nColor: Int)
     {
         col = nColor;
@@ -30,8 +31,13 @@ class Block:Hashable
         nod = SKSpriteNode(texture: nil,
                            color: BlockRush.BlockColors[col!],
                            size: CGSize(width: BlockRush.BlockWidth-2, height: BlockRush.BlockWidth/2-2));
-        
-        //nod.st
+        if let ln = debugLabel
+        {
+            nod.addChild(ln);
+            ln.fontSize = BlockRush.BlockWidth * 0.3;
+            ln.verticalAlignmentMode = .center;
+            ln.fontColor = .black;
+        }
         nod.zPosition = 0;
     }
     var hashValue: Int

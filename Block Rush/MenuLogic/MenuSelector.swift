@@ -140,33 +140,43 @@ class MenuSelector<T: Equatable>: SKNode
         {
             if(t == validTouchL)
             {
-                validTouchL = nil;
                 DehighlightL();
-                value -= 1;
-                if(value < 0)
-                {
-                    value = options.count-1;
-                }
-                let v = options[value];
-                valueText = v.1;
-                Vnode.text = valueText;
-                Action(v.0);
+                validTouchL = nil;
+                ChangeValueLeft();
             }
             if(t == validTouchR)
             {
-                validTouchR = nil;
                 DehighlightR();
-                value += 1;
-                if(value == options.count)
-                {
-                    value = 0;
-                }
-                let v = options[value];
-                valueText = v.1;
-                Vnode.text = valueText;
-                Action(v.0);
+                validTouchR = nil;
+                ChangeValueRight();
             }
         }
+    }
+    
+    func ChangeValueLeft()
+    {
+        value -= 1;
+        if(value < 0)
+        {
+            value = options.count-1;
+        }
+        let v = options[value];
+        valueText = v.1;
+        Vnode.text = valueText;
+        Action(v.0);
+    }
+    
+    func ChangeValueRight()
+    {
+        value += 1;
+        if(value == options.count)
+        {
+            value = 0;
+        }
+        let v = options[value];
+        valueText = v.1;
+        Vnode.text = valueText;
+        Action(v.0);
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -189,6 +199,19 @@ class MenuSelector<T: Equatable>: SKNode
         }
  */
     }
+    
+    func Highlight()
+    {
+        Tnode.fontColor = .yellow;
+        Vnode.fontColor = .yellow;
+    }
+    
+    func Dehighlight()
+    {
+        Tnode.fontColor = .white;
+        Vnode.fontColor = .white;
+    }
+    
     func HighlightL()
     {
         Lnode.fillColor = .yellow;

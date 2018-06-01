@@ -16,6 +16,11 @@ class InputDevice
     
     internal init() {};
     
+    public func debugText() -> String
+    {
+        return "Please override the base InputDevice class.";
+    }
+    
     //Override Eval.
     //This function returns a bitmask whose bits are all active inputs.
     internal func Eval() -> UInt8

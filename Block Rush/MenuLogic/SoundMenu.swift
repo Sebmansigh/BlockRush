@@ -20,6 +20,7 @@ class SoundMenu: GameMenu
                                min: 0, max: 100)
         {
             BlockRush.Settings[.BackgroundMusicVolume] = .Volume($0);
+            BlockRush.player?.volume = Float($0)/100;
         };
         SFXslider = MenuSlider(title: "Sound Volume",
                    initialValue: Int(BlockRush.Settings[.SoundEffectVolume]!.rawValue),
@@ -34,6 +35,7 @@ class SoundMenu: GameMenu
     
     override func show(node: SKNode)
     {
+        GameMenu.focusMenu = self;
         inNode = node;
         titleNode.text = title;
         

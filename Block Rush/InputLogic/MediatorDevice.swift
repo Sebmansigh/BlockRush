@@ -11,6 +11,11 @@ class MediatorDevice : InputDevice
 {
     public var frameQueue = Queue<UInt8>();
     
+    public override func debugText() -> String
+    {
+        return "QueueSize: \(frameQueue.count())";
+    }
+    
     override func CanEval() -> Bool
     {
         return !frameQueue.isEmpty();

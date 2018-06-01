@@ -54,6 +54,6 @@ class GameViewController: UIViewController {
     }
     
     override func preferredScreenEdgesDeferringSystemGestures() -> UIRectEdge {
-        return .left
+        return .left;
     }
 }

@@ -8,42 +8,99 @@
 import Foundation
 import SpriteKit
 
+/**
+ The playfield on which a round is played.
+ */
 class PlayField
 {
+    /// The 2-dimensional array containing the Blocks on the field.
     var Field: [[Block?]]
+    /// The current frame number
     var GameFrame: Int;
+    /// Whether the game has been initialized
     var GameReady: Bool;
-    var GameOver: Bool;
+    /// The frame on which the game has ended, if it has ended.
+    var GameOverFrame: Int? = nil;
     
+    /// The white bar indicating where the center of gravity is for the blocks.
     let CenterBar: SKSpriteNode;
+    /// The gray bar indicating where the middle of the playfield is.
     let BackBar: SKSpriteNode;
+    
+    /// An array of rectangles going from the center bar to the edge of the top player's playfield.
     var TopColumns: [SKSpriteNode];
+    /// The top player's Ghost Piece's front block
     var GhostTopFront: SKSpriteNode?;
+    /// The top player's Ghost Piece's rear block
     var GhostTopRear: SKSpriteNode?;
+    
+    /// An array of rectangles going from the center bar to the edge of the bottom player's playfield.
     var BottomColumns: [SKSpriteNode];
+    /// The bottom player's Ghost Piece's front block
     var GhostBottomFront: SKSpriteNode?;
+    /// The bottom player's Ghost Piece's rear block
     var GhostBottomRear: SKSpriteNode?;
     
+    ///If set to `true`, a cascade check will be performed next frame.
+    var CheckCascade: Bool = false;
+    ///A Set of frame numbers on which to check for matches.
+    var CheckMatchFrames: Set<Int> = [];
     
+    /// A map of frame numbers to matches made.
+    /// These matches are credited to the top player.
     var TopMatches: [Int: Set<Block> ];
-    var BtmMatches: [Int: Set<Block> ]
+    /// A map of frame numbers to matches made.
+    /// These matches are credited to the bottom player.
+    var BtmMatches: [Int: Set<Block> ];
+    /// A map of frame numbers to matches made.
+    /// These matches have been fizzled.
     var NilMatches: [Int: Set<Block> ];
+    
+    /// The top player.
     unowned var playerTop: Player;
+    /// The bottom player
     unowned var playerBottom: Player;
+    /// The game scene
     unowned var gameScene: GameScene;
+    
+    /// A parent node containing all moving parts of the game field.
+    /// When the field moves, the position of this node is changed.
     var fieldNode: SKNode;
+    
+    /// How many units of movement are stored up
+    /// - Positive values move towards the top player
+    /// - Negative values move towards the bottom player
     var movePower: Int;
+    
+    /// How many units of movement have been applied
+    /// - Positive values are towards the top player
+    /// - Negative values are towards the bottom player
     var moveAmount: Int;
+    
+    /// The stored movement indicators on the left side of the field.
+    /// Each fully opaque indicator represents 8 units of movement, or half a row
     var LPowerNodes: [SKSpriteNode];
+    
+    /// The stored movement indicators on the right side of the field.
+    /// Each fully opaque indicator represents 8 units of movement, or half a row
     var RPowerNodes: [SKSpriteNode];
+    
+    /// The stored large indicators on the left side of the field.
+    /// Each one represents half the field, or 20 small indicators, or 10 rows, or 160 units of movement.
     var LBigNodes: [SKSpriteNode];
+    /// The stored large indicators on the right side of the field.
+    /// Each one represents half the field, or 20 small indicators, or 10 rows, or 160 units of movement.
     var RBigNodes: [SKSpriteNode];
+    
+    /// The current total amount of movement that the indicators represent. This only changes by 1 per frame so that the indicators can appear animated and is therefore not the actual amount of movement that is stored up.
     var curPowerVal: Int;
     
-    
+    /// An array containing the cached stack heights of the top side of the play field.
     var TopStackHeight:[Int];
+    /// An array containing the cached stack heights of the bottom side of the play field.
     var BottomStackHeight:[Int];
     
+    /// Contains the loser of the game. If it is `nil`, then the game was a draw.
     var Loser: Player? = nil;
     
     init(cols:Int, rows:Int, playerTop t:Player, playerBottom b: Player, scene:SKScene)
@@ -51,7 +108,6 @@ class PlayField
         fieldNode = SKNode();
         GameFrame = 0;
         GameReady = false;
-        GameOver = false;
         
         TopMatches = [:];
         BtmMatches = [:];
@@ -115,18 +171,27 @@ class PlayField
         
     }
     
+    /// Gets the number of columns in this playfield
     func columns() -> Int
     {
         return Field.count;
     }
     
+    /// Gets the number of rows in this playfield
     func rows() -> Int
     {
         return Field[0].count;
     }
     
     
-    //returns an array of stack heights for the given player. Indecies are column numbers.
+    /**
+     Gets the surface data for the given player.
+     
+     Because there are two sides of the field, the player must be specified.
+     
+     - Parameter player: the player for whom to get surface data for.
+     - Returns: an array of stack heights for the given player. Indecies are column numbers.
+     */
     func getSurfaceData(_ player: Player) -> [Int]
     {
         var ret: [Int] = Array<Int>(repeating: 0, count: columns());
@@ -137,7 +202,15 @@ class PlayField
         return ret;
     }
     
-    
+    /**
+     Gets the column data for the given player.
+     
+     Because there are two sides of the field, the player must be specified.
+     
+     - Parameter column: the column for which to get data for.
+     - Parameter player: the player for whom to get data for.
+     - Returns: an array of stack heights for the given player. Indecies are column numbers.
+     */
     func getStackHeight(column: Int, player: Player) -> Int
     {
         if(player === playerTop)
@@ -155,6 +228,9 @@ class PlayField
         }
     }
     
+    /**
+     Update the values of `TopStackHeight` and `BottomStackHeight`.
+     */
     func RecalculateStackHeights()
     {
         for column in 0...columns()-1
@@ -193,6 +269,9 @@ class PlayField
         }
     }
     
+    /**
+     Causes one frame of animation for the movement indicators on either side of the field.
+     */
     func AnimPower()
     {
         let targetPowVal = playerBottom.storedPower-playerTop.storedPower+movePower;
@@ -462,12 +541,28 @@ class PlayField
         }
     }
     
+    /**
+     Pushes a new piece onto the bottom side of stack.
+     
+     - Parameters:
+        - column: The column to push the piece onto.
+        - piece: The piece to push onto the stack.
+        - frame: Which frame this occurred on (in case an input device is behind the current game frame.)
+     */
     func PushBottom(column: Int, piece: Piece, frame: Int)
     {
         PushBottom(column:column, block:piece.FrontBlock, frame:frame);
         PushBottom(column:column, block:piece.RearBlock, frame:frame);
     }
     
+    /**
+     Pushes a single block onto the bottom side of stack.
+     
+     - Parameters:
+        - column: The column to push the piece onto.
+        - block: The block to push onto the stack.
+        - frame: Which frame this occurred on (in case an input device is behind the current game frame.)
+     */
     func PushBottom(column: Int, block: Block,frame: Int)
     {
         for i in rows()/2...rows()-1
@@ -482,17 +577,37 @@ class PlayField
                 block.jPos = i;
                 block.nod.removeFromParent();
                 fieldNode.addChild(block.nod);
+                
+                block.debugLabel?.text = "\(frame)\u{21e9}"
+                
+                CheckMatchFrames.insert(frame);
                 return;
             }
         }
     }
     
+    /**
+     Pushes a new piece onto the top side of stack.
+     
+     - Parameters:
+         - column: The column to push the piece onto.
+         - piece: The piece to push onto the stack.
+         - frame: Which frame this occurred on (in case an input device is behind the current game frame.)
+     */
     func PushTop(column: Int, piece: Piece, frame: Int)
     {
         PushTop(column:column, block:piece.FrontBlock, frame:frame);
         PushTop(column:column, block:piece.RearBlock, frame:frame);
     }
     
+    /**
+     Pushes a single block onto the top side of stack.
+     
+     - Parameters:
+         - column: The column to push the piece onto.
+         - block: The block to push onto the stack.
+         - frame: Which frame this occurred on (in case an input device is behind the current game frame.)
+     */
     func PushTop(column: Int, block: Block,frame: Int)
     {
         for i in (0...rows()/2-1).reversed()
@@ -507,11 +622,22 @@ class PlayField
                 block.jPos = i;
                 block.nod.removeFromParent();
                 fieldNode.addChild(block.nod);
+                
+                block.debugLabel?.text = "\(frame)\u{21e7}"
+                
+                CheckMatchFrames.insert(frame);
                 return;
             }
         }
     }
     
+    
+    /**
+     Calculate the position of the specified row/column indecies.
+     - Parameter column: The column number to use.
+     - Parameter row: The row number to use.
+     - Returns: The calculated point.
+     */
     func GetPosition(column:Int,row:Int) -> CGPoint
     {
         
@@ -520,16 +646,33 @@ class PlayField
         
         return CGPoint(x: pX, y: pY);
     }
+    
+    /**
+     Calculate the x-position of the specified column.
+     - Parameter column: The column number to use.
+     - Returns: The calculated value.
+     */
     func GetPosition(column:Int) -> CGFloat
     {
         return BlockRush.BlockWidth/2 + BlockRush.BlockWidth * CGFloat(column-3);
     }
+    /**
+     Calculate the y-position of the specified row.
+     - Parameter row: The row number to use.
+     - Returns: The calculated value.
+     */
     func GetPosition(row:Int) -> CGFloat
     {
         let offsetRows = CGFloat(rows())/2;
         return BlockRush.BlockWidth * ((offsetRows-CGFloat(row))/2-0.25);
     }
     
+    /**
+     Get the y-position of the top row of a given column plus a specified number of rows.
+     - Parameter column: The column to calculate the y-position of.
+     - Parameter add: The number of rows above the top row to add.
+     - Returns: The final y-position.
+     */
     func GetPositionTopNext(column:Int,add:Int) -> CGPoint
     {
         for i in 0...rows()/2-1
@@ -542,6 +685,12 @@ class PlayField
         return GetPosition(column:column, row:rows()/2-add);
     }
     
+    /**
+     Get the y-position of the bottom row of a given column plus a specified number of rows.
+     - Parameter column: The column to calculate the y-position of.
+     - Parameter add: The number of rows below the bottom row to add.
+     - Returns: The final y-position.
+     */
     func GetPositionBottomNext(column:Int,add:Int) -> CGPoint
     {
         for i in (rows()/2...rows()-1).reversed()
@@ -555,7 +704,13 @@ class PlayField
         return GetPosition(column:column, row:rows()/2+add-1);
     }
     
-    func TopBlockAtColumn(column: Int, player: Player) -> Block?
+    /**
+     Gets the surface-level block for a given column and player
+     - Parameter column: The column number to check.
+     - Parameter player: The player whose side to check.
+     - Returns: `nil` if the surface level is the center bar, or the surface-level block otherwise.
+     */
+    func SurfaceBlockAtColumn(column: Int, player: Player) -> Block?
     {
         if(player === playerTop)
         {
@@ -593,6 +748,11 @@ class PlayField
         }
     }
     
+    /**
+     Evaluates the effects of a chain link.
+     - Parameter player: The player who caused the match.
+     - Parameter numMatched: The total number of blocks matched in this chain link.
+     */
     func EvalChain(player: Player, numMatched: Int) -> Int
     {
         player.chainLevel += 1;
@@ -604,6 +764,11 @@ class PlayField
         return linkDamage;
     }
     
+    /**
+     Checks the loss condition for the given player.
+     - Parameter player: The player to check for.
+     - Returns: Whether the given player's loss condition has been met.
+     */
     func DetectPlayerLoss(player: Player) -> Bool
     {
         if(player === playerTop)
@@ -620,6 +785,10 @@ class PlayField
         }
     }
     
+    /**
+     Checks the loss condition for the bottom player.
+     - Returns: Whether the bottom player's loss condition has been met.
+     */
     func DetectBottomPlayerLoss() -> Bool
     {
         let Sdata = getSurfaceData(playerBottom);
@@ -638,7 +807,10 @@ class PlayField
         }
         return false;
     }
-    
+    /**
+     Checks the loss condition for the top player.
+     - Returns: Whether the top player's loss condition has been met.
+     */
     func DetectTopPlayerLoss() -> Bool
     {
         let Sdata = getSurfaceData(playerTop);
@@ -658,8 +830,17 @@ class PlayField
         return false;
     }
     
+    /**
+     Moves the stack 1 unit towards the given player if the value of `movePower` indicates that such movement should take place. If successful, the value of `movePower` will become 1 closer to 0.
+     
+     - Returns: Whether or not movement occurred.
+     */
     func StackMove(player: Player) -> Bool
     {
+        if(movePower == 0)
+        {
+            return false;
+        }
         if(movePower < 0)
         {
             if(player === playerBottom)
@@ -697,7 +878,7 @@ class PlayField
                 return false;
             }
         }
-        else if(movePower > 0)
+        else// if(movePower > 0)
         {
             if(player === playerTop)
             {
@@ -732,29 +913,37 @@ class PlayField
                 return false;
             }
         }
+        /*
         else
         {
-            return false;
+            fatalError("wut?");
         }
+         */
     }
     
+    
+    /**
+     Causes the playfield and any pending matches or cascades to advance one frame.
+     */
     func AdvanceFrame()
     {
-        let DoFrame = GameFrame-20;
-        EvalMatches(frame: DoFrame);
+        let DoFrame = GameFrame;
+        if(CheckMatchFrames.contains(DoFrame-16))
+        {
+            EvalMatches(frame: DoFrame-15);
+            CheckMatchFrames.remove(DoFrame-16);
+            //print("CHECKING:\(DoFrame-1)");
+        }
+        else
+        {
+            //print(DoFrame,CheckMatchFrames);
+        }
         //
         AnimMatches(frame: DoFrame);
         let Fell = Cascade(frame: DoFrame);
-        if(!Fell)
+        if(Fell)
         {
-            if(TopMatches.isEmpty)
-            {
-                movePower -= playerTop.Unfreeze();
-            }
-            if(BtmMatches.isEmpty)
-            {
-                movePower += playerBottom.Unfreeze();
-            }
+            CheckMatchFrames.insert(DoFrame);
         }
         AnimPower();
         
@@ -890,9 +1079,15 @@ class PlayField
         GameFrame += 1;
     }
     
+    /**
+     Register a set of matched blocks and color them white in-game.
+     - Parameters:
+        - blocks: An array containing the matched blocks
+        - frame: The frame at which the match occurred
+        - creditTop: `true` if it's the top player's match, `false` if it's the bottom player's, or `nil` if it's been fizzled.
+     */
     func ApplyMatch(blocks: [Block],frame: Int, creditTop: Bool?)
     {
-        BlockRush.PlaySound(name: "Chain1");
         for block in blocks
         {
             block.nod.size.width*=1.2;
@@ -912,7 +1107,10 @@ class PlayField
         }
         else if(creditTop! == true)
         {
-            playerTop.Freeze();
+            /*
+             TO DO: Add a frame argument to freeze and unfreeze.
+             */
+            playerTop.Freeze(untilFrame: frame+120);
             if(TopMatches[frame] == nil)
             {
                 TopMatches[frame] = (Set<Block>()).union(blocks);
@@ -924,7 +1122,7 @@ class PlayField
         }
         else
         {
-            playerBottom.Freeze();
+            playerBottom.Freeze(untilFrame: frame+120);
             if(BtmMatches[frame] == nil)
             {
                 BtmMatches[frame] = (Set<Block>()).union(blocks);
@@ -936,6 +1134,10 @@ class PlayField
         }
     }
     
+    /**
+     Detect and call `ApplyMatch` all matches on the field.
+     - Parameter frame: The frame number on which the match occurred
+     */
     func EvalMatches(frame: Int)
     {
         var TotalMatched: Set<Block> = [];
@@ -1035,19 +1237,32 @@ class PlayField
         {
             block.col = nil;
         }
+        if(!TotalMatched.isEmpty)
+        {
+            BlockRush.PlaySound(name: "Chain1");
+        }
     }
     
+    /**
+     Creates a visual chain effect centered on a set of blocks.
+     - Parameters:
+        - blocks: A set containing the blocks to center the chain effect on.
+        - creditTop: Whether the effect should face the top player.
+        - chainLevel: The chain level this effect represents.
+     */
     func CreateChainEffect(blocks: Set<Block>,creditTop:Bool,chainLevel:Int)
     {
-        
         let cN = CGFloat(blocks.count);
         var cX: CGFloat = 0;
         var cY: CGFloat = 0;
         for b in blocks
         {
-            cX += b.nod.position.x / cN;
-            cY += b.nod.position.y / cN;
+            cX += b.nod.position.x;
+            cY += b.nod.position.y;
         }
+        
+        cX /= cN;
+        cY /= cN;
         
         cX += fieldNode.position.x;
         cY += fieldNode.position.y;
@@ -1087,11 +1302,18 @@ class PlayField
         }
     }
     
+    /**
+     Cause the animation and disappearing of sets of matched blocks.
+     - Parameters:
+        - frame: The current game frame.
+        - Matches: A dictionary of frame-match pairs. The frame is the number on which the match was made.
+        - CreditTop: `true` if `Matches` contains the top player's matches, `false` if it contains the bottom player's, or `nil` if it contains fizzled matches.
+     */
     private func AnimMatchesPartial(frame: Int, Matches: inout [Int:Set<Block>],CreditTop: Bool?)
     {
         let decayFactor: CGFloat = 0.92;
-        let preFrames: Int = 30;
-        let stayFrames: Int = 50;
+        let preFrames: Int = 45;
+        let stayFrames: Int = 60;
         let endFrame: Int = 90;
         
         for (MatchFrame,S) in Matches
@@ -1105,19 +1327,20 @@ class PlayField
             {
                 if(CreditTop != nil)
                 {
-                    let linkDamage: Int;
+                    //let linkDamage: Int;
                     let p : Player;
                     if(CreditTop!)
                     {
-                        print("TOP PLAYER-----");
+                        //print("TOP PLAYER-----");
                         p = playerTop;
                     }
                     else
                     {
-                        print("BOTTOM PLAYER-----");
+                        //print("BOTTOM PLAYER-----");
                         p = playerBottom;
                     }
-                    linkDamage = EvalChain(player: p, numMatched: S.count);
+                    //linkDamage =
+                    let _ = EvalChain(player: p, numMatched: S.count);
                     
                     switch p.chainLevel
                     {
@@ -1137,7 +1360,7 @@ class PlayField
                         BlockRush.PlaySound(name: "Chain7");
                     }
                     
-                    print(String(p.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
+                    //print(String(p.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
                     CreateChainEffect(blocks: S, creditTop: CreditTop!, chainLevel: p.chainLevel);
                 }
             }
@@ -1172,6 +1395,7 @@ class PlayField
                         if(block.nod.parent != nil)
                         {
                             block.nod.removeFromParent();
+                            CheckCascade = true;
                         }
                     }
                 }
@@ -1182,7 +1406,11 @@ class PlayField
             }
         }
     }
-    
+
+    /**
+     Cause the animation and disappearing of all sets of matched blocks.
+     - Parameter frame: The current game frame.
+    */
     func AnimMatches(frame: Int)
     {
         AnimMatchesPartial(frame: frame, Matches: &TopMatches, CreditTop: true);
@@ -1190,9 +1418,20 @@ class PlayField
         AnimMatchesPartial(frame: frame, Matches: &NilMatches, CreditTop: nil);
     }
     
-    
+    /**
+     Cause blocks to move towards the center bar, filling empty spaces as they go.
+     Blocks will not move through matches in progress.
+     - Parameter frame: The current game frame.
+     */
     func Cascade(frame:Int) -> Bool
     {
+        if(!CheckCascade)
+        {
+            return false;
+        }
+        
+        CheckCascade = false;
+
         var ret = false;
         for i in 0...columns()-1
         {
@@ -1228,6 +1467,29 @@ class PlayField
                     
                     block.CreditTop = Credit;
                     block.LockFrame = frame;
+                    
+                    if let l = block.debugLabel
+                    {
+                        let t: String;
+                        if let c = Credit
+                        {
+                            if(c)
+                            {
+                                t = "\u{21e7}";
+                            }
+                            else
+                            {
+                                t = "\u{21e9}";
+                            }
+                        }
+                        else
+                        {
+                            t = "=";
+                        }
+                        
+                        l.text = "\(frame)"+t;
+                    }
+                    
                     Field[i][jFrom] = nil;
                     
                     Field[i][jTo] = block;
@@ -1270,6 +1532,28 @@ class PlayField
                     block.CreditTop = Credit;
                     block.LockFrame = frame;
                     
+                    if let l = block.debugLabel
+                    {
+                        let t: String;
+                        if let c = Credit
+                        {
+                            if(c)
+                            {
+                                t = "\u{21e7}";
+                            }
+                            else
+                            {
+                                t = "\u{21e9}";
+                            }
+                        }
+                        else
+                        {
+                            t = "=";
+                        }
+                        
+                        l.text = "\(frame)"+t;
+                    }
+                        
                     Field[i][jFrom] = nil;
                     
                     Field[i][jTo] = block;
@@ -1282,18 +1566,40 @@ class PlayField
         return ret;
     }
     
-    func acceptDefeat(player: Player)
+    /**
+     Called when a player's loss condition is met and cannot be recovered from.
+     If called for both players in the same frame before the game over check, the game results in a draw.
+     - Parameter player: The player who lost the game.
+     - Parameter frame: The frame on which the player lost.
+     */
+    func acceptDefeat(player: Player,frame: Int)
     {
-        //print(player);
+        if(GameOverFrame != nil)
+        {
+            //The calling player accepted defeat on a frame after the other player, so they don't lose.
+            if(GameOverFrame! < frame)
+            {
+                return;
+            }
+            //The other player accepted defeat, but the this player was frames behind and lost first.
+            if(GameOverFrame! > frame)
+            {
+                print(frame,player)
+                Loser = player;
+                GameOverFrame = frame;
+            }
+        }
+        print(frame,player);
         if(Loser != nil && Loser! !== player)
         {
+            //Both players have accepted defeat on the same frame
             Loser = nil;
+            gameScene.ReadyEndOfGame();
         }
         else
         {
-            GameOver = true;
+            GameOverFrame = frame;
             Loser = player;
-            gameScene.ReadyEndOfGame();
         }
     }
 }

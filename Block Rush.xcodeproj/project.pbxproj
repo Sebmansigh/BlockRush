@@ -24,7 +24,7 @@
 		A8071BD82079A2C100EC3272 /* SoundMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BD72079A2C100EC3272 /* SoundMenu.swift */; };
 		A8071BDA2079A4B900EC3272 /* ControlMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BD92079A4B900EC3272 /* ControlMenu.swift */; };
 		A8071BDC2079D5B900EC3272 /* TouchDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDB2079D5B900EC3272 /* TouchDevice.swift */; };
-		A8071BDE2079DF7400EC3272 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDD2079DF7400EC3272 /* Settings.swift */; };
+		A8071BDE2079DF7400EC3272 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDD2079DF7400EC3272 /* Setting.swift */; };
 		A8071BE02079F4BE00EC3272 /* EnumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */; };
 		A8071BE2207AA4DA00EC3272 /* MenuSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */; };
 		A8071BE9207AD39D00EC3272 /* SettingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BE8207AD39D00EC3272 /* SettingOption.swift */; };
@@ -34,17 +34,28 @@
 		A80CDA12206C382700AA579B /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80CDA11206C382700AA579B /* Player.swift */; };
 		A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80FE7012072BAE000E73E36 /* TopPlayer.swift */; };
 		A80FE7042072D8E900E73E36 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80FE7032072D8E900E73E36 /* Block.swift */; };
+		A8231F7820A54F1A000BC14E /* Chain1.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8231F7720A54F1A000BC14E /* Chain1.wav */; };
+		A8231F7F20A54FFF000BC14E /* Chain6.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8231F7920A54FFF000BC14E /* Chain6.wav */; };
+		A8231F8020A54FFF000BC14E /* Chain4.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8231F7A20A54FFF000BC14E /* Chain4.wav */; };
+		A8231F8120A54FFF000BC14E /* Chain2.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8231F7B20A54FFF000BC14E /* Chain2.wav */; };
+		A8231F8220A54FFF000BC14E /* Chain3.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8231F7C20A54FFF000BC14E /* Chain3.wav */; };
+		A8231F8320A54FFF000BC14E /* Chain7.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8231F7D20A54FFF000BC14E /* Chain7.wav */; };
+		A8231F8420A54FFF000BC14E /* Chain5.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8231F7E20A54FFF000BC14E /* Chain5.wav */; };
 		A83507052096C8E600DC7C37 /* DebugTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83507042096C8E600DC7C37 /* DebugTools.swift */; };
+		A83C576820B1076A002A482D /* Track1.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A83C576720B106AB002A482D /* Track1.aiff */; };
+		A83C576A20B10772002A482D /* Intro.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A83C576920B10772002A482D /* Intro.aiff */; };
+		A83C576C20B10A5D002A482D /* Winner.wav in Resources */ = {isa = PBXBuildFile; fileRef = A83C576B20B10A5D002A482D /* Winner.wav */; };
+		A83C576E20B10B5E002A482D /* Loser.wav in Resources */ = {isa = PBXBuildFile; fileRef = A83C576D20B10B5E002A482D /* Loser.wav */; };
+		A83C577020B10FC4002A482D /* Track2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A83C576F20B10FC4002A482D /* Track2.aiff */; };
+		A83C577220B11111002A482D /* Track3.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A83C577120B11111002A482D /* Track3.aiff */; };
+		A83C577420B11266002A482D /* DemoGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C577320B11266002A482D /* DemoGame.swift */; };
+		A83C577620B1181E002A482D /* ReplayDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C577520B1181E002A482D /* ReplayDevice.swift */; };
+		A83C577820B1E928002A482D /* IdleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C577720B1E928002A482D /* IdleDevice.swift */; };
+		A83C577A20B2640B002A482D /* DelayedDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C577920B2640B002A482D /* DelayedDevice.swift */; };
+		A87302DA20B782FC00B26F8F /* KeyboardDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87302D920B782FC00B26F8F /* KeyboardDevice.swift */; };
+		A87302DC20B8735900B26F8F /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87302DB20B8735900B26F8F /* GameView.swift */; };
 		A8C386D8209A405D00DB58D4 /* MoveTick.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386D7209A405D00DB58D4 /* MoveTick.wav */; };
 		A8C386DA209A43D800DB58D4 /* PlaySnap.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386D9209A43D800DB58D4 /* PlaySnap.wav */; };
-		A8C386DC209A47C300DB58D4 /* MatchBoom.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386DB209A47C300DB58D4 /* MatchBoom.wav */; };
-		A8C386DE209A4F6C00DB58D4 /* Chain1.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386DD209A4F6C00DB58D4 /* Chain1.wav */; };
-		A8C386E5209A51BC00DB58D4 /* Chain6.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386DF209A51BC00DB58D4 /* Chain6.wav */; };
-		A8C386E6209A51BC00DB58D4 /* Chain4.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E0209A51BC00DB58D4 /* Chain4.wav */; };
-		A8C386E7209A51BC00DB58D4 /* Chain2.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E1209A51BC00DB58D4 /* Chain2.wav */; };
-		A8C386E8209A51BC00DB58D4 /* Chain3.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E2209A51BC00DB58D4 /* Chain3.wav */; };
-		A8C386E9209A51BC00DB58D4 /* Chain7.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E3209A51BC00DB58D4 /* Chain7.wav */; };
-		A8C386EA209A51BC00DB58D4 /* Chain5.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386E4209A51BC00DB58D4 /* Chain5.wav */; };
 		A8C395CF2079546D00D57AE0 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */; };
 		A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C395D02079548F00D57AE0 /* MainMenuScene.swift */; };
 		A8C395D320795A5C00D57AE0 /* MenuOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C395D220795A5C00D57AE0 /* MenuOption.swift */; };
@@ -96,7 +107,7 @@
 		A8071BD72079A2C100EC3272 /* SoundMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundMenu.swift; sourceTree = "<group>"; };
 		A8071BD92079A4B900EC3272 /* ControlMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlMenu.swift; sourceTree = "<group>"; };
 		A8071BDB2079D5B900EC3272 /* TouchDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDevice.swift; sourceTree = "<group>"; };
-		A8071BDD2079DF7400EC3272 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		A8071BDD2079DF7400EC3272 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumCollection.swift; sourceTree = "<group>"; };
 		A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSlider.swift; sourceTree = "<group>"; };
 		A8071BE8207AD39D00EC3272 /* SettingOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOption.swift; sourceTree = "<group>"; };
@@ -106,17 +117,28 @@
 		A80CDA11206C382700AA579B /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		A80FE7012072BAE000E73E36 /* TopPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPlayer.swift; sourceTree = "<group>"; };
 		A80FE7032072D8E900E73E36 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
+		A8231F7720A54F1A000BC14E /* Chain1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain1.wav; sourceTree = "<group>"; };
+		A8231F7920A54FFF000BC14E /* Chain6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain6.wav; sourceTree = "<group>"; };
+		A8231F7A20A54FFF000BC14E /* Chain4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain4.wav; sourceTree = "<group>"; };
+		A8231F7B20A54FFF000BC14E /* Chain2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain2.wav; sourceTree = "<group>"; };
+		A8231F7C20A54FFF000BC14E /* Chain3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain3.wav; sourceTree = "<group>"; };
+		A8231F7D20A54FFF000BC14E /* Chain7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain7.wav; sourceTree = "<group>"; };
+		A8231F7E20A54FFF000BC14E /* Chain5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain5.wav; sourceTree = "<group>"; };
 		A83507042096C8E600DC7C37 /* DebugTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTools.swift; sourceTree = "<group>"; };
+		A83C576720B106AB002A482D /* Track1.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Track1.aiff; sourceTree = "<group>"; };
+		A83C576920B10772002A482D /* Intro.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Intro.aiff; sourceTree = "<group>"; };
+		A83C576B20B10A5D002A482D /* Winner.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Winner.wav; sourceTree = "<group>"; };
+		A83C576D20B10B5E002A482D /* Loser.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Loser.wav; sourceTree = "<group>"; };
+		A83C576F20B10FC4002A482D /* Track2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Track2.aiff; sourceTree = "<group>"; };
+		A83C577120B11111002A482D /* Track3.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Track3.aiff; sourceTree = "<group>"; };
+		A83C577320B11266002A482D /* DemoGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoGame.swift; sourceTree = "<group>"; };
+		A83C577520B1181E002A482D /* ReplayDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayDevice.swift; sourceTree = "<group>"; };
+		A83C577720B1E928002A482D /* IdleDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDevice.swift; sourceTree = "<group>"; };
+		A83C577920B2640B002A482D /* DelayedDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedDevice.swift; sourceTree = "<group>"; };
+		A87302D920B782FC00B26F8F /* KeyboardDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDevice.swift; sourceTree = "<group>"; };
+		A87302DB20B8735900B26F8F /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		A8C386D7209A405D00DB58D4 /* MoveTick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MoveTick.wav; sourceTree = "<group>"; };
 		A8C386D9209A43D800DB58D4 /* PlaySnap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = PlaySnap.wav; sourceTree = "<group>"; };
-		A8C386DB209A47C300DB58D4 /* MatchBoom.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MatchBoom.wav; sourceTree = "<group>"; };
-		A8C386DD209A4F6C00DB58D4 /* Chain1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain1.wav; sourceTree = "<group>"; };
-		A8C386DF209A51BC00DB58D4 /* Chain6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain6.wav; sourceTree = "<group>"; };
-		A8C386E0209A51BC00DB58D4 /* Chain4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain4.wav; sourceTree = "<group>"; };
-		A8C386E1209A51BC00DB58D4 /* Chain2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain2.wav; sourceTree = "<group>"; };
-		A8C386E2209A51BC00DB58D4 /* Chain3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain3.wav; sourceTree = "<group>"; };
-		A8C386E3209A51BC00DB58D4 /* Chain7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain7.wav; sourceTree = "<group>"; };
-		A8C386E4209A51BC00DB58D4 /* Chain5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chain5.wav; sourceTree = "<group>"; };
 		A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
 		A8C395D02079548F00D57AE0 /* MainMenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		A8C395D220795A5C00D57AE0 /* MenuOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuOption.swift; sourceTree = "<group>"; };
@@ -152,9 +174,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A801FC6D20A285BC00176400 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				A83C576920B10772002A482D /* Intro.aiff */,
+				A83C576720B106AB002A482D /* Track1.aiff */,
+				A83C576F20B10FC4002A482D /* Track2.aiff */,
+				A83C577120B11111002A482D /* Track3.aiff */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
 		A80539AF20685A650059562D = {
 			isa = PBXGroup;
 			children = (
+				A801FC6D20A285BC00176400 /* Music */,
 				A83507082097D36800DC7C37 /* Sounds */,
 				A80539BA20685A650059562D /* Block Rush */,
 				A80539D520685A650059562D /* Block RushTests */,
@@ -236,8 +270,13 @@
 				A80CDA0F206C14EC00AA579B /* Input.swift */,
 				A80CDA0D206C0FB800AA579B /* InputDevice.swift */,
 				A8071BDB2079D5B900EC3272 /* TouchDevice.swift */,
+				A87302D920B782FC00B26F8F /* KeyboardDevice.swift */,
 				A8D1D7FC209534ED004004EA /* MediatorDevice.swift */,
 				A8D1D80020953F22004004EA /* BotDevices.swift */,
+				A83C577320B11266002A482D /* DemoGame.swift */,
+				A83C577520B1181E002A482D /* ReplayDevice.swift */,
+				A83C577720B1E928002A482D /* IdleDevice.swift */,
+				A83C577920B2640B002A482D /* DelayedDevice.swift */,
 			);
 			path = InputLogic;
 			sourceTree = "<group>";
@@ -259,7 +298,7 @@
 		A8071BE7207AD36000EC3272 /* SettingsLogic */ = {
 			isa = PBXGroup;
 			children = (
-				A8071BDD2079DF7400EC3272 /* Settings.swift */,
+				A8071BDD2079DF7400EC3272 /* Setting.swift */,
 				A8071BE8207AD39D00EC3272 /* SettingOption.swift */,
 			);
 			path = SettingsLogic;
@@ -271,6 +310,7 @@
 				A80539CA20685A650059562D /* LaunchScreen.storyboard */,
 				A80539C520685A650059562D /* Main.storyboard */,
 				A80539C320685A650059562D /* GameViewController.swift */,
+				A87302DB20B8735900B26F8F /* GameView.swift */,
 			);
 			path = StoryboardLogic;
 			sourceTree = "<group>";
@@ -292,16 +332,17 @@
 		A83507082097D36800DC7C37 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				A8C386E1209A51BC00DB58D4 /* Chain2.wav */,
-				A8C386E2209A51BC00DB58D4 /* Chain3.wav */,
-				A8C386E0209A51BC00DB58D4 /* Chain4.wav */,
-				A8C386E4209A51BC00DB58D4 /* Chain5.wav */,
-				A8C386DF209A51BC00DB58D4 /* Chain6.wav */,
-				A8C386E3209A51BC00DB58D4 /* Chain7.wav */,
-				A8C386DD209A4F6C00DB58D4 /* Chain1.wav */,
 				A8C386D7209A405D00DB58D4 /* MoveTick.wav */,
 				A8C386D9209A43D800DB58D4 /* PlaySnap.wav */,
-				A8C386DB209A47C300DB58D4 /* MatchBoom.wav */,
+				A8231F7720A54F1A000BC14E /* Chain1.wav */,
+				A8231F7B20A54FFF000BC14E /* Chain2.wav */,
+				A8231F7C20A54FFF000BC14E /* Chain3.wav */,
+				A8231F7A20A54FFF000BC14E /* Chain4.wav */,
+				A8231F7E20A54FFF000BC14E /* Chain5.wav */,
+				A8231F7920A54FFF000BC14E /* Chain6.wav */,
+				A8231F7D20A54FFF000BC14E /* Chain7.wav */,
+				A83C576B20B10A5D002A482D /* Winner.wav */,
+				A83C576D20B10B5E002A482D /* Loser.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -412,21 +453,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A80539C720685A650059562D /* Main.storyboard in Resources */,
-				A8C386DE209A4F6C00DB58D4 /* Chain1.wav in Resources */,
-				A8C386E9209A51BC00DB58D4 /* Chain7.wav in Resources */,
-				A8C386EA209A51BC00DB58D4 /* Chain5.wav in Resources */,
-				A80539BE20685A650059562D /* GameScene.sks in Resources */,
-				A8C386E7209A51BC00DB58D4 /* Chain2.wav in Resources */,
-				A8C386E5209A51BC00DB58D4 /* Chain6.wav in Resources */,
-				A80539C920685A650059562D /* Assets.xcassets in Resources */,
-				A8C386DC209A47C300DB58D4 /* MatchBoom.wav in Resources */,
-				A8C386E8209A51BC00DB58D4 /* Chain3.wav in Resources */,
-				A80539CC20685A650059562D /* LaunchScreen.storyboard in Resources */,
+				A83C576A20B10772002A482D /* Intro.aiff in Resources */,
+				A83C576820B1076A002A482D /* Track1.aiff in Resources */,
 				A8C386D8209A405D00DB58D4 /* MoveTick.wav in Resources */,
-				A8C395CF2079546D00D57AE0 /* MainMenuScene.sks in Resources */,
-				A8C386E6209A51BC00DB58D4 /* Chain4.wav in Resources */,
 				A8C386DA209A43D800DB58D4 /* PlaySnap.wav in Resources */,
+				A8231F7820A54F1A000BC14E /* Chain1.wav in Resources */,
+				A8231F8120A54FFF000BC14E /* Chain2.wav in Resources */,
+				A8231F8220A54FFF000BC14E /* Chain3.wav in Resources */,
+				A8231F8020A54FFF000BC14E /* Chain4.wav in Resources */,
+				A8231F8420A54FFF000BC14E /* Chain5.wav in Resources */,
+				A8231F7F20A54FFF000BC14E /* Chain6.wav in Resources */,
+				A8231F8320A54FFF000BC14E /* Chain7.wav in Resources */,
+				A83C577020B10FC4002A482D /* Track2.aiff in Resources */,
+				A83C576C20B10A5D002A482D /* Winner.wav in Resources */,
+				A83C576E20B10B5E002A482D /* Loser.wav in Resources */,
+				A80539BE20685A650059562D /* GameScene.sks in Resources */,
+				A83C577220B11111002A482D /* Track3.aiff in Resources */,
+				A8C395CF2079546D00D57AE0 /* MainMenuScene.sks in Resources */,
+				A80539CC20685A650059562D /* LaunchScreen.storyboard in Resources */,
+				A80539C720685A650059562D /* Main.storyboard in Resources */,
+				A80539C920685A650059562D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,10 +505,14 @@
 				A83507052096C8E600DC7C37 /* DebugTools.swift in Sources */,
 				A8071BE02079F4BE00EC3272 /* EnumCollection.swift in Sources */,
 				A8071BE9207AD39D00EC3272 /* SettingOption.swift in Sources */,
+				A87302DA20B782FC00B26F8F /* KeyboardDevice.swift in Sources */,
+				A83C577620B1181E002A482D /* ReplayDevice.swift in Sources */,
+				A83C577420B11266002A482D /* DemoGame.swift in Sources */,
 				A8071BED207AD81E00EC3272 /* MenuSelector.swift in Sources */,
 				A80FE7042072D8E900E73E36 /* Block.swift in Sources */,
 				A80539F0206863990059562D /* BottomPlayer.swift in Sources */,
 				A8C395D520795A9600D57AE0 /* GameMenu.swift in Sources */,
+				A83C577A20B2640B002A482D /* DelayedDevice.swift in Sources */,
 				A8071BDC2079D5B900EC3272 /* TouchDevice.swift in Sources */,
 				A8071BE2207AA4DA00EC3272 /* MenuSlider.swift in Sources */,
 				A80539C220685A650059562D /* GameScene.swift in Sources */,
@@ -474,12 +524,14 @@
 				A80539C420685A650059562D /* GameViewController.swift in Sources */,
 				A8071BDA2079A4B900EC3272 /* ControlMenu.swift in Sources */,
 				A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */,
+				A83C577820B1E928002A482D /* IdleDevice.swift in Sources */,
 				A8D1D7FF2095381E004004EA /* PlayerType.swift in Sources */,
 				A8D1D80120953F22004004EA /* BotDevices.swift in Sources */,
 				A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */,
-				A8071BDE2079DF7400EC3272 /* Settings.swift in Sources */,
+				A8071BDE2079DF7400EC3272 /* Setting.swift in Sources */,
 				A8071BD82079A2C100EC3272 /* SoundMenu.swift in Sources */,
 				A80539BC20685A650059562D /* AppDelegate.swift in Sources */,
+				A87302DC20B8735900B26F8F /* GameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

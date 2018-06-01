@@ -8,11 +8,16 @@
 import Foundation
 import GameKit
 
+/**
+ A struct representing a potential value of a setting.
+ */
 struct SettingOption: OptionSet, Hashable
 {
     let rawValue: UInt8;
     
-    static let None = SettingOption(rawValue: 0b0000_0000);
+    static let None  = SettingOption(rawValue: 0b0000_0000);
+    static let True  = SettingOption(rawValue: 0b0000_0001);
+    static let False = SettingOption(rawValue: 0b0000_0000);
     
     internal init(rawValue n: UInt8)
     {
@@ -24,23 +29,29 @@ struct SettingOption: OptionSet, Hashable
         return SettingOption(rawValue: UInt8(s)!);
     }
     
-    
-    class ControlType
+    /**
+     A class containing `SettingOptions` for use with control type settings.
+     */
+    final class ControlType
     {
         private init(){}
         
         static let TouchSlide     = SettingOption(rawValue: 0b0000_0001);
         static let TouchTap       = SettingOption(rawValue: 0b0000_0010);
         static let TouchHybrid    = SettingOption(rawValue: 0b0000_0100);
-        /*
-         static let KeyboardA      = SettingOption(rawValue: 0b0000_1000);
-         static let KeyboardB      = SettingOption(rawValue: 0b0001_0000);
-         static let KeyboardCustom = SettingOption(rawValue: 0b0010_0000);
-         */
+        static let KeyboardArrows = SettingOption(rawValue: 0b0000_1000);
+        static let KeyboardWASD   = SettingOption(rawValue: 0b0001_0000);
+        static let KeyboardCustom = SettingOption(rawValue: 0b0010_0000);
         static let GamepadDefault = SettingOption(rawValue: 0b0100_0000);
         static let GamepadCustom  = SettingOption(rawValue: 0b1000_0000);
     }
     
+    /**
+     Creates a `SettingOption` from an integer value.
+     - Parameter x: The desired volume value.
+        This value will be clamped to the range `0` to `100`.
+     - Returns: The created `SettingOption`.
+     */
     static func Volume(_ x: Int) -> SettingOption
     {
         if(x < 0)

@@ -8,27 +8,111 @@
 import SpriteKit
 import GameplayKit
 
+/**
+ The scene in which a round of block rush is played.
+ */
 class GameScene: SKScene
 {
+    ///Whether or not to advance the game forward
+    public var Paused: Bool = false;
+
+    /**
+     The type of the top player.
+     
+     This variable is to be set before the scene is presented and its value is used in the initialization of the game scene.
+     */
+    public var BottomPlayerType: PlayerType = .None;
+    /**
+     The type of the bottom player.
+     
+     This variable is to be set before the scene is presented and its value is used in the initialization of the game scene.
+     */
+    public var TopPlayerType: PlayerType = .None;
+    /**
+     The initial seed of the piece sequences.
+     
+     This variable is to be set before the scene is presented and its value is used in the initialization of the game scene.
+     */
+    public var InitialSeed: UInt64 = 0;
+    /**
+     The name of the demo game, if this game is a demo game.
+     
+     This variable is to be set before the scene is presented and its value is used in the initialization of the game scene.
+     */
+    public var ReplayName: String? = nil;
+    
+    
+    
+    /**
+     A touch device for _potential_ use by the bottom player.
+     
+     If the bottom player is using a different touch device, then
+     this input device will not affect the game.
+     */
     private let BDevice = TouchDevice();
+    /**
+     A touch device for _potential_ use by the top player.
+     
+     If the top player is using a different touch device, then
+     this input device will not affect the game.
+     */
     private let TDevice = TouchDevice();
+    /**
+     The column that the bottom player's touch device should seek.
+     */
     var BTarget: Int? = nil;
+    /**
+     The column that the top player's touch device should seek.
+     */
     var TTarget: Int? = nil;
     
+    /**
+     The black rectangle with white border that defines the boundary of the play area.
+     */
     var backgroundGrid : SKShapeNode? = nil;
+    /**
+     The top player.
+     */
     var playerTop: Player?;
+    /**
+     The bottom player.
+     */
     var playerBottom: Player?;
     
+    /**
+     The playfield.
+     */
     var playField : PlayField? = nil;
     
-    public var BottomPlayerType: PlayerType = .None;
-    public var TopPlayerType: PlayerType = .None;
-    public var InitialSeed: UInt64 = 0;
-    
+    /**
+     Whether or not the game has ended
+     */
     var EndGame = false;
     
-    var MenuNode: SKNode?;
-    var Menu: GameMenu?;
+    /**
+     A node that contains the menu to be shown when the game ends
+     */
+    var EndMenuNode: SKNode?;
+    /**
+     The menu to be shown when the game ends
+     */
+    var EndMenu: GameMenu?;
+    
+    /**
+     A node that contains the menu to be shown when the game is paused
+     */
+    var PauseMenuNode: SKNode?;
+    /**
+     The menu to be shown when the game is paused
+     */
+    var PauseMenu: GameMenu?;
+    
+    
+    // Variables to be used during the debug process.
+    var DebugNodeTop = SKLabelNode(fontNamed: "Avenir");
+    var DebugTopObj: Any? = nil;
+    var DebugNodeBottom = SKLabelNode(fontNamed: "Avenir");
+    var DebugBottomObj: Any? = nil;
     
     deinit
     {
@@ -46,15 +130,29 @@ class GameScene: SKScene
             return;
         }
         
+        DebugNodeTop.position.y = BlockRush.ScreenHeight/2-32;
+        DebugNodeTop.verticalAlignmentMode = .center
+        addChild(DebugNodeTop);
+        
+        DebugNodeBottom.position.y = -BlockRush.ScreenHeight/2+32;
+        DebugNodeBottom.verticalAlignmentMode = .center
+        addChild(DebugNodeBottom);
+        
         BlockRush.SoundScene = self;
         
-        
-        
         let TopDevice: InputDevice;
+        var Data: (UInt64,[Input],[Input])? = nil;
+        if(ReplayName != nil)
+        {
+            Data = DemoGame.Get(ReplayName!);
+            InitialSeed = Data!.0;
+        }
         switch TopPlayerType
         {
         case .Local:
             TopDevice = TDevice;
+        case .Replay:
+            TopDevice = DelayedDevice(device: ReplayDevice(Data!.2), frames:15);
         case .BotNovice:
             TopDevice = BotDevice.Novice();
         case .BotAdept:
@@ -71,7 +169,17 @@ class GameScene: SKScene
         switch BottomPlayerType
         {
         case .Local:
-            BottomDevice = BDevice;
+            if(BlockRush.Settings[.BottomPlayerControlType]! == SettingOption.ControlType.KeyboardArrows)
+            {
+                KeyboardDevice.Device.pendingInput = [];
+                BottomDevice = KeyboardDevice.Device;
+            }
+            else
+            {
+                BottomDevice = BDevice;
+            }
+        case .Replay:
+            BottomDevice = ReplayDevice(Data!.1);
         case .BotNovice:
             BottomDevice = BotDevice.Novice();
         case .BotAdept:
@@ -84,8 +192,13 @@ class GameScene: SKScene
             fatalError("Unkown Bottom Player Type: "+String(describing: TopPlayerType));
         }
         
+        DebugTopObj = TopDevice;
+        DebugBottomObj = BottomDevice;
         playerTop = TopPlayer(rngSeed: InitialSeed, scene:self, device: TopDevice);
         playerBottom = BottomPlayer(rngSeed: InitialSeed, scene:self, device: BottomDevice);
+        
+        playerTop!.foe = playerBottom;
+        playerBottom!.foe = playerTop;
         
         backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
         backgroundGrid?.fillColor = UIColor.black;
@@ -98,12 +211,13 @@ class GameScene: SKScene
         //*/
         
         
-        Menu = GameMenu(title: "main",
+        EndMenu = GameMenu(title: "main",
                         menuOptions:
             [
                 MenuAction(title: "Play Again")
                 {
                     [unowned self] in
+                    GameMenu.focusMenu = nil;
                     if let scene = SKScene(fileNamed: "GameScene") as? GameScene
                     {
                         // Set the scale mode to scale to fit the window
@@ -113,6 +227,8 @@ class GameScene: SKScene
                         
                         scene.BottomPlayerType = self.BottomPlayerType;
                         scene.TopPlayerType = self.TopPlayerType;
+                        arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
+                        scene.ReplayName = self.ReplayName;
                         
                         self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
                     }
@@ -124,6 +240,7 @@ class GameScene: SKScene
                 MenuAction(title: "Main Menu")
                 {
                     [unowned self] in
+                    GameMenu.focusMenu = nil;
                     if let scene = SKScene(fileNamed: "MainMenuScene")
                     {
                         // Set the scale mode to scale to fit the window
@@ -139,10 +256,9 @@ class GameScene: SKScene
                     }
                 }
             ]);
-        MenuNode = SKSpriteNode(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.6),
+        EndMenuNode = SKSpriteNode(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.6),
                                 size: CGSize(width: BlockRush.ScreenWidth, height: BlockRush.ScreenHeight));
-        MenuNode!.zPosition = 100;
-        Menu!.show(node: MenuNode!);
+        EndMenuNode!.zPosition = 100;
         
         //
         
@@ -155,13 +271,38 @@ class GameScene: SKScene
         sceneDidLoad();
     }
     
+    /**
+     The UITouch on the top half of the screen for use by `TDevice`.
+     */
     var TopTouch: UITouch? = nil;
+    /**
+     A variable whose meaning varies on the value of `TopPlayerControlType`.
+     
+     - If the value is `ControlType.TouchHybrid`, it represents how long until Auto-repeat kicks in.
+     - Otherwise, it represents how many frames the `TopTouch` has been held.
+     */
     var TopTouchFrames = 0;
+    /**
+     The point where `TopTouch` began.
+     */
     var TopStartPos = CGPoint.zero;
     
+    /**
+     The UITouch on the bottom half of the screen for use by `BDevice`.
+     */
     var BottomTouch: UITouch? = nil;
+    /**
+     A variable whose meaning varies on the value of `BottomPlayerControlType`.
+     
+     - If the value is `ControlType.TouchHybrid`, it represents how long until Auto-repeat kicks in.
+     - Otherwise, it represents how many frames the `BottomTouch` has been held.
+     */
     var BottomTouchFrames = 0;
+    /**
+     The point where `BottomTouch` began.
+     */
     var BottomStartPos = CGPoint.zero;
+    
     func touchDown(touch: UITouch)
     {
         let pos = touch.location(in: self)
@@ -410,37 +551,54 @@ class GameScene: SKScene
     
     override func update(_ currentTime: TimeInterval)
     {
+        if(Paused)
+        {
+            return;
+        }
         if(EndGame)
         {
+            Paused = true;
             if(playField!.Loser === playerTop)
             {
                 PlayLoseEffect(top: true);
                 PlayWinEffect(top: false);
+                BlockRush.PlaySound(name: "Winner");
             }
             else if(playField!.Loser === playerBottom)
             {
                 PlayLoseEffect(top: false);
                 PlayWinEffect(top: true);
+                if(TopPlayerType == .Local)
+                {
+                    BlockRush.PlaySound(name: "Winner");
+                }
+                else
+                {
+                    BlockRush.PlaySound(name: "Loser");
+                }
             }
             else
             {
                 PlayLoseEffect(top: true);
                 PlayLoseEffect(top: false);
+                BlockRush.PlaySound(name: "Loser");
             }
-            EndGame = false;
+            BlockRush.StopMusic();
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0)
             {
-                self.addChild(self.MenuNode!);
+                self.addChild(self.EndMenuNode!);
                 
-                self.MenuNode!.run(.fadeIn(withDuration: 1));
+                self.EndMenuNode!.run(.fadeIn(withDuration: 1));
+                self.EndMenu!.show(node: self.EndMenuNode!);
             };
             
         }
         if(playField != nil)
         {
-            if(playField!.GameOver)
+            let f = playField!;
+            if(f.GameOverFrame != nil && playerTop!.curFrame == playerBottom!.curFrame)
             {
-                //Do things
+                // Do things
             }
             else if(playField!.GameReady)
             {
@@ -584,8 +742,22 @@ class GameScene: SKScene
                 
                 let BFrame = playerBottom!.runTo(targetFrame: playField!.GameFrame,playField: playField!);
                 let TFrame = playerTop!   .runTo(targetFrame: playField!.GameFrame,playField: playField!);
-                // If neither player is less than 15 frames behind
-                if((playField!.GameFrame - BFrame) < 15 && (playField!.GameFrame - TFrame < 15))
+                if(playField!.GameOverFrame != nil)
+                {
+                    if let l = playField!.Loser
+                    {
+                        if(l.curFrame <= l.foe.curFrame) //If loser is behind or at opponent, end game
+                        {
+                            ReadyEndOfGame();
+                        }
+                    }
+                    else //both have lost
+                    {
+                        ReadyEndOfGame();
+                    }
+                }
+                // Hang if either player is more than 15 frames behind.
+                if((playField!.GameFrame - BFrame) <= 15 && (playField!.GameFrame - TFrame <= 15))
                 {
                     if(playField!.GameFrame <= 200)
                     {
@@ -596,6 +768,7 @@ class GameScene: SKScene
                             if(n == 0)
                             {
                                 Str = "GO!";
+                                BlockRush.PlayMusic(name: "Track" + String(1+(InitialSeed % 3)) );
                             }
                             else
                             {
@@ -625,19 +798,51 @@ class GameScene: SKScene
                     }
                     playField!.AdvanceFrame();
                 }
+                else
+                {
+                    /*
+                    print("HANGING");
+                    //Game is hung, check for end of game
+                    if(playField!.GameOverFrame != nil)
+                    {
+                        ReadyEndOfGame();
+                    }
+                     */
+                }
             }
             else
             {
                 print("Game is not ready!");
             }
         }
+        /*
+        
+        //Show debug text.
+        let T = DebugTopObj as? InputDevice;
+        let B = DebugBottomObj as? InputDevice;
+        if(T != nil)
+        {
+            DebugNodeTop.text = "\(playerTop!.hasLost) \(playerTop!.curFrame)";//T!.debugText();
+        }
+        if(B != nil)
+        {
+            DebugNodeBottom.text = "\(playField!.GameFrame) = \(playerBottom!.curFrame)";//B!.debugText();
+        }
+         */
     }
     
+    /**
+     Prepare for the game to end next frame.
+     */
     func ReadyEndOfGame()
     {
         EndGame = true;
     }
     
+    /**
+     Place the WINNER! banner on the specified player's side of the field.
+     - Parameter top: Whether or not to place the banner on the top player's side. It will be placed on the bottom player's side if `false`
+     */
     func PlayWinEffect(top: Bool)
     {
         let GroupNode = SKNode();
@@ -682,6 +887,10 @@ class GameScene: SKScene
         
     }
     
+    /**
+     Place the LOSER... banner on the specified player's side of the field.
+     - Parameter top: Whether or not to place the banner on the top player's side. It will be placed on the bottom player's side if `false`
+     */
     func PlayLoseEffect(top: Bool)
     {
         let GroupNode = SKNode();
@@ -707,4 +916,5 @@ class GameScene: SKScene
         GroupNode.zPosition = 10;
         self.addChild(GroupNode);
     }
+    
 }

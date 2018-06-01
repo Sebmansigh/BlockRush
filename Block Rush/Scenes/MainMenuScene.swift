@@ -8,21 +8,38 @@
 import Foundation
 import SpriteKit
 
+/**
+ The scene that contains the main menu navigation
+ */
 class MainMenuScene: SKScene
 {
+    /**
+     The main menu.
+     */
     var Menu: GameMenu? = nil;
+    /**
+     An `SKLabelNode` that is used by `Menu` to display the current menu's title.
+     */
     var titleNode: SKLabelNode? = nil;
-    var loaded = false;
     
     deinit
     {
         print("Deallocated MainMenuScene");
     }
     
+    
+    private var loaded = false;
+    /**
+     Creates a closure that, when executed, presents an instance of `GameScene`.
+     - Parameter bottomPlayerType: The type of the bottom player when the game starts.
+     - Parameter topPlayerType: The type of the top player when the game starts.
+     - Returns: A closure that presents a `GameScene` when executed.
+     */
     private func toGameScene(bottomPlayerType: PlayerType,topPlayerType: PlayerType) -> ( () -> Void )
     {
         return {
             [unowned self] in
+            GameMenu.focusMenu = nil;
             if let scene = SKScene(fileNamed: "GameScene") as? GameScene
             {
                 // Set the scale mode to scale to fit the window
@@ -33,7 +50,7 @@ class MainMenuScene: SKScene
                 scene.BottomPlayerType = bottomPlayerType;
                 scene.TopPlayerType = topPlayerType;
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                
+                BlockRush.StopMusic();
                 self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
             }
             else
@@ -41,6 +58,37 @@ class MainMenuScene: SKScene
                 fatalError("Could not load GameScene.");
             }
         };
+    }
+    /**
+     Creates a closure that, when executed, presents an instance of `GameScene` that replays a named demo game.
+     - Parameter name: the name of the demo game.
+     - Returns: A closure that presents a `GameScene` when executed.
+     */
+    private func playDemoGame(_ name: String) -> ( () -> Void )
+    {
+        return {
+            [unowned self] in
+            GameMenu.focusMenu = nil;
+            if let scene = SKScene(fileNamed: "GameScene") as? GameScene
+            {
+                // Set the scale mode to scale to fit the window
+                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                    height: UIScreen.main.nativeBounds.height);
+                scene.scaleMode = .aspectFit;
+                
+                scene.BottomPlayerType = .Replay;
+                scene.TopPlayerType = .Replay;
+                scene.ReplayName = name;
+                
+                arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
+                BlockRush.StopMusic();
+                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+            }
+            else
+            {
+                fatalError("Could not load GameScene.");
+            }
+        }
     }
     
     override func sceneDidLoad()
@@ -51,7 +99,6 @@ class MainMenuScene: SKScene
             return;
         }
         BlockRush.SoundScene = self;
-        BlockRush.PlaySound(name: "PlaySnap");
         
         titleNode = SKLabelNode(text: "BLOCK RUSH");
         titleNode!.position.y = CGFloat(BlockRush.GameHeight/4);
@@ -82,7 +129,7 @@ class MainMenuScene: SKScene
                                   [GameMenu(title: "Tutorial"),
                                    GameMenu(title: "Novice"),
                                    GameMenu(title: "Adept"),
-                                   GameMenu(title: "Expert")
+                                   MenuAction(title:"Expert", action: playDemoGame("Demo1"))
                                   ]),
                          GameMenu(title:"Settings",
                                   menuOptions:
@@ -90,8 +137,11 @@ class MainMenuScene: SKScene
                                      ControlMenu(title: "Controls")
                                     ])
                          ]);
-        
-        Menu!.show(node: self);
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0)
+        {
+            BlockRush.PlayMusic(name: "Intro");
+            self.Menu!.show(node: self);
+        }
         loaded = true;
     }
     
@@ -99,41 +149,6 @@ class MainMenuScene: SKScene
     {
         //view.presentScene(self);
         sceneDidLoad();
-    }
-    
-    func touchDown(touch: UITouch)
-    {
-        
-    }
-    
-    func touchMoved(touch: UITouch)
-    {
-        
-    }
-    
-    func touchUp(touch: UITouch)
-    {
-        
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
-    {
-        for t in touches { self.touchDown(touch: t) }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
-    {
-        for t in touches { self.touchMoved(touch: t); }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
-    {
-        for t in touches { self.touchUp(touch: t); }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?)
-    {
-        for t in touches { self.touchUp(touch: t); }
     }
     
 }

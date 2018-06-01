@@ -38,6 +38,10 @@ class MenuOption
         Btn = ButtonNode(owner: self);
         return Btn!;
     }
+    func RefButton() -> ButtonNode?
+    {
+        return Btn;
+    }
     
     static var confirming = false;
     func Confirm()
@@ -48,11 +52,11 @@ class MenuOption
         }
         MenuOption.confirming = true;
         superMenu!.hideSiblings(self);
-        Btn!.run(.sequence([.repeat(.sequence([.run(Btn!.Dehighlight),
+        Btn!.run(.repeat(.sequence([.run(Btn!.Dehighlight),
                                     .wait(forDuration: 0.125),
                                     .run(Btn!.Highlight),
-                                    .wait(forDuration: 0.125)]), count: 2),
-                            .wait(forDuration: 0.5)]))
+                                    .wait(forDuration: 0.125)]), count: 2));
+        DispatchQueue.main.asyncAfter(deadline: .now()+1.0)
         {
             let _ = self.FetchButton();
             self.EvalPress();
