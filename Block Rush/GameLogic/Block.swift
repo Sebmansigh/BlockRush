@@ -22,7 +22,7 @@ class Block:Hashable
     var LockFrame: Int = -1;
     var iPos = -1;
     var jPos = -1;
-    var debugLabel: SKLabelNode? = nil;//SKLabelNode(fontNamed: "Avenir");
+    var debugLabel: SKLabelNode? = BlockRush.DEBUG_MODE ? SKLabelNode(fontNamed: "Avenir") : nil;
     init(nColor: Int)
     {
         col = nColor;

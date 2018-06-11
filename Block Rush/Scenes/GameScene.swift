@@ -99,6 +99,10 @@ class GameScene: SKScene
     var EndMenu: GameMenu?;
     
     /**
+     If the game is pausable, holds a reference to the pause button
+     */
+    var PauseButton: SKSpriteNode? = nil;
+    /**
      A node that contains the menu to be shown when the game is paused
      */
     var PauseMenuNode: SKNode?;
@@ -113,6 +117,9 @@ class GameScene: SKScene
     var DebugTopObj: Any? = nil;
     var DebugNodeBottom = SKLabelNode(fontNamed: "Avenir");
     var DebugBottomObj: Any? = nil;
+    
+    var DebugNodeTopColumn = [SKLabelNode?](repeating: nil, count: 6);
+    var DebugNodeBottomColumn = [SKLabelNode?](repeating: nil, count: 6);
     
     deinit
     {
@@ -130,14 +137,38 @@ class GameScene: SKScene
             return;
         }
         
-        DebugNodeTop.position.y = BlockRush.ScreenHeight/2-32;
-        DebugNodeTop.verticalAlignmentMode = .center
-        addChild(DebugNodeTop);
-        
-        DebugNodeBottom.position.y = -BlockRush.ScreenHeight/2+32;
-        DebugNodeBottom.verticalAlignmentMode = .center
-        addChild(DebugNodeBottom);
-        
+        if(BlockRush.DEBUG_MODE)
+        {
+            DebugNodeTop.position.y = BlockRush.ScreenHeight/2-32;
+            DebugNodeTop.verticalAlignmentMode = .center
+            addChild(DebugNodeTop);
+            
+            DebugNodeBottom.position.y = -BlockRush.ScreenHeight/2+32;
+            DebugNodeBottom.verticalAlignmentMode = .center
+            addChild(DebugNodeBottom);
+            for i in 0...5
+            {
+                let n = SKLabelNode(fontNamed: "Avenir");
+                DebugNodeTopColumn[i] = n;
+                n.text = "0 =";
+                n.fontColor = .white;
+                n.fontSize = BlockRush.BlockWidth * 0.3;
+                n.position.y = BlockRush.BlockWidth * 5;
+                n.position.x = BlockRush.BlockWidth * (CGFloat(i)-2.5);
+                addChild(n);
+            }
+            for i in 0...5
+            {
+                let n = SKLabelNode(fontNamed: "Avenir");
+                DebugNodeBottomColumn[i] = n;
+                n.text = "0 =";
+                n.fontColor = .white;
+                n.fontSize = BlockRush.BlockWidth * 0.3;
+                n.position.y = BlockRush.BlockWidth * -5;
+                n.position.x = BlockRush.BlockWidth * (CGFloat(i)-2.5);
+                addChild(n);
+            }
+        }
         BlockRush.SoundScene = self;
         
         let TopDevice: InputDevice;
@@ -151,16 +182,22 @@ class GameScene: SKScene
         {
         case .Local:
             TopDevice = TDevice;
+            CreatePauseButton();
         case .Replay:
             TopDevice = DelayedDevice(device: ReplayDevice(Data!.2), frames:15);
+            CreatePauseButton();
         case .BotNovice:
             TopDevice = BotDevice.Novice();
+            CreatePauseButton();
         case .BotAdept:
             TopDevice = BotDevice.Adept();
+            CreatePauseButton();
         case .BotExpert:
             TopDevice = BotDevice.Expert();
+            CreatePauseButton();
         case .BotMaster:
             TopDevice = BotDevice.Master();
+            CreatePauseButton();
         default:
             fatalError("Unkown Top Player Type: "+String(describing: TopPlayerType));
         }
@@ -261,7 +298,62 @@ class GameScene: SKScene
         EndMenuNode!.zPosition = 100;
         
         //
-        
+        PauseMenu = GameMenu(title: "main",
+                           menuOptions:
+            [
+                MenuAction(title: "Resume")
+                {
+                    [unowned self] in
+                    GameMenu.focusMenu = nil;
+                    self.Paused = false;
+                    self.PauseMenuNode!.removeAllActions();
+                    self.PauseMenuNode!.removeFromParent();
+                },
+                MenuAction(title: "Restart")
+                {
+                    [unowned self] in
+                    GameMenu.focusMenu = nil;
+                    if let scene = SKScene(fileNamed: "GameScene") as? GameScene
+                    {
+                        // Set the scale mode to scale to fit the window
+                        scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                            height: UIScreen.main.nativeBounds.height);
+                        scene.scaleMode = .aspectFit;
+                        
+                        scene.BottomPlayerType = self.BottomPlayerType;
+                        scene.TopPlayerType = self.TopPlayerType;
+                        arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
+                        scene.ReplayName = self.ReplayName;
+                        
+                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+                    }
+                    else
+                    {
+                        fatalError("Could not load GameScene.");
+                    }
+                },
+                MenuAction(title: "Main Menu")
+                {
+                    [unowned self] in
+                    GameMenu.focusMenu = nil;
+                    if let scene = SKScene(fileNamed: "MainMenuScene")
+                    {
+                        // Set the scale mode to scale to fit the window
+                        scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                            height: UIScreen.main.nativeBounds.height);
+                        scene.scaleMode = .aspectFit;
+                        
+                        self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+                    }
+                    else
+                    {
+                        fatalError("Could not load MainMenuScene.");
+                    }
+                }
+            ]);
+        PauseMenuNode = SKSpriteNode(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.6),
+                                   size: CGSize(width: BlockRush.ScreenWidth, height: BlockRush.ScreenHeight));
+        PauseMenuNode!.zPosition = 100;
         
         playField!.GameReady = true;
     }
@@ -269,6 +361,20 @@ class GameScene: SKScene
     override func didMove(to view: SKView)
     {
         sceneDidLoad();
+    }
+    
+    /**
+     Creates the pause button above the bottom player's time gauge
+     */
+    func CreatePauseButton()
+    {
+        let s = BlockRush.BlockWidth*4/5
+        let P = SKSpriteNode(texture: nil, color: .white, size: CGSize(width: s, height: s));
+        P.position.x = -BlockRush.GameWidth * 0.45;
+        P.position.y = -BlockRush.GameHeight * 0.1;
+        P.zPosition = 10;
+        addChild(P);
+        PauseButton = P;
     }
     
     /**
@@ -305,6 +411,14 @@ class GameScene: SKScene
     
     func touchDown(touch: UITouch)
     {
+        if let b = PauseButton
+        {
+            if(nodes(at: touch.location(in: self)).contains(b))
+            {
+                GamePause();
+                return;
+            }
+        }
         let pos = touch.location(in: self)
         if(pos.y > 0)
         {
@@ -548,6 +662,18 @@ class GameScene: SKScene
         for t in touches { self.touchUp(touch: t); }
     }
     
+    func GamePause()
+    {
+        if(Paused)
+        {
+            return;
+        }
+        print("PAUSING");
+        Paused = true;
+        addChild(PauseMenuNode!);
+        PauseMenuNode!.run(.fadeIn(withDuration: 1));
+        PauseMenu!.show(node: PauseMenuNode!);
+    }
     
     override func update(_ currentTime: TimeInterval)
     {
@@ -815,20 +941,21 @@ class GameScene: SKScene
                 print("Game is not ready!");
             }
         }
-        /*
         
-        //Show debug text.
-        let T = DebugTopObj as? InputDevice;
-        let B = DebugBottomObj as? InputDevice;
-        if(T != nil)
+        if(BlockRush.DEBUG_MODE)
         {
-            DebugNodeTop.text = "\(playerTop!.hasLost) \(playerTop!.curFrame)";//T!.debugText();
+            //Show debug text.
+            let T = DebugTopObj as? InputDevice;
+            let B = DebugBottomObj as? InputDevice;
+            if(T != nil)
+            {
+                DebugNodeTop.text = "\(playerTop!.hasLost) \(playerTop!.curFrame)";//T!.debugText();
+            }
+            if(B != nil)
+            {
+                DebugNodeBottom.text = "\(playField!.GameFrame) = \(playerBottom!.curFrame)";//B!.debugText();
+            }
         }
-        if(B != nil)
-        {
-            DebugNodeBottom.text = "\(playField!.GameFrame) = \(playerBottom!.curFrame)";//B!.debugText();
-        }
-         */
     }
     
     /**

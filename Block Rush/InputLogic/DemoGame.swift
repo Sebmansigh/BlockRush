@@ -15,35 +15,57 @@ final class DemoGame
     {
         var bottom = [Input]();
         var top = [Input]();
+        func bothwait(_ frames: Int)
+        {
+            bottom.append(contentsOf: wait(frames));
+            top.append(contentsOf: wait(frames));
+        }
         switch(name)
         {
         case "Demo1":
-            bottom.append(contentsOf: wait(240));
-            for _ in 0...10
-            {
-                bottom.append(contentsOf: wait(70));
-                bottom.append(.LEFT);
-                bottom.append(contentsOf: wait(5));
-                bottom.append(.LEFT);
-                bottom.append(contentsOf: wait(5));
-                bottom.append(Input(rawValue: Input.LEFT.rawValue | Input.PLAY.rawValue));
-                bottom.append(contentsOf: wait(70));
-                bottom.append(.LEFT);
-                bottom.append(contentsOf: wait(5));
-                bottom.append(Input(rawValue: Input.LEFT.rawValue | Input.PLAY.rawValue));
-                bottom.append(contentsOf: wait(70));
-                bottom.append(Input(rawValue: Input.LEFT.rawValue | Input.PLAY.rawValue));
-                bottom.append(contentsOf: wait(70));
-                bottom.append(.PLAY);
-                bottom.append(contentsOf: wait(70));
-                bottom.append(Input(rawValue: Input.RIGHT.rawValue | Input.PLAY.rawValue));
-                bottom.append(contentsOf: wait(70));
-                bottom.append(.RIGHT);
-                bottom.append(contentsOf: wait(5));
-                bottom.append(Input(rawValue: Input.RIGHT.rawValue | Input.PLAY.rawValue));
-            }
-            bottom.append(contentsOf: wait(0));
-            return (1029784756,bottom,bottom);
+            bothwait(240);
+            
+            bottom += [.LEFT,.LEFT,.PLAY];
+            top += [.RIGHT,.FLIP,.PLAY];
+            bothwait(40);
+            bottom += [.LEFT,.PLAY];
+            top += [.RIGHT,.PLAY];
+            bothwait(40);
+            bottom += [.NONE,.PLAY];
+            top += [.LEFT,.PLAY];
+            bothwait(40);
+            top += [.LEFT,.FLIP,.PLAY];
+            bottom += [.NONE,.NONE,.PLAY];
+            bothwait(40)
+            top += [.FLIP,.PLAY];
+            bothwait(40);
+            top += [.PLAY];
+            bothwait(40);
+            top += [.RIGHT,.RIGHT,.FLIP];
+            bottom.append(contentsOf: wait(6));
+            top += [.RIGHT,.RIGHT,.PLAY];
+            bothwait(40);
+            top += [.PLAY];
+            bothwait(40);
+            top += [.RIGHT,.RIGHT,.PLAY];
+            bothwait(40);
+            top += [.RIGHT,.RIGHT,.PLAY];
+            bothwait(125);
+            top += [.RIGHT,.RIGHT];
+            bottom.append(contentsOf: wait(12));
+            
+            print(top.count);
+            print(bottom.count);
+            
+            bothwait(120);
+            bottom += [.PLAY];
+            //If the number of wait frames is set to 90, bottom player gets a 2-chain. If set to 91, both players get a 1-chain.
+            top.append(contentsOf: wait(90));
+            top += [.PLAY];
+            bothwait(600);
+            print(top.count);
+            print(bottom.count);
+            return (1029784756,bottom,top);
         default:
             fatalError("Bad demo name :\(name)")
         }

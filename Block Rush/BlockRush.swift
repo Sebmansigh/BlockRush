@@ -14,6 +14,7 @@ import AVFoundation
  */
 final class BlockRush
 {
+    public static let DEBUG_MODE = false;//264
     /**
      A publically readable and writable map of settings and their values.
      */

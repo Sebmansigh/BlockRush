@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SpriteKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
@@ -56,6 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
                     UIKeyCommand(input: "", modifierFlags: .command, action: #selector(AppDelegate.UnlockKeyboardControls(sender:)), discoverabilityTitle: "Unlock Keyboard Controls"),
                     //*
                     UIKeyCommand(input: "", modifierFlags: .shift, action: #selector(AppDelegate.BackMenu(sender:)), discoverabilityTitle: "Go Back" ),
+                    UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.BackMenu(sender:)), discoverabilityTitle: "Go Back" )
                 ];
             default:
             return [
@@ -65,6 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
                 UIKeyCommand(input: " ", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.ChooseMenu(sender:)), discoverabilityTitle: "Choose Option" ),
                 UIKeyCommand(input: "\r", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.ChooseMenu(sender:)), discoverabilityTitle: "Choose Option" ),
                 UIKeyCommand(input: "", modifierFlags: .shift, action: #selector(AppDelegate.BackMenu(sender:)), discoverabilityTitle: "Go Back" ),
+                UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.BackMenu(sender:)), discoverabilityTitle: "Go Back" )
             ];
             }
         }
@@ -78,6 +81,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
                 //*
                 UIKeyCommand(input: " ", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.PlayInput(sender:)), discoverabilityTitle: "Play Piece" ),
                 UIKeyCommand(input: "", modifierFlags: UIKeyModifierFlags.shift, action: #selector(AppDelegate.FlipInput(sender:)), discoverabilityTitle: "Flip Piece" ),
+                
+                UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.PauseInput(sender:)), discoverabilityTitle: "Pause Game" ),
                 //*/
             ];
         }
@@ -104,7 +109,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     {
         KeyboardDevice.Device.pendingInput.append(.RIGHT);
     }
-    
+    @objc func PauseInput(sender: UIKeyCommand)
+    {
+        if let s = (window!.rootViewController!.view as! SKView).scene as? GameScene
+        {
+            if(s.PauseButton != nil)
+            {
+                s.GamePause();
+            }
+        }
+    }
     //Keyboard Menu input.
     @objc func BackMenu(sender: UIKeyCommand)
     {

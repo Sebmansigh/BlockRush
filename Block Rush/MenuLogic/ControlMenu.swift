@@ -27,12 +27,15 @@ class ControlMenu: GameMenu
         node.addChild(TopSelector.Fetch());
         node.addChild(BottomSelector.Fetch());
         
-        showBackButton()
+        if(Back == nil)
         {
-            let _ = self.TopSelector!.Fetch();
-            let _ = self.BottomSelector!.Fetch();
-            BlockRush.saveSettings();
-        };
+            showBackButton()
+            {
+                let _ = self.TopSelector!.Fetch();
+                let _ = self.BottomSelector!.Fetch();
+                BlockRush.saveSettings();
+            };
+        }
     }
     
     func remakeSelectors()
@@ -70,7 +73,7 @@ class ControlMenu: GameMenu
     {
         if let i = focusIndex
         {
-            if(focusIndex == 0)
+            if(i == 0)
             {
                 TopSelector.Dehighlight();
                 focusIndex = 1;

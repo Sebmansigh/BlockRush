@@ -45,6 +45,14 @@ class PlayField
     var CheckCascade: Bool = false;
     ///A Set of frame numbers on which to check for matches.
     var CheckMatchFrames: Set<Int> = [];
+    ///The frame on which the last cascade occurred on the top side of the field.
+    var LastCascadeTop:    [Int] = [Int](repeating:0, count:6);
+    ///The frame on which the last cascade occurred on the bottom side of the field.
+    var LastCascadeBottom: [Int] = [Int](repeating:0, count:6);
+    ///Which player, if any, should be credited with a match that occured from an adjusted cascade on the top side of the field.
+    var CascadeCreditTop:  [Bool?] = [Bool?](repeating: nil, count: 6);
+    ///Which player, if any, should be credited with a match that occured from an adjusted cascade on the bottom side of the field.
+    var CascadeCreditBottom: [Bool?] = [Bool?](repeating: nil, count: 6);
     
     /// A map of frame numbers to matches made.
     /// These matches are credited to the top player.
@@ -120,7 +128,6 @@ class PlayField
         
         let inArr = Array<Block?>(repeating: nil, count:rows);
         Field = Array<Array<Block?>>(repeating: inArr, count:cols);
-        
         
         
         CenterBar = SKSpriteNode(texture: nil,
@@ -226,6 +233,30 @@ class PlayField
         {
             fatalError("Recieved neither top nor bottom player for getStackHeight");
         }
+    }
+    
+    func surfaceTopBlock(column: Int) -> Block?
+    {
+        for i in 0...rows()/2-1
+        {
+            if let b = Field[column][i]
+            {
+                return b;
+            }
+        }
+        return nil;
+    }
+    
+    func surfaceBottomBlock(column: Int) -> Block?
+    {
+        for i in (rows()/2...rows()-1).reversed()
+        {
+            if let b = Field[column][i]
+            {
+                return b;
+            }
+        }
+        return nil;
     }
     
     /**
@@ -570,8 +601,16 @@ class PlayField
             if(Field[column][i] == nil)
             {
                 block.nod.position = GetPosition(column:column,row:i);
-                block.CreditTop = false;
-                block.LockFrame = frame;
+                if(frame >= LastCascadeBottom[column])
+                {
+                    block.CreditTop = false;
+                    block.LockFrame = frame;
+                }
+                else
+                {
+                    block.CreditTop = CascadeCreditBottom[column];
+                    block.LockFrame = LastCascadeBottom[column];
+                }
                 Field[column][i] = block;
                 block.iPos = column;
                 block.jPos = i;
@@ -615,8 +654,16 @@ class PlayField
             if(Field[column][i] == nil)
             {
                 block.nod.position = GetPosition(column:column,row:i);
-                block.CreditTop = true;
-                block.LockFrame = frame;
+                if(frame >= LastCascadeTop[column])
+                {
+                    block.CreditTop = true;
+                    block.LockFrame = frame;
+                }
+                else
+                {
+                    block.CreditTop = CascadeCreditTop[column];
+                    block.LockFrame = LastCascadeTop[column];
+                }
                 Field[column][i] = block;
                 block.iPos = column;
                 block.jPos = i;
@@ -1077,6 +1124,50 @@ class PlayField
         }
         //
         GameFrame += 1;
+        ///*
+        if(BlockRush.DEBUG_MODE)
+        {
+            for i in 0...5
+            {
+                var t: String;
+                if let c = CascadeCreditTop[i]
+                {
+                    if(c)
+                    {
+                        t = "\u{21e7}";
+                    }
+                    else
+                    {
+                        t = "\u{21e9}";
+                    }
+                }
+                else
+                {
+                    t = "=";
+                }
+                
+                gameScene.DebugNodeTopColumn[i]!.text = "\(LastCascadeTop[i])"+t;
+                //
+                if let c = CascadeCreditBottom[i]
+                {
+                    if(c)
+                    {
+                        t = "\u{21e7}";
+                    }
+                    else
+                    {
+                        t = "\u{21e9}";
+                    }
+                }
+                else
+                {
+                    t = "=";
+                }
+                
+                gameScene.DebugNodeBottomColumn[i]!.text = "\(LastCascadeBottom[i])"+t;
+            }
+        }
+         //*/
     }
     
     /**
@@ -1377,6 +1468,16 @@ class PlayField
                     {
                         let I = block.iPos;
                         let J = block.jPos;
+                        if(surfaceTopBlock(column:I) == block)
+                        {
+                            CascadeCreditTop[I] = CreditTop;
+                            LastCascadeTop[I] = frame;
+                        }
+                        else if(surfaceBottomBlock(column:I) == block)
+                        {
+                            CascadeCreditBottom[I] = CreditTop;
+                            LastCascadeBottom[I] = frame;
+                        }
                         Field[I][J] = nil;
                         if(J <= rows()/2-1)
                         {
@@ -1438,6 +1539,9 @@ class PlayField
             var jFrom = rows()/2-2;
             var Credit: Bool? = nil;
             var blockFell = false;
+            
+            
+            //Top side of the field:
         columnBaseLoop:
             for jTo in (0...rows()/2-1).reversed()
             {
@@ -1468,28 +1572,33 @@ class PlayField
                     block.CreditTop = Credit;
                     block.LockFrame = frame;
                     
-                    if let l = block.debugLabel
+                    CascadeCreditTop[i] = Credit;
+                    LastCascadeTop[i] = frame;
+                    
+                    if(BlockRush.DEBUG_MODE)
                     {
-                        let t: String;
-                        if let c = Credit
+                        if let l = block.debugLabel
                         {
-                            if(c)
+                            let t: String;
+                            if let c = Credit
                             {
-                                t = "\u{21e7}";
+                                if(c)
+                                {
+                                    t = "\u{21e7}";
+                                }
+                                else
+                                {
+                                    t = "\u{21e9}";
+                                }
                             }
                             else
                             {
-                                t = "\u{21e9}";
+                                t = "=";
                             }
+                            
+                            l.text = "\(frame)"+t;
                         }
-                        else
-                        {
-                            t = "=";
-                        }
-                        
-                        l.text = "\(frame)"+t;
                     }
-                    
                     Field[i][jFrom] = nil;
                     
                     Field[i][jTo] = block;
@@ -1502,6 +1611,7 @@ class PlayField
             jFrom = rows()/2+1;
             blockFell = false;
             
+            //Bottom side of the field.
         columnBaseLoop:
             for jTo in rows()/2...rows()-1
             {
@@ -1532,28 +1642,33 @@ class PlayField
                     block.CreditTop = Credit;
                     block.LockFrame = frame;
                     
-                    if let l = block.debugLabel
+                    CascadeCreditBottom[i] = Credit;
+                    LastCascadeBottom[i] = frame;
+                    
+                    if(BlockRush.DEBUG_MODE)
                     {
-                        let t: String;
-                        if let c = Credit
+                        if let l = block.debugLabel
                         {
-                            if(c)
+                            let t: String;
+                            if let c = Credit
                             {
-                                t = "\u{21e7}";
+                                if(c)
+                                {
+                                    t = "\u{21e7}";
+                                }
+                                else
+                                {
+                                    t = "\u{21e9}";
+                                }
                             }
                             else
                             {
-                                t = "\u{21e9}";
+                                t = "=";
                             }
+                            
+                            l.text = "\(frame)"+t;
                         }
-                        else
-                        {
-                            t = "=";
-                        }
-                        
-                        l.text = "\(frame)"+t;
                     }
-                        
                     Field[i][jFrom] = nil;
                     
                     Field[i][jTo] = block;
