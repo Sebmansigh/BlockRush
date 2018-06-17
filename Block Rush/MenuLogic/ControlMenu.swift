@@ -7,6 +7,7 @@
 
 import Foundation
 import SpriteKit
+import GameController
 
 class ControlMenu: GameMenu
 {
@@ -27,15 +28,12 @@ class ControlMenu: GameMenu
         node.addChild(TopSelector.Fetch());
         node.addChild(BottomSelector.Fetch());
         
-        if(Back == nil)
+        showBackButton()
         {
-            showBackButton()
-            {
-                let _ = self.TopSelector!.Fetch();
-                let _ = self.BottomSelector!.Fetch();
-                BlockRush.saveSettings();
-            };
-        }
+            let _ = self.TopSelector!.Fetch();
+            let _ = self.BottomSelector!.Fetch();
+            BlockRush.saveSettings();
+        };
     }
     
     func remakeSelectors()

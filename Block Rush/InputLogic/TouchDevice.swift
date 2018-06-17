@@ -9,7 +9,6 @@ import Foundation
 
 class TouchDevice: InputDevice
 {
-    public var pendingInput: [Input] = [];
     private var previousInput: [Input] = [];
     
     public override init() {super.init();}

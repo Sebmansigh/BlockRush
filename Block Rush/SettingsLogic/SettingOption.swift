@@ -40,10 +40,6 @@ struct SettingOption: OptionSet, Hashable
         static let TouchTap       = SettingOption(rawValue: 0b0000_0010);
         static let TouchHybrid    = SettingOption(rawValue: 0b0000_0100);
         static let KeyboardArrows = SettingOption(rawValue: 0b0000_1000);
-        static let KeyboardWASD   = SettingOption(rawValue: 0b0001_0000);
-        static let KeyboardCustom = SettingOption(rawValue: 0b0010_0000);
-        static let GamepadDefault = SettingOption(rawValue: 0b0100_0000);
-        static let GamepadCustom  = SettingOption(rawValue: 0b1000_0000);
     }
     
     /**

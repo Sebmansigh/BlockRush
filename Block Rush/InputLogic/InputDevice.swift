@@ -9,6 +9,8 @@ import Foundation
 
 class InputDevice
 {
+    //All input from outside sources goes here. There is no guarantee that this input device honors these inputs.
+    public var pendingInput: [Input] = [];
     internal var inputLog: [UInt8] = [];
     internal var curInput: UInt8 = 0;
     public var player: Player? = nil;

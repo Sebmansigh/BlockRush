@@ -10,7 +10,6 @@ import UIKit
 
 final class KeyboardDevice: InputDevice
 {
-    public var pendingInput: [Input] = [];
     private var previousInput: [Input] = [];
     public static var Device = KeyboardDevice();
     

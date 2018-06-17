@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import GameController
 import SpriteKit
 
 /**
@@ -98,6 +99,8 @@ class MainMenuScene: SKScene
         {
             return;
         }
+        ControllerObserver.initializeControllers();
+        
         BlockRush.SoundScene = self;
         
         titleNode = SKLabelNode(text: "BLOCK RUSH");

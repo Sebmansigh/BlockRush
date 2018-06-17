@@ -137,6 +137,7 @@ class GameScene: SKScene
             return;
         }
         
+        
         if(BlockRush.DEBUG_MODE)
         {
             DebugNodeTop.position.y = BlockRush.ScreenHeight/2-32;
@@ -728,6 +729,8 @@ class GameScene: SKScene
             }
             else if(playField!.GameReady)
             {
+                ControllerObserver.UpdateDAS();
+                
                 switch BlockRush.Settings[.BottomPlayerControlType]!
                 {
                     

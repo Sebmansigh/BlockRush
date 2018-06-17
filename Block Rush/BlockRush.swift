@@ -229,7 +229,7 @@ final class BlockRush
         label.fontName = "Avenir";
         label.fontSize = BlockRush.BlockWidth * 0.5;
         
-        bgNode.run(.fadeOut(withDuration: 2))
+        bgNode.run(.sequence([.wait(forDuration: 3) ,.fadeOut(withDuration: 2)]))
         {
             bgNode.removeFromParent();
         };

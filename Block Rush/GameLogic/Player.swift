@@ -21,7 +21,7 @@ class Player
     ///The most recently executed frame
     internal var curFrame: Int;
     ///The `InputDevice` from which to detect and execute game inputs.
-    internal let inputDevice: InputDevice;
+    public let inputDevice: InputDevice;
     
     //GAME LOGIC
     ///The length of a chain in progress.

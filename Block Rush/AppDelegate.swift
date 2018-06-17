@@ -11,11 +11,12 @@ import SpriteKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
+    static var instance: AppDelegate!;
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
-        
+        AppDelegate.instance = UIApplication.shared.delegate as! AppDelegate
         BlockRush.Initialize();
         return true
     }
@@ -50,39 +51,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             {
             case is ControlMenu:
                 return [
-                    UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.LeftMenu), discoverabilityTitle: "Cycle Options" ),
-                    UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.RightMenu), discoverabilityTitle: "Cycle Options" ),
-                    UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.UpMenu(sender:)), discoverabilityTitle: "Go Up" ),
-                    UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.DownMenu(sender:)), discoverabilityTitle: "Go Down" ),
+                    UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBLeftMenu), discoverabilityTitle: "Cycle Options" ),
+                    UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBRightMenu), discoverabilityTitle: "Cycle Options" ),
+                    UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBUpMenu(sender:)), discoverabilityTitle: "Go Up" ),
+                    UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBDownMenu(sender:)), discoverabilityTitle: "Go Down" ),
                     UIKeyCommand(input: "", modifierFlags: .command, action: #selector(AppDelegate.UnlockKeyboardControls(sender:)), discoverabilityTitle: "Unlock Keyboard Controls"),
                     //*
-                    UIKeyCommand(input: "", modifierFlags: .shift, action: #selector(AppDelegate.BackMenu(sender:)), discoverabilityTitle: "Go Back" ),
-                    UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.BackMenu(sender:)), discoverabilityTitle: "Go Back" )
+                    UIKeyCommand(input: "", modifierFlags: .shift, action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" ),
+                    UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" )
                 ];
             default:
             return [
-                UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.UpMenu(sender:)), discoverabilityTitle: "Go Up" ),
-                UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.DownMenu(sender:)), discoverabilityTitle: "Go Down" ),
+                UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBUpMenu(sender:)), discoverabilityTitle: "Go Up" ),
+                UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBDownMenu(sender:)), discoverabilityTitle: "Go Down" ),
                 //*
-                UIKeyCommand(input: " ", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.ChooseMenu(sender:)), discoverabilityTitle: "Choose Option" ),
-                UIKeyCommand(input: "\r", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.ChooseMenu(sender:)), discoverabilityTitle: "Choose Option" ),
-                UIKeyCommand(input: "", modifierFlags: .shift, action: #selector(AppDelegate.BackMenu(sender:)), discoverabilityTitle: "Go Back" ),
-                UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.BackMenu(sender:)), discoverabilityTitle: "Go Back" )
+                UIKeyCommand(input: " ", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBChooseMenu(sender:)), discoverabilityTitle: "Choose Option" ),
+                UIKeyCommand(input: "\r", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBChooseMenu(sender:)), discoverabilityTitle: "Choose Option" ),
+                UIKeyCommand(input: "", modifierFlags: .shift, action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" ),
+                UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" )
             ];
             }
         }
         else if(BlockRush.Settings[.BottomPlayerControlType] == SettingOption.ControlType.KeyboardArrows)
         {
             return [
-                UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.LeftInput(sender:)), discoverabilityTitle: "Move Left" ),
-                UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.RightInput(sender:)), discoverabilityTitle: "Move Right" ),
-                UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.PlayInput(sender:)), discoverabilityTitle: "Play Piece" ),
-                UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.FlipInput(sender:)), discoverabilityTitle: "Flip Piece" ),
+                UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBLeftInput(sender:)), discoverabilityTitle: "Move Left" ),
+                UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBRightInput(sender:)), discoverabilityTitle: "Move Right" ),
+                UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBPlayInput(sender:)), discoverabilityTitle: "Play Piece" ),
+                UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBFlipInput(sender:)), discoverabilityTitle: "Flip Piece" ),
                 //*
-                UIKeyCommand(input: " ", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.PlayInput(sender:)), discoverabilityTitle: "Play Piece" ),
-                UIKeyCommand(input: "", modifierFlags: UIKeyModifierFlags.shift, action: #selector(AppDelegate.FlipInput(sender:)), discoverabilityTitle: "Flip Piece" ),
+                UIKeyCommand(input: " ", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBPlayInput(sender:)), discoverabilityTitle: "Play Piece" ),
+                UIKeyCommand(input: "", modifierFlags: UIKeyModifierFlags.shift, action: #selector(AppDelegate.KBFlipInput(sender:)), discoverabilityTitle: "Flip Piece" ),
                 
-                UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.PauseInput(sender:)), discoverabilityTitle: "Pause Game" ),
+                UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBPauseInput(sender:)), discoverabilityTitle: "Pause Game" ),
                 //*/
             ];
         }
@@ -92,24 +93,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         }
     }
     
-    //Keyboard Game input.
-    @objc func PlayInput(sender: UIKeyCommand)
+    //Game input.
+    static func HumanInput(_ input: Input,forTopPlayer: Bool)
+    {
+        if let s = (AppDelegate.instance.window!.rootViewController!.view as! SKView).scene as? GameScene
+        {
+            let p = forTopPlayer ? s.playerTop! : s.playerBottom!;
+            
+            p.inputDevice.pendingInput.append(input);
+        }
+    }
+    @objc func KBPlayInput(sender: UIKeyCommand)
     {
         KeyboardDevice.Device.pendingInput.append(.PLAY);
     }
-    @objc func FlipInput(sender: UIKeyCommand)
+    @objc func KBFlipInput(sender: UIKeyCommand)
     {
         KeyboardDevice.Device.pendingInput.append(.FLIP);
     }
-    @objc func LeftInput(sender: UIKeyCommand)
+    @objc func KBLeftInput(sender: UIKeyCommand)
     {
         KeyboardDevice.Device.pendingInput.append(.LEFT);
     }
-    @objc func RightInput(sender: UIKeyCommand)
+    @objc func KBRightInput(sender: UIKeyCommand)
     {
         KeyboardDevice.Device.pendingInput.append(.RIGHT);
     }
-    @objc func PauseInput(sender: UIKeyCommand)
+    
+    static func HumanPauseInput()
+    {
+        if let s = (AppDelegate.instance.window!.rootViewController!.view as! SKView).scene as? GameScene
+        {
+            if(s.PauseButton != nil)
+            {
+                s.GamePause();
+            }
+        }
+    }
+    @objc func KBPauseInput(sender: UIKeyCommand)
     {
         if let s = (window!.rootViewController!.view as! SKView).scene as? GameScene
         {
@@ -119,42 +140,74 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             }
         }
     }
-    //Keyboard Menu input.
-    @objc func BackMenu(sender: UIKeyCommand)
+    
+    
+    //Menu input.
+    static func BackMenu()
     {
         GameMenu.focusMenu?.MenuBackChoose();
     }
-    @objc func ChooseMenu(sender: UIKeyCommand)
+    @objc func KBBackMenu(sender: UIKeyCommand)
+    {
+        AppDelegate.BackMenu();
+    }
+    
+    static func ChooseMenu()
     {
         GameMenu.focusMenu?.MenuChoose();
     }
-    @objc func UpMenu(sender: UIKeyCommand)
+    @objc func KBChooseMenu(sender: UIKeyCommand)
+    {
+        AppDelegate.ChooseMenu();
+    }
+    
+    static func UpMenu()
     {
         GameMenu.focusMenu?.MenuUp();
     }
-    @objc func DownMenu(sender: UIKeyCommand)
+    @objc func KBUpMenu(sender: UIKeyCommand)
+    {
+        AppDelegate.UpMenu();
+    }
+    
+    static func DownMenu()
     {
         GameMenu.focusMenu?.MenuDown();
     }
-    @objc func LeftMenu(sender: UIKeyCommand)
+    @objc func KBDownMenu(sender: UIKeyCommand)
+    {
+        AppDelegate.DownMenu();
+    }
+    static func LeftMenu()
     {
         GameMenu.focusMenu?.MenuLeft();
     }
-    @objc func RightMenu(sender: UIKeyCommand)
+    @objc func KBLeftMenu(sender: UIKeyCommand)
+    {
+        AppDelegate.LeftMenu();
+    }
+    
+    static func RightMenu()
     {
         GameMenu.focusMenu?.MenuRight();
+    }
+    @objc func KBRightMenu(sender: UIKeyCommand)
+    {
+        AppDelegate.RightMenu();
     }
     
     @objc func UnlockKeyboardControls(sender: UIKeyCommand)
     {
-        //if(BlockRush.Settings[.KeyboardControlsUnlocked]! == .False)
-        //{
+        if(BlockRush.Settings[.KeyboardControlsUnlocked]! == .False)
+        {
             BlockRush.Settings[.KeyboardControlsUnlocked] = .True;
             BlockRush.PopUp("Keyboard Controls Unlocked!");
             let cm = GameMenu.focusMenu! as! ControlMenu;
             cm.remakeSelectors();
             cm.show(node: cm.inNode!);
-        //}
+        }
     }
+    
+    
 }
 
