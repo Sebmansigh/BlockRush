@@ -34,6 +34,7 @@ final class BlockRush
         GameHeight = min(UIScreen.main.nativeBounds.height,UIScreen.main.nativeBounds.width*2);
         
         BlockWidth = min(GameWidth * 0.12,GameHeight/14);
+        print(BlockWidth);
     }
     
     /**
@@ -108,9 +109,9 @@ final class BlockRush
     
     public static var BlockWidth: CGFloat = 0;
     public static let BlockColors: [UIColor] = [
-        UIColor(red:1,green:0.3,blue:0.3,alpha:1),
-        UIColor(red:0.3,green:1,blue:0.3,alpha:1),
-        UIColor(red:0.3,green:0.3,blue:1,alpha:1)];
+        UIColor(red:1,green:0,blue:0,alpha:1),
+        UIColor(red:0,green:1,blue:0,alpha:1),
+        UIColor(red:0,green:0,blue:1,alpha:1)];
     
     public static var ScreenWidth: CGFloat = 0;
     public static var ScreenHeight: CGFloat = 0;

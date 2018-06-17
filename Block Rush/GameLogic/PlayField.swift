@@ -114,6 +114,7 @@ class PlayField
     init(cols:Int, rows:Int, playerTop t:Player, playerBottom b: Player, scene:SKScene)
     {
         fieldNode = SKNode();
+        fieldNode.zPosition = -1;
         GameFrame = 0;
         GameReady = false;
         
@@ -138,8 +139,8 @@ class PlayField
                                  size: CGSize(width: BlockRush.BlockWidth*6, height: BlockRush.BlockWidth/16));
         fieldNode.addChild(CenterBar);
         gameScene = scene as! GameScene;
-        CenterBar.zPosition = 2;
-        BackBar.zPosition = -1;
+        CenterBar.zPosition = 1;
+        BackBar.zPosition = -3;
         
         LPowerNodes = [];
         RPowerNodes = [];
@@ -162,12 +163,14 @@ class PlayField
         {
             let Tc = SKSpriteNode(color: .white, size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth*5));
             Tc.alpha = 0;
+            Tc.zPosition = -2;
             Tc.position.x = GetPosition(column: i);
             Tc.position.y = BlockRush.BlockWidth*2.5;
             scene.addChild(Tc);
             TopColumns.append(Tc);
             let Bc = SKSpriteNode(color: .white, size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth*5));
             Bc.alpha = 0;
+            Bc.zPosition = -2;
             Bc.position.x = GetPosition(column: i);
             Bc.position.y = -BlockRush.BlockWidth*2.5;
             scene.addChild(Bc);
@@ -349,8 +352,8 @@ class PlayField
                         NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
                         NewNodeR.position = CGPoint(x: Bw*3,y:pY);
                         
-                        NewNodeL.zPosition = 10;
-                        NewNodeR.zPosition = 10;
+                        NewNodeL.zPosition = 3;
+                        NewNodeR.zPosition = 3;
                         
                         gameScene.addChild(NewNodeL);
                         gameScene.addChild(NewNodeR);
@@ -368,6 +371,9 @@ class PlayField
                     //Total power is towards bottom player
                     NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
                     NewNodeR.position = CGPoint(x: Bw*3,y:pY);
+                    
+                    NewNodeL.zPosition = 3;
+                    NewNodeR.zPosition = 3;
                     
                     NewNodeL.alpha = 0.125;
                     NewNodeR.alpha = 0.125;
@@ -407,6 +413,9 @@ class PlayField
                         //Total power is towards bottom player
                         NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
                         NewNodeR.position = CGPoint(x: Bw*3,y:pY);
+                        
+                        NewNodeL.zPosition = 3;
+                        NewNodeR.zPosition = 3;
                         
                         NewNodeL.alpha = 1;
                         NewNodeR.alpha = 1;
@@ -477,8 +486,8 @@ class PlayField
                         NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
                         NewNodeR.position = CGPoint(x: Bw*3,y:pY);
                         
-                        NewNodeL.zPosition = 10;
-                        NewNodeR.zPosition = 10;
+                        NewNodeL.zPosition = 3;
+                        NewNodeR.zPosition = 3;
                         
                         gameScene.addChild(NewNodeL);
                         gameScene.addChild(NewNodeR);
@@ -535,6 +544,9 @@ class PlayField
                         //Total power is towards bottom player
                         NewNodeL.position = CGPoint(x:-Bw*3,y:pY);
                         NewNodeR.position = CGPoint(x: Bw*3,y:pY);
+                        
+                        NewNodeL.zPosition = 3;
+                        NewNodeR.zPosition = 3;
                         
                         NewNodeL.alpha = 1;
                         NewNodeR.alpha = 1;
@@ -1078,8 +1090,8 @@ class PlayField
             GhostTopFront!.alpha = 0.5;
             GhostTopRear!.alpha = 0.5;
             
-            GhostTopFront!.zPosition = 9;
-            GhostTopRear!.zPosition = 9;
+            GhostTopFront!.zPosition = -1;
+            GhostTopRear!.zPosition = -1;
             
             gameScene.addChild(GhostTopFront!);
             gameScene.addChild(GhostTopRear!);
@@ -1109,8 +1121,8 @@ class PlayField
             GhostBottomFront!.alpha = 0.5;
             GhostBottomRear!.alpha = 0.5;
             
-            GhostBottomFront!.zPosition = 9;
-            GhostBottomRear!.zPosition = 9;
+            GhostBottomFront!.zPosition = -1;
+            GhostBottomRear!.zPosition = -1;
             
             gameScene.addChild(GhostBottomFront!);
             gameScene.addChild(GhostBottomRear!);
@@ -1181,9 +1193,9 @@ class PlayField
     {
         for block in blocks
         {
-            block.nod.size.width*=1.2;
-            block.nod.size.height*=1.2;
-            block.nod.zPosition = 2;
+            //block.nod.size.width*=1.2;
+            //block.nod.size.height*=1.2;
+            block.nod.color = .white;
         }
         if(creditTop == nil)
         {
@@ -1457,7 +1469,7 @@ class PlayField
             }
             for block in S
             {
-                block.nod.color = .white;
+                block.nod.texture = nil;
                 
                 if(AnimFrame >= stayFrames)
                 {

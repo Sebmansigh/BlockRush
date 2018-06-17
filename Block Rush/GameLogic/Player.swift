@@ -91,7 +91,7 @@ class Player
         timeGaugeBar = timeGaugeNode.copy() as! SKSpriteNode;
         timeGaugeBar.color = .green;
         
-        timeGaugeNode.position.x =  BlockRush.GameWidth * 0.45;
+        timeGaugeNode.position.x =  BlockRush.GameWidth * 0.44;
         timeGaugeNode.position.y = -BlockRush.GameHeight * (-0.3);
         
         let timeLabelNode = SKLabelNode(text:"TIME");

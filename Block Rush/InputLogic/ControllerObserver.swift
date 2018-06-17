@@ -168,12 +168,11 @@ final class ControllerObserver
             TopDASCount += 1;
             if(TopDASCount >= 15)
             {
-                if(TopDASCount % 5 == 0)
+                if(TopDASCount % 3 == 0)
                 {
                     AppDelegate.HumanInput(TopDASInput, forTopPlayer: true);
                 }
             }
-            print(TopDASCount);
         }
         
         if(BottomDASInput != .NONE)
@@ -181,12 +180,11 @@ final class ControllerObserver
             BottomDASCount += 1;
             if(BottomDASCount >= 15)
             {
-                if(BottomDASCount % 5 == 0)
+                if(BottomDASCount % 3 == 0)
                 {
                     AppDelegate.HumanInput(BottomDASInput, forTopPlayer: false);
                 }
             }
-            print(BottomDASCount);
         }
     }
     
@@ -418,11 +416,23 @@ final class ControllerObserver
     }
     func setUpStandardController(_ controller:GCController)
     {
-        
+        let gp = controller.gamepad!;
+        setUpDpad(gp.dpad,forTopPlayer: controller == controller2);
+        setUpFace(confirm: [gp.buttonA,gp.buttonY], cancel: [gp.buttonB,gp.buttonX],forTopPlayer: controller == controller2);
+        gp.controller!.controllerPausedHandler = {
+            (_: GCController) in
+            AppDelegate.HumanPauseInput();
+        }
     }
     func setUpMicroController(_ controller:GCController)
     {
-        
+        let gp = controller.microGamepad!;
+        setUpDpad(gp.dpad,forTopPlayer: controller == controller2);
+        setUpFace(confirm: [gp.buttonA], cancel: [gp.buttonX],forTopPlayer: controller == controller2);
+        gp.controller!.controllerPausedHandler = {
+            (_: GCController) in
+            AppDelegate.HumanPauseInput();
+        }
     }
     
     private static var initialized = false;

@@ -245,7 +245,7 @@ class GameScene: SKScene
         TopDevice.playField = playField;
         BottomDevice.playField = playField;
         
-        backgroundGrid?.zPosition = -1;
+        backgroundGrid?.zPosition = -4;
         //*/
         
         
@@ -369,10 +369,10 @@ class GameScene: SKScene
      */
     func CreatePauseButton()
     {
-        let s = BlockRush.BlockWidth*4/5
-        let P = SKSpriteNode(texture: nil, color: .white, size: CGSize(width: s, height: s));
-        P.position.x = -BlockRush.GameWidth * 0.45;
-        P.position.y = -BlockRush.GameHeight * 0.1;
+        let s = BlockRush.BlockWidth
+        let P = SKSpriteNode(texture: SKTexture(imageNamed: "PauseButton"), color: .white, size: CGSize(width: s, height: s));
+        P.position.x = -BlockRush.GameWidth * 0.44;
+        P.position.y = -BlockRush.GameHeight * 0.09;
         P.zPosition = 10;
         addChild(P);
         PauseButton = P;
