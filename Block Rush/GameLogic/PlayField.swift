@@ -1078,8 +1078,11 @@ class PlayField
             let P = playerTop.readyPiece!;
             GhostTopFront?.removeFromParent();
             GhostTopRear?.removeFromParent();
-            GhostTopFront = SKSpriteNode(color: BlockRush.BlockColors[P.FrontBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
-            GhostTopRear = SKSpriteNode(color: BlockRush.BlockColors[P.RearBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostTopFront = SKSpriteNode(texture: Block.Textures[P.FrontBlock.col!], color: BlockRush.BlockColors[P.FrontBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostTopRear = SKSpriteNode(texture: Block.Textures[P.RearBlock.col!], color: BlockRush.BlockColors[P.RearBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            
+            GhostTopFront?.colorBlendFactor = 1;
+            GhostTopRear?.colorBlendFactor = 1;
             
             GhostTopFront!.position = GetPositionTopNext(column: playerTop.columnOver,add: 1);
             GhostTopRear! .position = GetPositionTopNext(column: playerTop.columnOver,add: 2);
@@ -1109,8 +1112,12 @@ class PlayField
             let P = playerBottom.readyPiece!
             GhostBottomFront?.removeFromParent();
             GhostBottomRear?.removeFromParent();
-            GhostBottomFront = SKSpriteNode(color: BlockRush.BlockColors[P.FrontBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
-            GhostBottomRear = SKSpriteNode(color: BlockRush.BlockColors[P.RearBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostBottomFront = SKSpriteNode(texture: Block.Textures[P.FrontBlock.col!], color: BlockRush.BlockColors[P.FrontBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostBottomRear = SKSpriteNode(texture: Block.Textures[P.RearBlock.col!], color: BlockRush.BlockColors[P.RearBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            
+            
+            GhostBottomFront?.colorBlendFactor = 1;
+            GhostBottomRear?.colorBlendFactor = 1;
             
             GhostBottomFront!.position = GetPositionBottomNext(column: playerBottom.columnOver,add: 1);
             GhostBottomRear! .position = GetPositionBottomNext(column: playerBottom.columnOver,add: 2);
