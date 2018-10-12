@@ -52,7 +52,6 @@
 		A83C577620B1181E002A482D /* ReplayDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C577520B1181E002A482D /* ReplayDevice.swift */; };
 		A83C577820B1E928002A482D /* IdleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C577720B1E928002A482D /* IdleDevice.swift */; };
 		A83C577A20B2640B002A482D /* DelayedDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C577920B2640B002A482D /* DelayedDevice.swift */; };
-		A87302DA20B782FC00B26F8F /* KeyboardDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87302D920B782FC00B26F8F /* KeyboardDevice.swift */; };
 		A87302DC20B8735900B26F8F /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87302DB20B8735900B26F8F /* GameView.swift */; };
 		A8A3A38E20D46FFF005E3DE3 /* ControllerObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A3A38D20D46FFF005E3DE3 /* ControllerObserver.swift */; };
 		A8C386D8209A405D00DB58D4 /* MoveTick.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386D7209A405D00DB58D4 /* MoveTick.wav */; };
@@ -136,7 +135,6 @@
 		A83C577520B1181E002A482D /* ReplayDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplayDevice.swift; sourceTree = "<group>"; };
 		A83C577720B1E928002A482D /* IdleDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDevice.swift; sourceTree = "<group>"; };
 		A83C577920B2640B002A482D /* DelayedDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedDevice.swift; sourceTree = "<group>"; };
-		A87302D920B782FC00B26F8F /* KeyboardDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDevice.swift; sourceTree = "<group>"; };
 		A87302DB20B8735900B26F8F /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		A8A3A38D20D46FFF005E3DE3 /* ControllerObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerObserver.swift; sourceTree = "<group>"; };
 		A8C386D7209A405D00DB58D4 /* MoveTick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MoveTick.wav; sourceTree = "<group>"; };
@@ -272,7 +270,6 @@
 				A80CDA0F206C14EC00AA579B /* Input.swift */,
 				A80CDA0D206C0FB800AA579B /* InputDevice.swift */,
 				A8071BDB2079D5B900EC3272 /* TouchDevice.swift */,
-				A87302D920B782FC00B26F8F /* KeyboardDevice.swift */,
 				A8D1D7FC209534ED004004EA /* MediatorDevice.swift */,
 				A8D1D80020953F22004004EA /* BotDevices.swift */,
 				A83C577320B11266002A482D /* DemoGame.swift */,
@@ -508,7 +505,6 @@
 				A83507052096C8E600DC7C37 /* DebugTools.swift in Sources */,
 				A8071BE02079F4BE00EC3272 /* EnumCollection.swift in Sources */,
 				A8071BE9207AD39D00EC3272 /* SettingOption.swift in Sources */,
-				A87302DA20B782FC00B26F8F /* KeyboardDevice.swift in Sources */,
 				A83C577620B1181E002A482D /* ReplayDevice.swift in Sources */,
 				A83C577420B11266002A482D /* DemoGame.swift in Sources */,
 				A8071BED207AD81E00EC3272 /* MenuSelector.swift in Sources */,

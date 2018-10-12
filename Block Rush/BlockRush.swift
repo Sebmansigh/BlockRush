@@ -109,9 +109,9 @@ final class BlockRush
     
     public static var BlockWidth: CGFloat = 0;
     public static let BlockColors: [UIColor] = [
-        UIColor(red:1,green:0,blue:0,alpha:1),
-        UIColor(red:0,green:1,blue:0,alpha:1),
-        UIColor(red:0,green:0,blue:1,alpha:1)];
+        UIColor(red:1,green:0.2,blue:0.2,alpha:1),
+        UIColor(red:0.2,green:1,blue:0.2,alpha:1),
+        UIColor(red:0.2,green:0.2,blue:1,alpha:1)];
     
     public static var ScreenWidth: CGFloat = 0;
     public static var ScreenHeight: CGFloat = 0;

@@ -207,15 +207,8 @@ class GameScene: SKScene
         switch BottomPlayerType
         {
         case .Local:
-            if(BlockRush.Settings[.BottomPlayerControlType]! == SettingOption.ControlType.KeyboardArrows)
-            {
-                KeyboardDevice.Device.pendingInput = [];
-                BottomDevice = KeyboardDevice.Device;
-            }
-            else
-            {
-                BottomDevice = BDevice;
-            }
+            BDevice.pendingInput = [];
+            BottomDevice = BDevice;
         case .Replay:
             BottomDevice = ReplayDevice(Data!.1);
         case .BotNovice:

@@ -55,7 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
                     UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBRightMenu), discoverabilityTitle: "Cycle Options" ),
                     UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBUpMenu(sender:)), discoverabilityTitle: "Go Up" ),
                     UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBDownMenu(sender:)), discoverabilityTitle: "Go Down" ),
-                    UIKeyCommand(input: "", modifierFlags: .command, action: #selector(AppDelegate.UnlockKeyboardControls(sender:)), discoverabilityTitle: "Unlock Keyboard Controls"),
                     //*
                     UIKeyCommand(input: "", modifierFlags: .shift, action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" ),
                     UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" )
@@ -72,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             ];
             }
         }
-        else if(BlockRush.Settings[.BottomPlayerControlType] == SettingOption.ControlType.KeyboardArrows)
+        else
         {
             return [
                 UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBLeftInput(sender:)), discoverabilityTitle: "Move Left" ),
@@ -86,10 +85,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
                 UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBPauseInput(sender:)), discoverabilityTitle: "Pause Game" ),
                 //*/
             ];
-        }
-        else
-        {
-            return [];
         }
     }
     
@@ -105,19 +100,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     }
     @objc func KBPlayInput(sender: UIKeyCommand)
     {
-        KeyboardDevice.Device.pendingInput.append(.PLAY);
+        AppDelegate.HumanInput(.PLAY,forTopPlayer: false);
     }
     @objc func KBFlipInput(sender: UIKeyCommand)
     {
-        KeyboardDevice.Device.pendingInput.append(.FLIP);
+        AppDelegate.HumanInput(.FLIP,forTopPlayer: false);
     }
     @objc func KBLeftInput(sender: UIKeyCommand)
     {
-        KeyboardDevice.Device.pendingInput.append(.LEFT);
+        AppDelegate.HumanInput(.LEFT,forTopPlayer: false);
     }
     @objc func KBRightInput(sender: UIKeyCommand)
     {
-        KeyboardDevice.Device.pendingInput.append(.RIGHT);
+        AppDelegate.HumanInput(.RIGHT,forTopPlayer: false);
     }
     
     static func HumanPauseInput()
@@ -194,18 +189,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     @objc func KBRightMenu(sender: UIKeyCommand)
     {
         AppDelegate.RightMenu();
-    }
-    
-    @objc func UnlockKeyboardControls(sender: UIKeyCommand)
-    {
-        if(BlockRush.Settings[.KeyboardControlsUnlocked]! == .False)
-        {
-            BlockRush.Settings[.KeyboardControlsUnlocked] = .True;
-            BlockRush.PopUp("Keyboard Controls Unlocked!");
-            let cm = GameMenu.focusMenu! as! ControlMenu;
-            cm.remakeSelectors();
-            cm.show(node: cm.inNode!);
-        }
     }
     
     

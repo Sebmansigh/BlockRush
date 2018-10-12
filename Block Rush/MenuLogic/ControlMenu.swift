@@ -11,13 +11,32 @@ import GameController
 
 class ControlMenu: GameMenu
 {
-    var TopSelector: MenuSelector<SettingOption>!;
-    var BottomSelector: MenuSelector<SettingOption>!;
+    let TopSelector: MenuSelector<SettingOption>;
+    let BottomSelector: MenuSelector<SettingOption>;
     
     required init(title: String)
     {
+        let ControlTypeOptions = [(SettingOption.ControlType.TouchSlide,"Slide"),
+                                  (SettingOption.ControlType.TouchTap,"Tap"),
+                                  (SettingOption.ControlType.TouchHybrid,"Hybrid")];
+        //If no keyboard detected.
+        
+        TopSelector = MenuSelector(title: "Top Player (VS)",
+                                   initialValue: BlockRush.Settings[.TopPlayerControlType]!,
+                                   options: ControlTypeOptions)
+        {
+            BlockRush.Settings[.TopPlayerControlType] = $0;
+        };
+        
+        BottomSelector = MenuSelector(title: "Bottom Player",
+                                      initialValue: BlockRush.Settings[.BottomPlayerControlType]!,
+                                      options: ControlTypeOptions)
+        {
+            BlockRush.Settings[.BottomPlayerControlType] = $0;
+        };
+        BottomSelector.position.y = -BlockRush.GameHeight/5;
+        
         super.init(title: title);
-        remakeSelectors();
     }
     
     override func show(node: SKNode)
@@ -30,41 +49,10 @@ class ControlMenu: GameMenu
         
         showBackButton()
         {
-            let _ = self.TopSelector!.Fetch();
-            let _ = self.BottomSelector!.Fetch();
+            let _ = self.TopSelector.Fetch();
+            let _ = self.BottomSelector.Fetch();
             BlockRush.saveSettings();
         };
-    }
-    
-    func remakeSelectors()
-    {
-        let _ = self.TopSelector?.Fetch();
-        let _ = self.BottomSelector?.Fetch();
-        
-        let ControlTypeOptions = [(SettingOption.ControlType.TouchSlide,"Slide"),
-                                  (SettingOption.ControlType.TouchTap,"Tap"),
-                                  (SettingOption.ControlType.TouchHybrid,"Hybrid")];
-        var KeyboardOptions = [(SettingOption.ControlType.KeyboardArrows,"Arrow Keys")];
-        //If no keyboard detected.
-        if(BlockRush.Settings[.KeyboardControlsUnlocked] == .False)
-        {
-            KeyboardOptions = [];
-        }
-        
-        TopSelector = MenuSelector(title: "Top Player (VS)",
-                                   initialValue: BlockRush.Settings[.TopPlayerControlType]!,
-                                   options: ControlTypeOptions)
-        {
-            BlockRush.Settings[.TopPlayerControlType] = $0;
-        };
-        
-        BottomSelector = MenuSelector(title: "Bottom Player",
-                                      initialValue: BlockRush.Settings[.BottomPlayerControlType]!,
-                                      options: ControlTypeOptions+KeyboardOptions)
-        {
-            BlockRush.Settings[.BottomPlayerControlType] = $0;
-        };
-        BottomSelector.position.y = -BlockRush.GameHeight/5;
     }
     
     override func MenuUp()

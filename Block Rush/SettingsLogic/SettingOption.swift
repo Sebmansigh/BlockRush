@@ -39,7 +39,6 @@ struct SettingOption: OptionSet, Hashable
         static let TouchSlide     = SettingOption(rawValue: 0b0000_0001);
         static let TouchTap       = SettingOption(rawValue: 0b0000_0010);
         static let TouchHybrid    = SettingOption(rawValue: 0b0000_0100);
-        static let KeyboardArrows = SettingOption(rawValue: 0b0000_1000);
     }
     
     /**

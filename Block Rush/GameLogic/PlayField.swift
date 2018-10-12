@@ -1435,6 +1435,10 @@ class PlayField
             }
             if(AnimFrame == preFrames)
             {
+                for block in S
+                {
+                    block.nod.texture = nil;
+                }
                 if(CreditTop != nil)
                 {
                     //let linkDamage: Int;
@@ -1476,8 +1480,6 @@ class PlayField
             }
             for block in S
             {
-                block.nod.texture = nil;
-                
                 if(AnimFrame >= stayFrames)
                 {
                     block.nod.alpha *= decayFactor;
