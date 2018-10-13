@@ -186,11 +186,11 @@ class GameScene: SKScene
         BlockRush.SoundScene = self;
         
         let TopDevice: InputDevice;
-        var Data: (UInt64,[Input],[Input],Queue<GameEvent>?)? = nil;
+        var GameData: (UInt64,[Input],[Input])? = nil;
         if case .Replay(let name) = GameMode
         {
-            Data = DemoGame.Get(name);
-            InitialSeed = Data!.0;
+            GameData = DemoGame.Get(name);
+            InitialSeed = GameData!.0;
         }
         switch TopPlayerType
         {
@@ -198,7 +198,7 @@ class GameScene: SKScene
             TopDevice = TDevice;
             CreatePauseButton();
         case .Replay:
-            TopDevice = DelayedDevice(device: ReplayDevice(Data!.2), frames:15);
+            TopDevice = DelayedDevice(device: ReplayDevice(GameData!.2), frames:15);
             CreatePauseButton();
         case .BotNovice:
             TopDevice = BotDevice.Novice();
@@ -232,7 +232,7 @@ class GameScene: SKScene
             BDevice.pendingInput = [];
             BottomDevice = BDevice;
         case .Replay:
-            BottomDevice = ReplayDevice(Data!.1);
+            BottomDevice = ReplayDevice(GameData!.1);
         case .BotNovice:
             BottomDevice = BotDevice.Novice();
         case .BotAdept:
