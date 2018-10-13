@@ -79,7 +79,7 @@ class MainMenuScene: SKScene
                 
                 scene.BottomPlayerType = .Replay;
                 scene.TopPlayerType = .Replay;
-                scene.GameName = name;
+                scene.GameMode = .Replay(name: name);
                 
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
                 BlockRush.StopMusic();
@@ -118,7 +118,7 @@ class MainMenuScene: SKScene
                 {
                     scene.TopPlayerType = .None;
                 }
-                scene.GameName = name;
+                scene.GameMode = .Fixed(name: name);
                 
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
                 BlockRush.StopMusic();
@@ -145,7 +145,7 @@ class MainMenuScene: SKScene
                 
                 scene.BottomPlayerType = .Local;
                 scene.TopPlayerType = .None;
-                scene.GameName = "Survival";
+                scene.GameMode = .Survival;
                 
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
                 BlockRush.StopMusic();
@@ -172,7 +172,7 @@ class MainMenuScene: SKScene
                 
                 scene.BottomPlayerType = .Local;
                 scene.TopPlayerType = .None;
-                scene.GameName = "Time Attack";
+                scene.GameMode = .TimeAttack;
                 
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
                 BlockRush.StopMusic();

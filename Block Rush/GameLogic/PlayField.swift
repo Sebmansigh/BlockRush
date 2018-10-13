@@ -821,13 +821,14 @@ class PlayField
     {
         player.chainLevel += 1;
         let linkDamage = BlockRush.CalculateDamage(chainLevel: player.chainLevel, blocksCleared: numMatched);
-        if(gameScene.GameName == "Survival" || gameScene.GameName == "Time Attack")
+        switch(gameScene.GameMode)
         {
-            let linkScore = BlockRush.CalculateScore(chainLevel: player.chainLevel, blocksCleared: numMatched) * gameScene.Level;
-            player.linkScore = linkScore;
-        }
-        if(gameScene.GameName != "Time Attack")
-        {
+        case .Survival:
+            player.storedPower += linkDamage;
+            fallthrough;
+        case .TimeAttack:
+            player.linkScore = gameScene.Level * BlockRush.CalculateScore(chainLevel: player.chainLevel, blocksCleared: numMatched);
+        default:
             player.storedPower += linkDamage;
         }
         player.GainTime(300*player.chainLevel-150);
@@ -1020,7 +1021,8 @@ class PlayField
      */
     func AdvanceFrame()
     {
-        if(gameScene.GameName == "Survival" && GameFrame > 200)
+        if GameFrame > 200,
+           case .Survival = gameScene.GameMode
         {
             if(StackMove(player: playerTop))
             {
@@ -1101,7 +1103,7 @@ class PlayField
             var Datai = Double(Tdata[i]);
             var c = TopColumns[i];
             
-            if(gameScene.GameName == "Survival")
+            if case .Survival = gameScene.GameMode
             {
                 c.color = UIColor.purple;
                 c.alpha = 1;

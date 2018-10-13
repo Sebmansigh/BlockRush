@@ -48,7 +48,8 @@ class BottomPlayer: Player
         BlockRush.PlaySound(name: "PlaySnap");
         readyPiece = nil;
         nextFrame = curFrame + 30;
-        if(field.gameScene.GameName == "Survival" || field.gameScene.GameName == "Time Attack")
+        if case .Survival = field.gameScene.GameMode,
+           case .TimeAttack = field.gameScene.GameMode
         {
             field.gameScene.Score += 50;
         }

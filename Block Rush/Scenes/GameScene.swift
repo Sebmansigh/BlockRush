@@ -35,11 +35,9 @@ class GameScene: SKScene
      */
     public var InitialSeed: UInt64 = 0;
     /**
-     The name of the demo game or single-player game mode, if applicable.
-     
-     This variable is to be set before the scene is presented and its value is used in the initialization of the game scene.
+     What game mode the player is playing.
      */
-    public var GameName: String? = nil;
+    public var GameMode: GameMode = .Versus;
     
     
     
@@ -186,9 +184,9 @@ class GameScene: SKScene
         
         let TopDevice: InputDevice;
         var Data: (UInt64,[Input],[Input],Queue<GameEvent>?)? = nil;
-        if(GameName != nil && GameName != "Practice" && GameName != "Survival" && GameName != "Time Attack")
+        if case .Replay(let name) = GameMode
         {
-            Data = DemoGame.Get(GameName!);
+            Data = DemoGame.Get(name);
             InitialSeed = Data!.0;
         }
         switch TopPlayerType
@@ -212,14 +210,13 @@ class GameScene: SKScene
             TopDevice = BotDevice.Master();
             CreatePauseButton();
         case .None:
-            if(GameName == "Tutorial" || GameName == "Survival" || GameName == "Time Attack")
+            switch(GameMode)
             {
+            case .Fixed, .Survival, .TimeAttack:
                 TopDevice = IdleDevice();
                 CreatePauseButton();
-            }
-            else
-            {
-                fallthrough;
+            default:
+                fatalError("PlayerType `None` not valid for this game mode.");
             }
         default:
             fatalError("Unkown Top Player Type: "+String(describing: TopPlayerType));
@@ -253,9 +250,34 @@ class GameScene: SKScene
         playerTop!.foe = playerBottom;
         playerBottom!.foe = playerTop;
         
+        backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
+        backgroundGrid?.fillColor = UIColor.black;
+        self.addChild(backgroundGrid!);
+        playField = PlayField(cols:6, rows:46, playerTop:playerTop!, playerBottom:playerBottom!, scene:self);
         
-        if(GameName == "Survival" || GameName == "Time Attack")
+        TopDevice.playField = playField;
+        BottomDevice.playField = playField;
+        
+        backgroundGrid?.zPosition = -4;
+        
+        switch(GameMode)
         {
+        case .TimeAttack:
+            playerBottom!.timeMax = 10800;
+            playerBottom!.timeLeft = playerBottom!.timeMax+200;
+            let tgn = playerBottom!.timeGaugeNode;
+            tgn.size.height = BlockRush.GameHeight-BlockRush.BlockWidth;
+            playerBottom!.timeGaugeBar.size = tgn.size;
+            playerBottom!.timeLabelNode.position.y = tgn.size.height/2;
+            tgn.position.y = 0;
+            playerBottom!.TimeGaugeUpdate();
+            playerBottom!.trueTime = true;
+            PauseButton!.position = CGPoint(x: BlockRush.GameWidth * 0.44,
+                                            y: BlockRush.GameHeight * 0.15);
+            fallthrough;
+        case .Survival:
+            playField!.StackMove(moveAmount: 160);
+            
             playerTop!.Hide();
             playerTop!.TimeStop();
             
@@ -275,45 +297,18 @@ class GameScene: SKScene
             self.addChild(ScoreLabel);
             self.addChild(LevelLabel);
             self.addChild(NextLabel);
-            if(GameName == "Time Attack")
-            {
-                playerBottom!.timeMax = 10800;
-                playerBottom!.timeLeft = playerBottom!.timeMax+200;
-                let tgn = playerBottom!.timeGaugeNode;
-                tgn.size.height = BlockRush.GameHeight-BlockRush.BlockWidth;
-                playerBottom!.timeGaugeBar.size = tgn.size;
-                playerBottom!.timeLabelNode.position.y = tgn.size.height/2;
-                tgn.position.y = 0;
-                playerBottom!.TimeGaugeUpdate();
-                playerBottom!.trueTime = true;
-                PauseButton!.position = CGPoint(x: BlockRush.GameWidth * 0.44,
-                                                y: BlockRush.GameHeight * 0.15);
-            }
-        }
-        else if(GameName == "Tutorial")
-        {
+            
+        case .Fixed(let name):
             playerTop!.Hide();
             playerTop!.TimeStop();
             playerBottom!.TimeStop();
-        }
-        else if(GameName == "Practice")
-        {
+        case .Practice:
             playerBottom!.TimeStop();
             playerTop!.TimeStop();
+        default:
+            break;
         }
         
-        backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
-        backgroundGrid?.fillColor = UIColor.black;
-        self.addChild(backgroundGrid!);
-        playField = PlayField(cols:6, rows:46, playerTop:playerTop!, playerBottom:playerBottom!, scene:self);
-        if(GameName == "Survival" || GameName == "Time Attack")
-        {
-            playField!.StackMove(moveAmount: 160);
-        }
-        TopDevice.playField = playField;
-        BottomDevice.playField = playField;
-        
-        backgroundGrid?.zPosition = -4;
         //*/
         
         
@@ -334,7 +329,7 @@ class GameScene: SKScene
                         scene.BottomPlayerType = self.BottomPlayerType;
                         scene.TopPlayerType = self.TopPlayerType;
                         arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                        scene.GameName = self.GameName;
+                        scene.GameMode = self.GameMode;
                         
                         self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
                     }
@@ -392,7 +387,7 @@ class GameScene: SKScene
                         scene.BottomPlayerType = self.BottomPlayerType;
                         scene.TopPlayerType = self.TopPlayerType;
                         arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                        scene.GameName = self.GameName;
+                        scene.GameMode = self.GameMode;
                         
                         self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
                     }
@@ -988,7 +983,10 @@ class GameScene: SKScene
                             {
                                 Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 0.5, duration: 1)]));
                             }
-                            if(TopPlayerType != .None && GameName != "Tutorial")
+                            if case .None = TopPlayerType,
+                               case .Fixed = GameMode
+                            {}
+                            else
                             {
                                 let Tnode = Bnode.copy() as! SKLabelNode;
                                 Tnode.position.y =  BlockRush.GameHeight/6;

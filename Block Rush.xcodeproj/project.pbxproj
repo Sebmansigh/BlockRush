@@ -65,6 +65,7 @@
 		A8D1D80120953F22004004EA /* BotDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D1D80020953F22004004EA /* BotDevices.swift */; };
 		A8E3F23521715B8A006DA2DA /* CaseIterable.extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F23421715B8A006DA2DA /* CaseIterable.extension.swift */; };
 		A8E3F23721718CC3006DA2DA /* GameEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F23621718CC3006DA2DA /* GameEvent.swift */; };
+		A8E3F239217249C2006DA2DA /* GameMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F238217249C2006DA2DA /* GameMode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,6 +150,7 @@
 		A8D1D80020953F22004004EA /* BotDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotDevices.swift; sourceTree = "<group>"; };
 		A8E3F23421715B8A006DA2DA /* CaseIterable.extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseIterable.extension.swift; sourceTree = "<group>"; };
 		A8E3F23621718CC3006DA2DA /* GameEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEvent.swift; sourceTree = "<group>"; };
+		A8E3F238217249C2006DA2DA /* GameMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -294,6 +296,7 @@
 				A80539F320686FA40059562D /* Piece.swift */,
 				A80FE7032072D8E900E73E36 /* Block.swift */,
 				A8D1D7FE2095381E004004EA /* PlayerType.swift */,
+				A8E3F238217249C2006DA2DA /* GameMode.swift */,
 			);
 			path = GameLogic;
 			sourceTree = "<group>";
@@ -535,6 +538,7 @@
 				A8D1D80120953F22004004EA /* BotDevices.swift in Sources */,
 				A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */,
 				A8071BDE2079DF7400EC3272 /* Setting.swift in Sources */,
+				A8E3F239217249C2006DA2DA /* GameMode.swift in Sources */,
 				A8E3F23521715B8A006DA2DA /* CaseIterable.extension.swift in Sources */,
 				A8071BD82079A2C100EC3272 /* SoundMenu.swift in Sources */,
 				A80539BC20685A650059562D /* AppDelegate.swift in Sources */,
