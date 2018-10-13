@@ -93,11 +93,11 @@ class MainMenuScene: SKScene
     }
     
     /**
-     Creates a closure that, when executed, presents an instance of `GameScene` that plays a fixed game.
+     Creates a closure that, when executed, presents an instance of `GameScene` that plays a specific game mode.
      - Parameter name: the name of the fixed game.
      - Returns: A closure that presents a `GameScene` when executed.
      */
-    private func playFixedGame(_ name: String) -> ( () -> Void )
+    private func playTypedGame(_ mode: GameMode) -> ( () -> Void )
     {
         return {
             [unowned self] in
@@ -110,7 +110,7 @@ class MainMenuScene: SKScene
                 scene.scaleMode = .aspectFit;
                 
                 scene.BottomPlayerType = .Local;
-                if(name == "Practice")
+                if case .Practice = mode
                 {
                     scene.TopPlayerType = .Local;
                 }
@@ -118,7 +118,7 @@ class MainMenuScene: SKScene
                 {
                     scene.TopPlayerType = .None;
                 }
-                scene.GameMode = .Fixed(name: name);
+                scene.GameMode = mode;
                 
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
                 BlockRush.StopMusic();
@@ -131,59 +131,6 @@ class MainMenuScene: SKScene
         }
     }
     
-    private func playSurvival() -> ( () -> Void )
-    {
-        return {
-            [unowned self] in
-            GameMenu.focusMenu = nil;
-            if let scene = SKScene(fileNamed: "GameScene") as? GameScene
-            {
-                // Set the scale mode to scale to fit the window
-                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
-                                    height: UIScreen.main.nativeBounds.height);
-                scene.scaleMode = .aspectFit;
-                
-                scene.BottomPlayerType = .Local;
-                scene.TopPlayerType = .None;
-                scene.GameMode = .Survival;
-                
-                arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                BlockRush.StopMusic();
-                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
-            }
-            else
-            {
-                fatalError("Could not load GameScene.");
-            }
-        }
-    }
-    
-    private func playTimeAttack() -> ( () -> Void )
-    {
-        return {
-            [unowned self] in
-            GameMenu.focusMenu = nil;
-            if let scene = SKScene(fileNamed: "GameScene") as? GameScene
-            {
-                // Set the scale mode to scale to fit the window
-                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
-                                    height: UIScreen.main.nativeBounds.height);
-                scene.scaleMode = .aspectFit;
-                
-                scene.BottomPlayerType = .Local;
-                scene.TopPlayerType = .None;
-                scene.GameMode = .TimeAttack;
-                
-                arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                BlockRush.StopMusic();
-                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
-            }
-            else
-            {
-                fatalError("Could not load GameScene.");
-            }
-        }
-    }
     override func sceneDidLoad()
     {
         backgroundColor = .black;
@@ -208,9 +155,9 @@ class MainMenuScene: SKScene
                         menuOptions:
                         [GameMenu(title:"Play Solo",
                                   menuOptions:
-                            [MenuAction(title:"Practice VS", action: playFixedGame("Practice")),
-                             MenuAction(title:"Survival", action: playSurvival()),
-                             MenuAction(title:"Time Attack", action: playTimeAttack())
+                            [MenuAction(title:"Practice VS", action: playTypedGame(.Practice)),
+                             MenuAction(title:"Survival", action: playTypedGame(.Survival)),
+                             MenuAction(title:"Time Attack", action: playTypedGame(.TimeAttack))
                             ]),
                             GameMenu(title:"Play VS",
                                   menuOptions:
@@ -227,11 +174,11 @@ class MainMenuScene: SKScene
                                   ]),
                          GameMenu(title:"Lessons",
                                   menuOptions:
-                                  [MenuAction(title: "Tutorial", action: playFixedGame("Tutorial")),
+                                  [MenuAction(title: "Tutorial", action: playTypedGame(.Fixed(name: "Tutorial"))),
                                    GameMenu(title: "Novice"),
                                    GameMenu(title: "Adept"),
                                    MenuAction(title:"Expert", action: playDemoGame("Demo1"))
-                                  ]),
+                                  ]),\\\\\\\\\\\\\
                          GameMenu(title:"Settings",
                                   menuOptions:
                                     [SoundMenu(title: "Sound"),
