@@ -11,10 +11,11 @@ final class DemoGame
 {
     private init () {}
     
-    public static func Get(_ name: String) -> (UInt64,[Input],[Input])
+    public static func Get(_ name: String) -> (UInt64,[Input],[Input],Queue<GameEvent>?)
     {
         var bottom = [Input]();
         var top = [Input]();
+        var queue = Queue<GameEvent>();
         func bothwait(_ frames: Int)
         {
             bottom.append(contentsOf: wait(frames));
@@ -22,6 +23,8 @@ final class DemoGame
         }
         switch(name)
         {
+        case "Tutorial":
+            return (100,[],[],queue);
         case "Demo1":
             bothwait(240);
             
@@ -54,8 +57,8 @@ final class DemoGame
             top += [.RIGHT,.RIGHT];
             bottom.append(contentsOf: wait(12));
             
-            print(top.count);
-            print(bottom.count);
+            //print(top.count);
+            //print(bottom.count);
             
             bothwait(120);
             bottom += [.PLAY];
@@ -63,9 +66,9 @@ final class DemoGame
             top.append(contentsOf: wait(90));
             top += [.PLAY];
             bothwait(600);
-            print(top.count);
-            print(bottom.count);
-            return (1029784756,bottom,top);
+            //print(top.count);
+            //print(bottom.count);
+            return (1029784756,bottom,top,nil);
         default:
             fatalError("Bad demo name :\(name)")
         }

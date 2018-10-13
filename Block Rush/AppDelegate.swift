@@ -14,9 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     static var instance: AppDelegate!;
     var window: UIWindow?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
     {
-        AppDelegate.instance = UIApplication.shared.delegate as! AppDelegate
+        AppDelegate.instance = (UIApplication.shared.delegate as! AppDelegate)
         BlockRush.Initialize();
         return true
     }
@@ -51,38 +51,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate
             {
             case is ControlMenu:
                 return [
-                    UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBLeftMenu), discoverabilityTitle: "Cycle Options" ),
-                    UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBRightMenu), discoverabilityTitle: "Cycle Options" ),
-                    UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBUpMenu(sender:)), discoverabilityTitle: "Go Up" ),
-                    UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBDownMenu(sender:)), discoverabilityTitle: "Go Down" ),
+                    UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBLeftMenu), discoverabilityTitle: "Cycle Options" ),
+                    UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBRightMenu), discoverabilityTitle: "Cycle Options" ),
+                    UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBUpMenu(sender:)), discoverabilityTitle: "Go Up" ),
+                    UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBDownMenu(sender:)), discoverabilityTitle: "Go Down" ),
                     //*
                     UIKeyCommand(input: "", modifierFlags: .shift, action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" ),
-                    UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" )
+                    UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" )
                 ];
             default:
             return [
-                UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBUpMenu(sender:)), discoverabilityTitle: "Go Up" ),
-                UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBDownMenu(sender:)), discoverabilityTitle: "Go Down" ),
+                UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBUpMenu(sender:)), discoverabilityTitle: "Go Up" ),
+                UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBDownMenu(sender:)), discoverabilityTitle: "Go Down" ),
                 //*
                 UIKeyCommand(input: " ", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBChooseMenu(sender:)), discoverabilityTitle: "Choose Option" ),
                 UIKeyCommand(input: "\r", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBChooseMenu(sender:)), discoverabilityTitle: "Choose Option" ),
                 UIKeyCommand(input: "", modifierFlags: .shift, action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" ),
-                UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" )
+                UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBBackMenu(sender:)), discoverabilityTitle: "Go Back" )
             ];
             }
         }
         else
         {
             return [
-                UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBLeftInput(sender:)), discoverabilityTitle: "Move Left" ),
-                UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBRightInput(sender:)), discoverabilityTitle: "Move Right" ),
-                UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBPlayInput(sender:)), discoverabilityTitle: "Play Piece" ),
-                UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBFlipInput(sender:)), discoverabilityTitle: "Flip Piece" ),
+                UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBLeftInput(sender:)), discoverabilityTitle: "Move Left" ),
+                UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBRightInput(sender:)), discoverabilityTitle: "Move Right" ),
+                UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBPlayInput(sender:)), discoverabilityTitle: "Play Piece" ),
+                UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBFlipInput(sender:)), discoverabilityTitle: "Flip Piece" ),
                 //*
                 UIKeyCommand(input: " ", modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBPlayInput(sender:)), discoverabilityTitle: "Play Piece" ),
                 UIKeyCommand(input: "", modifierFlags: UIKeyModifierFlags.shift, action: #selector(AppDelegate.KBFlipInput(sender:)), discoverabilityTitle: "Flip Piece" ),
                 
-                UIKeyCommand(input: UIKeyInputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBPauseInput(sender:)), discoverabilityTitle: "Pause Game" ),
+                UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: .init(rawValue: 0), action: #selector(AppDelegate.KBPauseInput(sender:)), discoverabilityTitle: "Pause Game" ),
                 //*/
             ];
         }

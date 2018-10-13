@@ -53,7 +53,7 @@ class GameViewController: UIViewController {
         return true;
     }
     
-    override func preferredScreenEdgesDeferringSystemGestures() -> UIRectEdge {
+    override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
         return .left;
     }
 }

@@ -10,8 +10,29 @@ import Foundation
 /**
  An implementation of a Queue data structure
  */
-class Queue<T>
+class Queue<T>: Collection
 {
+    func index(after i: Int) -> Int {
+        return i+1;
+    }
+    
+    subscript(position: Int) -> T {
+        return data[position];
+    }
+    
+    let startIndex: Int = 0;
+    
+    var endIndex: Int
+    {
+        return data.count;
+    }
+    
+    typealias Element = T;
+    
+    typealias Index = Int;
+    
+    
+    
     private var data: [T];
     /**
      Allocates an empty queue

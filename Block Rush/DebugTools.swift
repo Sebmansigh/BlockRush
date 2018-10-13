@@ -38,7 +38,6 @@ final class DebugTools
      */
     static func TimeExecution<T>(_ label: String, toCall: () -> T) -> T
     {
-        TimeExecution("",toCall: {});
         let start = Date();
         let ret = toCall();
         let end = Date();

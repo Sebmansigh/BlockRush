@@ -167,7 +167,6 @@ final class BotDevice
             
             if(FrameCt % inputRate == 0)
             {
-                print(player!.curFrame, playField!.GameFrame);
                 //print("Surface state before input: "+String(describing: surfaceData));
                 if(player!.columnOver == t)
                 {

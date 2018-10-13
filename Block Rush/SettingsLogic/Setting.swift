@@ -10,7 +10,7 @@ import Foundation
 /**
  An enum containing all setting values the game uses.
  */
-enum Setting: EnumCollection
+enum Setting: CaseIterable
 {
     case KeyboardControlsUnlocked;
     

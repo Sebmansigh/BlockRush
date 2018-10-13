@@ -35,11 +35,11 @@ class GameScene: SKScene
      */
     public var InitialSeed: UInt64 = 0;
     /**
-     The name of the demo game, if this game is a demo game.
+     The name of the demo game or single-player game mode, if applicable.
      
      This variable is to be set before the scene is presented and its value is used in the initialization of the game scene.
      */
-    public var ReplayName: String? = nil;
+    public var GameName: String? = nil;
     
     
     
@@ -121,6 +121,18 @@ class GameScene: SKScene
     var DebugNodeTopColumn = [SKLabelNode?](repeating: nil, count: 6);
     var DebugNodeBottomColumn = [SKLabelNode?](repeating: nil, count: 6);
     
+    
+    
+    var Score = 0;
+    var ScoreDisp = 0;
+    var ScoreLabel = SKLabelNode(fontNamed: "Avenir");
+    var Level = 1;
+    var LevelLabel = SKLabelNode(fontNamed: "Avenir");
+    var NextLevel = 40;
+    var NextLevelDisp = 40;
+    var NextLabel = SKLabelNode(fontNamed: "Avenir");
+    
+    
     deinit
     {
         print("Deallocated GameScene");
@@ -173,10 +185,10 @@ class GameScene: SKScene
         BlockRush.SoundScene = self;
         
         let TopDevice: InputDevice;
-        var Data: (UInt64,[Input],[Input])? = nil;
-        if(ReplayName != nil)
+        var Data: (UInt64,[Input],[Input],Queue<GameEvent>?)? = nil;
+        if(GameName != nil && GameName != "Practice" && GameName != "Survival" && GameName != "Time Attack")
         {
-            Data = DemoGame.Get(ReplayName!);
+            Data = DemoGame.Get(GameName!);
             InitialSeed = Data!.0;
         }
         switch TopPlayerType
@@ -199,6 +211,16 @@ class GameScene: SKScene
         case .BotMaster:
             TopDevice = BotDevice.Master();
             CreatePauseButton();
+        case .None:
+            if(GameName == "Tutorial" || GameName == "Survival" || GameName == "Time Attack")
+            {
+                TopDevice = IdleDevice();
+                CreatePauseButton();
+            }
+            else
+            {
+                fallthrough;
+            }
         default:
             fatalError("Unkown Top Player Type: "+String(describing: TopPlayerType));
         }
@@ -231,10 +253,63 @@ class GameScene: SKScene
         playerTop!.foe = playerBottom;
         playerBottom!.foe = playerTop;
         
+        
+        if(GameName == "Survival" || GameName == "Time Attack")
+        {
+            playerTop!.Hide();
+            playerTop!.TimeStop();
+            
+            ScoreLabel.text = "0";
+            ScoreLabel.fontSize = BlockRush.BlockWidth;
+            ScoreLabel.position.y = self.frame.height/2-BlockRush.BlockWidth;
+            
+            LevelLabel.text = "Level 1";
+            LevelLabel.fontSize = BlockRush.BlockWidth*2/3;
+            LevelLabel.position.y = self.frame.height/2-BlockRush.BlockWidth*2;
+            LevelLabel.position.x = -self.frame.width/4;
+            
+            NextLabel.text = "Next in 40";
+            NextLabel.fontSize = BlockRush.BlockWidth*2/3;
+            NextLabel.position.y = self.frame.height/2-BlockRush.BlockWidth*2;
+            NextLabel.position.x = self.frame.width/4;
+            self.addChild(ScoreLabel);
+            self.addChild(LevelLabel);
+            self.addChild(NextLabel);
+            if(GameName == "Time Attack")
+            {
+                playerBottom!.timeMax = 10800;
+                playerBottom!.timeLeft = playerBottom!.timeMax+200;
+                let tgn = playerBottom!.timeGaugeNode;
+                tgn.size.height = BlockRush.GameHeight-BlockRush.BlockWidth;
+                playerBottom!.timeGaugeBar.size = tgn.size;
+                playerBottom!.timeLabelNode.position.y = tgn.size.height/2;
+                tgn.position.y = 0;
+                playerBottom!.TimeGaugeUpdate();
+                playerBottom!.trueTime = true;
+                PauseButton!.position = CGPoint(x: BlockRush.GameWidth * 0.44,
+                                                y: BlockRush.GameHeight * 0.15);
+            }
+        }
+        else if(GameName == "Tutorial")
+        {
+            playerTop!.Hide();
+            playerTop!.TimeStop();
+            playerBottom!.TimeStop();
+        }
+        else if(GameName == "Practice")
+        {
+            playerBottom!.TimeStop();
+            playerTop!.TimeStop();
+        }
+        
         backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
         backgroundGrid?.fillColor = UIColor.black;
         self.addChild(backgroundGrid!);
         playField = PlayField(cols:6, rows:46, playerTop:playerTop!, playerBottom:playerBottom!, scene:self);
+        if(GameName == "Survival" || GameName == "Time Attack")
+        {
+            playField!.StackMove(moveAmount: 160);
+        }
         TopDevice.playField = playField;
         BottomDevice.playField = playField;
         
@@ -259,7 +334,7 @@ class GameScene: SKScene
                         scene.BottomPlayerType = self.BottomPlayerType;
                         scene.TopPlayerType = self.TopPlayerType;
                         arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                        scene.ReplayName = self.ReplayName;
+                        scene.GameName = self.GameName;
                         
                         self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
                     }
@@ -317,7 +392,7 @@ class GameScene: SKScene
                         scene.BottomPlayerType = self.BottomPlayerType;
                         scene.TopPlayerType = self.TopPlayerType;
                         arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                        scene.ReplayName = self.ReplayName;
+                        scene.GameName = self.GameName;
                         
                         self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
                     }
@@ -673,6 +748,10 @@ class GameScene: SKScene
     {
         if(Paused)
         {
+            if(EndGame)
+            {
+                AnimScore();
+            }
             return;
         }
         if(EndGame)
@@ -909,21 +988,25 @@ class GameScene: SKScene
                             {
                                 Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 0.5, duration: 1)]));
                             }
-                            
-                            let Tnode = Bnode.copy() as! SKLabelNode;
-                            Tnode.position.y =  BlockRush.GameHeight/6;
-                            Bnode.position.y = -BlockRush.GameHeight/6;
-                            Tnode.zRotation = .pi;
+                            if(TopPlayerType != .None && GameName != "Tutorial")
+                            {
+                                let Tnode = Bnode.copy() as! SKLabelNode;
+                                Tnode.position.y =  BlockRush.GameHeight/6;
+                                Bnode.position.y = -BlockRush.GameHeight/6;
+                                Tnode.zRotation = .pi;
+                                addChild(Tnode);
+                            }
                             addChild(Bnode);
-                            addChild(Tnode);
                         }
                     }
                     playField!.AdvanceFrame();
+                    
+                    AnimScore();
                 }
                 else
                 {
-                    /*
                     print("HANGING");
+                    /*
                     //Game is hung, check for end of game
                     if(playField!.GameOverFrame != nil)
                     {
@@ -1040,4 +1123,22 @@ class GameScene: SKScene
         self.addChild(GroupNode);
     }
     
+    /**
+     Animates the dispayed score and next level values towards the current actual values.
+     */
+    func AnimScore()
+    {
+        ScoreDisp = ScoreDisp + Int(ceil(Double(Score-ScoreDisp)/10.0));
+        if(NextLevelDisp < NextLevel)
+        {
+            NextLevelDisp = NextLevel;
+        }
+        else if(NextLevelDisp > NextLevel)
+        {
+            NextLevelDisp -= 1;
+        }
+        LevelLabel.text = "Level "+String(Level);
+        ScoreLabel.text = BlockRush.Commafy(value: ScoreDisp);
+        NextLabel.text = "Next in "+String(NextLevelDisp);
+    }
 }

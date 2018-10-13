@@ -111,6 +111,9 @@ class PlayField
     /// Contains the loser of the game. If it is `nil`, then the game was a draw.
     var Loser: Player? = nil;
     
+    /// In a game of Survival, stores how many 64ths of a unit of applied movement. Is 0 in all other game modes.
+    var PartialMove = 0;
+    
     init(cols:Int, rows:Int, playerTop t:Player, playerBottom b: Player, scene:SKScene)
     {
         fieldNode = SKNode();
@@ -612,6 +615,7 @@ class PlayField
         {
             if(Field[column][i] == nil)
             {
+                block.nod.isHidden = false;
                 block.nod.position = GetPosition(column:column,row:i);
                 if(frame >= LastCascadeBottom[column])
                 {
@@ -665,6 +669,7 @@ class PlayField
         {
             if(Field[column][i] == nil)
             {
+                block.nod.isHidden = false;
                 block.nod.position = GetPosition(column:column,row:i);
                 if(frame >= LastCascadeTop[column])
                 {
@@ -815,9 +820,16 @@ class PlayField
     func EvalChain(player: Player, numMatched: Int) -> Int
     {
         player.chainLevel += 1;
-        let linkDamage = BlockRush.CalculateDamage(chainLevel: player.chainLevel, blocksCleared: numMatched)
-        
-        player.storedPower += linkDamage;
+        let linkDamage = BlockRush.CalculateDamage(chainLevel: player.chainLevel, blocksCleared: numMatched);
+        if(gameScene.GameName == "Survival" || gameScene.GameName == "Time Attack")
+        {
+            let linkScore = BlockRush.CalculateScore(chainLevel: player.chainLevel, blocksCleared: numMatched) * gameScene.Level;
+            player.linkScore = linkScore;
+        }
+        if(gameScene.GameName != "Time Attack")
+        {
+            player.storedPower += linkDamage;
+        }
         player.GainTime(300*player.chainLevel-150);
         //
         return linkDamage;
@@ -887,6 +899,27 @@ class PlayField
             }
         }
         return false;
+    }
+    
+    /**
+     Moves the stack to the specified value of `moveAmount`.
+     */
+    func StackMove(moveAmount ma: Int)
+    {
+        moveAmount = ma;
+        let yPos = BlockRush.BlockWidth*CGFloat(moveAmount)/32;
+        fieldNode.position = CGPoint(x: 0, y: yPos);
+        
+        for i in 0...columns()-1
+        {
+            let Tc = TopColumns[i];
+            Tc.position.y  =  BlockRush.BlockWidth*2.5+yPos/2;
+            Tc.size.height =  BlockRush.BlockWidth*5-yPos;
+            
+            let Bc = BottomColumns[i];
+            Bc.position.y  = -BlockRush.BlockWidth*2.5+yPos/2;
+            Bc.size.height =  BlockRush.BlockWidth*5+yPos;
+        }
     }
     
     /**
@@ -983,9 +1016,26 @@ class PlayField
     
     /**
      Causes the playfield and any pending matches or cascades to advance one frame.
+     Causes the playfield to inch forward in Survival mode if the bottom player isn't frozen.
      */
     func AdvanceFrame()
     {
+        if(gameScene.GameName == "Survival" && GameFrame > 200)
+        {
+            if(StackMove(player: playerTop))
+            {
+                //Do not inch forward
+            }
+            else if(!playerBottom.isFrozen())
+            {
+                PartialMove += gameScene.Level*2-1;
+                if(PartialMove > 64)
+                {
+                    StackMove(moveAmount: moveAmount-PartialMove/64);
+                    PartialMove = PartialMove % 64;
+                }
+            }
+        }
         let DoFrame = GameFrame;
         if(CheckMatchFrames.contains(DoFrame-16))
         {
@@ -1010,8 +1060,8 @@ class PlayField
         RecalculateStackHeights();
         
         
-        let Tr = (playerTop.readyPiece != nil)
-        let Br = (playerBottom.readyPiece != nil)
+        let Tr = (playerTop.readyPiece != nil && !playerTop.IsHidden())
+        let Br = (playerBottom.readyPiece != nil && !playerBottom.IsHidden())
         
         for i in 0...columns()-1
         {
@@ -1047,16 +1097,26 @@ class PlayField
         for i in 0...columns()-1
         {
             let redFactor = CGFloat((sin(Double(DoFrame) * Double.pi / 2 / 30 )+1)/2)
-            var Datai:Double = Double(Tdata[i]);
+            
+            var Datai = Double(Tdata[i]);
             var c = TopColumns[i];
-            if(Datai > Tmax-DANGERZONE)
+            
+            if(gameScene.GameName == "Survival")
             {
-                c.color = UIColor(red:redFactor,green:0,blue:0,alpha:1);
+                c.color = UIColor.purple;
                 c.alpha = 1;
             }
             else
             {
-                c.color = .white;
+                if(Datai > Tmax-DANGERZONE)
+                {
+                    c.color = UIColor(red:redFactor,green:0,blue:0,alpha:1);
+                    c.alpha = 1;
+                }
+                else
+                {
+                    c.color = .white;
+                }
             }
             c = BottomColumns[i];
             Datai = Double(Bdata[i]);
@@ -1413,6 +1473,77 @@ class PlayField
     }
     
     /**
+     Creates a visual score effect centered on a set of blocks.
+     - Parameters:
+     - blocks: A set containing the blocks to center the chain effect on.
+     - score: The number of points earned.
+     */
+    func CreateScoreEffect(blocks: Set<Block>,score: Int)
+    {
+        let cN = CGFloat(blocks.count);
+        var cX: CGFloat = 0;
+        var cY: CGFloat = 0;
+        for b in blocks
+        {
+            cX += b.nod.position.x;
+            cY += b.nod.position.y;
+        }
+        
+        cX /= cN;
+        cY /= cN;
+        
+        cX += fieldNode.position.x;
+        cY += fieldNode.position.y;
+        
+        let Bw = BlockRush.BlockWidth;
+        let BaseNode = SKNode();
+        
+        let ScoreNode = SKLabelNode(fontNamed:"Avenir-HeavyOblique");
+        ScoreNode.fontSize = Bw*2/3;
+        ScoreNode.position = CGPoint(x:0,y:-Bw);
+        ScoreNode.fontColor = UIColor.cyan;
+        ScoreNode.text = String(score);
+        ScoreNode.verticalAlignmentMode = .center
+        
+        
+        BaseNode.addChild(ScoreNode);
+        
+        BaseNode.position = CGPoint(x: cX, y: cY)
+        gameScene.addChild(BaseNode);
+        BaseNode.run(.fadeOut(withDuration: 3)) {
+            BaseNode.removeFromParent();
+        };
+    }
+    
+    /**
+     Creates the visual level up effect.
+     */
+    func CreateLevelUpEffect()
+    {
+        let Bw = BlockRush.BlockWidth;
+        let BaseNode = SKNode();
+        
+        let cX: CGFloat = 0;
+        let cY = BlockRush.GameHeight/2 - BlockRush.BlockWidth;
+        
+        let TextNode = SKLabelNode(fontNamed:"Avenir-Heavy");
+        TextNode.fontSize = Bw;
+        TextNode.position = CGPoint(x:0,y:-Bw/3);
+        TextNode.fontColor = UIColor.orange;
+        TextNode.text = "LEVEL UP";
+        TextNode.verticalAlignmentMode = .center
+        
+        
+        BaseNode.addChild(TextNode);
+        
+        BaseNode.position = CGPoint(x: cX, y: cY)
+        gameScene.addChild(BaseNode);
+        BaseNode.run(.fadeOut(withDuration: 3)) {
+            BaseNode.removeFromParent();
+        };
+    }
+    
+    /**
      Cause the animation and disappearing of sets of matched blocks.
      - Parameters:
         - frame: The current game frame.
@@ -1476,6 +1607,23 @@ class PlayField
                     
                     //print(String(p.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");
                     CreateChainEffect(blocks: S, creditTop: CreditTop!, chainLevel: p.chainLevel);
+                    if(p.linkScore > 0)
+                    {
+                        CreateScoreEffect(blocks: S, score: p.linkScore);
+                        gameScene.Score += p.linkScore * p.chainLevel;
+                        gameScene.NextLevel -= S.count;
+                        if(gameScene.NextLevel <= 0)
+                        {
+                            CreateLevelUpEffect();
+                            repeat
+                            {
+                                gameScene.Level += 1;
+                                gameScene.NextLevel += 40;
+                            }
+                            while(gameScene.NextLevel < 0);
+                        }
+                        p.linkScore = 0;
+                    }
                 }
             }
             for block in S
@@ -1720,12 +1868,10 @@ class PlayField
             //The other player accepted defeat, but the this player was frames behind and lost first.
             if(GameOverFrame! > frame)
             {
-                print(frame,player)
                 Loser = player;
                 GameOverFrame = frame;
             }
         }
-        print(frame,player);
         if(Loser != nil && Loser! !== player)
         {
             //Both players have accepted defeat on the same frame

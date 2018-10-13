@@ -26,6 +26,8 @@ class Player
     //GAME LOGIC
     ///The length of a chain in progress.
     public var chainLevel: Int;
+    ///The score earned by the last chain link.
+    public var linkScore: Int = 0;
     /**
      The total amount of movement a chain in progress has generated.
      This will be animated together with `PlayField`'s  `movePower` variable, but differs in that it the field won't move until the chain has resolved.
@@ -49,6 +51,8 @@ class Player
     internal var timeGaugeNode: SKSpriteNode;
     ///The colored portion of the Time Gauge.
     internal var timeGaugeBar: SKSpriteNode;
+    ///The word "TIME" under the Time Gauge.
+    internal var timeLabelNode: SKLabelNode;
     
     ///Whether or not the playfield is accepting input from the player.
     ///The player can be frozen if, for instance, a chain from this player is resolving.
@@ -65,7 +69,15 @@ class Player
     
     ///How much of this player's Time Gauge is remaining.
     public var timeLeft = 1800;
+    ///The maximum value of `timeLeft`
+    public var timeMax = 1800;
+    ///Whether or not the time gauge depletes
+    private var timeDepletes = true;
+    ///If set to true, time cannot be gained and depletes while the player is frozen.
+    public var trueTime = false;
     
+    ///Whether or not to render this player's ui and gameplay elements
+    private var visible = true;
     
     ///The `GameScene` in which the game is being played.
     internal unowned var scene: GameScene;
@@ -94,7 +106,7 @@ class Player
         timeGaugeNode.position.x =  BlockRush.GameWidth * 0.44;
         timeGaugeNode.position.y = -BlockRush.GameHeight * (-0.3);
         
-        let timeLabelNode = SKLabelNode(text:"TIME");
+        timeLabelNode = SKLabelNode(text:"TIME");
         timeLabelNode.fontName = "Avenir-Black";
         timeLabelNode.fontSize = BlockRush.BlockWidth*2/7;
         timeLabelNode.position.y = timeGaugeNode.size.height/2;
@@ -118,13 +130,49 @@ class Player
     }
     
     /**
-     Generate a new piece and addit to the Piece Queue.
+     Prevents this player's time gauge from depleting.
+     */
+    func TimeStop()
+    {
+        timeDepletes = false;
+    }
+    
+    /**
+     Hides this player's ui and gameplay elements.
+     */
+    func Hide()
+    {
+        visible = false;
+        timeGaugeNode.isHidden = true;
+        for p in pieceQueue
+        {
+            p.FrontBlock.nod.isHidden = true;
+            p.RearBlock.nod.isHidden = true;
+        }
+    }
+    
+    /**
+     Whether this player is hidden or not.
+     */
+    func IsHidden() -> Bool
+    {
+        return !visible;
+    }
+
+    /**
+     Generate a new piece and add it to the Piece Queue.
      */
     func GeneratePiece()
     {
         let x1 = generator.nextInt();
         let x2 = generator.nextInt();
-        pieceQueue.enqueue(Piece(nFront:x1,nRear:x2));
+        let p = Piece(nFront:x1,nRear:x2);
+        if(IsHidden())
+        {
+            p.FrontBlock.nod.isHidden = true;
+            p.RearBlock.nod.isHidden = true;
+        }
+        pieceQueue.enqueue(p);
     }
     
     /**
@@ -140,21 +188,21 @@ class Player
      */
     func TimeGaugeUpdate()
     {
-        let ys = CGFloat(timeLeft)/1800
+        let ys = min(1,CGFloat(timeLeft)/CGFloat(timeMax));
         timeGaugeBar.yScale = ys;
         timeGaugeBar.position.y = timeGaugeNode.size.height/2*(1-ys);
         
         timeGaugeNode.color = .gray;
         
-        if(timeLeft <= 300)
+        if(ys < 1/6.0)
         {
             timeGaugeBar.color = .red;
-            if(curFrame % 30 == 0)
+            if(timeLeft < 300 && curFrame % 30 == 0)
             {
                 timeGaugeNode.color = .red;
             }
         }
-        else if(timeLeft <= 600)
+        else if(ys < 1/3.0)
         {
             timeGaugeBar.color = .yellow;
         }
@@ -257,6 +305,11 @@ class Player
      */
     func GainTime(_ t: Int)
     {
+        if(trueTime)
+        {
+            return;
+        }
+        
         timeLeft += t;
         if(timeLeft > 1800)
         {
@@ -275,7 +328,17 @@ class Player
         //print("STARTING AT FRAME "+String(curFrame)+"; RUNNING TO FRAME "+String(targetFrame));
         while(!acceptedDefeat && inputDevice.CanEval() && curFrame < targetFrame)
         {
-            if(readyPiece != nil)
+            if(trueTime)
+            {
+                timeLeft -= 1;
+                if(timeLeft <= 0 && !frozen)
+                {
+                    playField.acceptDefeat(player: self, frame: curFrame);
+                    acceptedDefeat = true;
+                    break;
+                }
+            }
+            else if(readyPiece != nil && timeDepletes)
             {
                 timeLeft -= 1;
             }

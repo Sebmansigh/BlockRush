@@ -25,7 +25,6 @@
 		A8071BDA2079A4B900EC3272 /* ControlMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BD92079A4B900EC3272 /* ControlMenu.swift */; };
 		A8071BDC2079D5B900EC3272 /* TouchDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDB2079D5B900EC3272 /* TouchDevice.swift */; };
 		A8071BDE2079DF7400EC3272 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDD2079DF7400EC3272 /* Setting.swift */; };
-		A8071BE02079F4BE00EC3272 /* EnumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */; };
 		A8071BE2207AA4DA00EC3272 /* MenuSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */; };
 		A8071BE9207AD39D00EC3272 /* SettingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BE8207AD39D00EC3272 /* SettingOption.swift */; };
 		A8071BED207AD81E00EC3272 /* MenuSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8071BEC207AD81E00EC3272 /* MenuSelector.swift */; };
@@ -64,6 +63,8 @@
 		A8D1D7FD209534ED004004EA /* MediatorDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D1D7FC209534ED004004EA /* MediatorDevice.swift */; };
 		A8D1D7FF2095381E004004EA /* PlayerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D1D7FE2095381E004004EA /* PlayerType.swift */; };
 		A8D1D80120953F22004004EA /* BotDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D1D80020953F22004004EA /* BotDevices.swift */; };
+		A8E3F23521715B8A006DA2DA /* CaseIterable.extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F23421715B8A006DA2DA /* CaseIterable.extension.swift */; };
+		A8E3F23721718CC3006DA2DA /* GameEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F23621718CC3006DA2DA /* GameEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,7 +109,6 @@
 		A8071BD92079A4B900EC3272 /* ControlMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlMenu.swift; sourceTree = "<group>"; };
 		A8071BDB2079D5B900EC3272 /* TouchDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDevice.swift; sourceTree = "<group>"; };
 		A8071BDD2079DF7400EC3272 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
-		A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumCollection.swift; sourceTree = "<group>"; };
 		A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSlider.swift; sourceTree = "<group>"; };
 		A8071BE8207AD39D00EC3272 /* SettingOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOption.swift; sourceTree = "<group>"; };
 		A8071BEC207AD81E00EC3272 /* MenuSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSelector.swift; sourceTree = "<group>"; };
@@ -147,6 +147,8 @@
 		A8D1D7FC209534ED004004EA /* MediatorDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediatorDevice.swift; sourceTree = "<group>"; };
 		A8D1D7FE2095381E004004EA /* PlayerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerType.swift; sourceTree = "<group>"; };
 		A8D1D80020953F22004004EA /* BotDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotDevices.swift; sourceTree = "<group>"; };
+		A8E3F23421715B8A006DA2DA /* CaseIterable.extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseIterable.extension.swift; sourceTree = "<group>"; };
+		A8E3F23621718CC3006DA2DA /* GameEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEvent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,8 +212,8 @@
 		A80539BA20685A650059562D /* Block Rush */ = {
 			isa = PBXGroup;
 			children = (
+				A8E3F23421715B8A006DA2DA /* CaseIterable.extension.swift */,
 				A83507042096C8E600DC7C37 /* DebugTools.swift */,
-				A8071BDF2079F4BE00EC3272 /* EnumCollection.swift */,
 				A80539F120686CC60059562D /* CustomCollections.swift */,
 				A80539F5206961420059562D /* BlockRush.swift */,
 				A80539CD20685A650059562D /* Info.plist */,
@@ -223,6 +225,7 @@
 				A8071BE5207AD2C600EC3272 /* InputLogic */,
 				A8071BEB207AD4A200EC3272 /* MenuLogic */,
 				A80539C820685A650059562D /* Assets.xcassets */,
+				A8E3F23621718CC3006DA2DA /* GameEvent.swift */,
 			);
 			path = "Block Rush";
 			sourceTree = "<group>";
@@ -414,15 +417,18 @@
 				TargetAttributes = {
 					A80539B720685A650059562D = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					A80539D120685A650059562D = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						TestTargetID = A80539B720685A650059562D;
 					};
 					A80539DC20685A650059562D = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						TestTargetID = A80539B720685A650059562D;
 					};
@@ -503,7 +509,6 @@
 				A80CDA10206C14EC00AA579B /* Input.swift in Sources */,
 				A8D1D7FD209534ED004004EA /* MediatorDevice.swift in Sources */,
 				A83507052096C8E600DC7C37 /* DebugTools.swift in Sources */,
-				A8071BE02079F4BE00EC3272 /* EnumCollection.swift in Sources */,
 				A8071BE9207AD39D00EC3272 /* SettingOption.swift in Sources */,
 				A83C577620B1181E002A482D /* ReplayDevice.swift in Sources */,
 				A83C577420B11266002A482D /* DemoGame.swift in Sources */,
@@ -516,6 +521,7 @@
 				A8071BE2207AA4DA00EC3272 /* MenuSlider.swift in Sources */,
 				A80539C220685A650059562D /* GameScene.swift in Sources */,
 				A8A3A38E20D46FFF005E3DE3 /* ControllerObserver.swift in Sources */,
+				A8E3F23721718CC3006DA2DA /* GameEvent.swift in Sources */,
 				A80539F6206961420059562D /* BlockRush.swift in Sources */,
 				A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */,
 				A80539F420686FA40059562D /* Piece.swift in Sources */,
@@ -529,6 +535,7 @@
 				A8D1D80120953F22004004EA /* BotDevices.swift in Sources */,
 				A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */,
 				A8071BDE2079DF7400EC3272 /* Setting.swift in Sources */,
+				A8E3F23521715B8A006DA2DA /* CaseIterable.extension.swift in Sources */,
 				A8071BD82079A2C100EC3272 /* SoundMenu.swift in Sources */,
 				A80539BC20685A650059562D /* AppDelegate.swift in Sources */,
 				A87302DC20B8735900B26F8F /* GameView.swift in Sources */,
@@ -708,7 +715,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sebmansigh.Block-Rush";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -724,7 +731,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sebmansigh.Block-Rush";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -740,7 +747,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sebmansigh.Block-RushTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Block Rush.app/Block Rush";
 			};
@@ -757,7 +764,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sebmansigh.Block-RushTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Block Rush.app/Block Rush";
 			};
@@ -773,7 +780,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sebmansigh.Block-RushUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Block Rush";
 			};
@@ -789,7 +796,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sebmansigh.Block-RushUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Block Rush";
 			};

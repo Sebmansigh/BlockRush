@@ -48,6 +48,10 @@ class BottomPlayer: Player
         BlockRush.PlaySound(name: "PlaySnap");
         readyPiece = nil;
         nextFrame = curFrame + 30;
+        if(field.gameScene.GameName == "Survival" || field.gameScene.GameName == "Time Attack")
+        {
+            field.gameScene.Score += 50;
+        }
     }
     
     override func PositionToColumn(_ n:Int)

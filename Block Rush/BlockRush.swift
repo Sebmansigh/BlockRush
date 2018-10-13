@@ -34,7 +34,6 @@ final class BlockRush
         GameHeight = min(UIScreen.main.nativeBounds.height,UIScreen.main.nativeBounds.width*2);
         
         BlockWidth = min(GameWidth * 0.12,GameHeight/14);
-        print(BlockWidth);
     }
     
     /**
@@ -50,7 +49,7 @@ final class BlockRush
                 let SettingsFileString = try String(contentsOf: fileURL,encoding: .utf8);
                 let StoredSettings = SettingsFileString.components(separatedBy: .newlines);
                 
-                let S = Setting.NameMap();
+                let S = Setting.nameMap;
                 
                 for Str in StoredSettings
                 {
@@ -68,8 +67,9 @@ final class BlockRush
             }
         }
         
+        print("Entering Loop");
         //Assign default values for settings that weren't found
-        for s in Setting.All()
+        for s in Setting.allCases
         {
             if(Settings[s] == nil)
             {
@@ -83,9 +83,9 @@ final class BlockRush
     public static func saveSettings()
     {
         var settingsString = "";
-        for s in Setting.All()
+        for s in Setting.allCases
         {
-            settingsString.append(Setting.Name(s));
+            settingsString.append(s.name);
             settingsString.append("=");
             settingsString.append(String(Settings[s]!.rawValue));
             settingsString.append("\n");
@@ -118,6 +118,13 @@ final class BlockRush
     
     public static var GameWidth: CGFloat = 0;
     public static var GameHeight: CGFloat = 0;
+    
+    public static func CalculateScore(chainLevel c: Int, blocksCleared n: Int) -> Int
+    {
+        let BlockScore = n*(n+1)/2 * 10;
+        let ChainBonus = 3+c+c*(c+1)/2;
+        return BlockScore*Int(ChainBonus);
+    }
     
     public static func CalculateDamage(chainLevel: Int, blocksCleared: Int) -> Int
     {
@@ -205,7 +212,11 @@ final class BlockRush
             {
                 player!.stop();
             }
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback);
+            if #available(iOS 10.0, *) {
+                try AVAudioSession.sharedInstance().setCategory(.playback,mode:.default)
+            } else {
+                // Fallback on earlier versions
+            };
             try AVAudioSession.sharedInstance().setActive(true);
             player = try AVAudioPlayer(contentsOf: url);
             player!.numberOfLoops = -1;
@@ -238,4 +249,35 @@ final class BlockRush
         bgNode.zPosition = 10000000;
         GameView.curview?.scene?.addChild(bgNode);
     }
+    
+    static func Commafy(value: Int) -> String
+    {
+        var x = value;
+        var ret = "";
+        while(x >= 1000)
+        {
+            let part = x % 1000;
+            x -= part;
+            if(part < 10)
+            {
+                ret = ",00\(part)"+ret;
+            }
+            else if(part < 100)
+            {
+                ret = ",0\(part)"+ret;
+            }
+            else
+            {
+                ret = ",\(part)"+ret;
+            }
+            
+            x /= 1000;
+        }
+        return "\(x)"+ret;
+    }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+	return input.rawValue
 }

@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import BlockRush
+//@testable import BlockRush
 
 class Block_RushTests: XCTestCase {
     

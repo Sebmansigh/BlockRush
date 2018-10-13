@@ -79,7 +79,7 @@ class MainMenuScene: SKScene
                 
                 scene.BottomPlayerType = .Replay;
                 scene.TopPlayerType = .Replay;
-                scene.ReplayName = name;
+                scene.GameName = name;
                 
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
                 BlockRush.StopMusic();
@@ -92,6 +92,98 @@ class MainMenuScene: SKScene
         }
     }
     
+    /**
+     Creates a closure that, when executed, presents an instance of `GameScene` that plays a fixed game.
+     - Parameter name: the name of the fixed game.
+     - Returns: A closure that presents a `GameScene` when executed.
+     */
+    private func playFixedGame(_ name: String) -> ( () -> Void )
+    {
+        return {
+            [unowned self] in
+            GameMenu.focusMenu = nil;
+            if let scene = SKScene(fileNamed: "GameScene") as? GameScene
+            {
+                // Set the scale mode to scale to fit the window
+                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                    height: UIScreen.main.nativeBounds.height);
+                scene.scaleMode = .aspectFit;
+                
+                scene.BottomPlayerType = .Local;
+                if(name == "Practice")
+                {
+                    scene.TopPlayerType = .Local;
+                }
+                else
+                {
+                    scene.TopPlayerType = .None;
+                }
+                scene.GameName = name;
+                
+                arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
+                BlockRush.StopMusic();
+                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+            }
+            else
+            {
+                fatalError("Could not load GameScene.");
+            }
+        }
+    }
+    
+    private func playSurvival() -> ( () -> Void )
+    {
+        return {
+            [unowned self] in
+            GameMenu.focusMenu = nil;
+            if let scene = SKScene(fileNamed: "GameScene") as? GameScene
+            {
+                // Set the scale mode to scale to fit the window
+                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                    height: UIScreen.main.nativeBounds.height);
+                scene.scaleMode = .aspectFit;
+                
+                scene.BottomPlayerType = .Local;
+                scene.TopPlayerType = .None;
+                scene.GameName = "Survival";
+                
+                arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
+                BlockRush.StopMusic();
+                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+            }
+            else
+            {
+                fatalError("Could not load GameScene.");
+            }
+        }
+    }
+    
+    private func playTimeAttack() -> ( () -> Void )
+    {
+        return {
+            [unowned self] in
+            GameMenu.focusMenu = nil;
+            if let scene = SKScene(fileNamed: "GameScene") as? GameScene
+            {
+                // Set the scale mode to scale to fit the window
+                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                    height: UIScreen.main.nativeBounds.height);
+                scene.scaleMode = .aspectFit;
+                
+                scene.BottomPlayerType = .Local;
+                scene.TopPlayerType = .None;
+                scene.GameName = "Time Attack";
+                
+                arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
+                BlockRush.StopMusic();
+                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+            }
+            else
+            {
+                fatalError("Could not load GameScene.");
+            }
+        }
+    }
     override func sceneDidLoad()
     {
         backgroundColor = .black;
@@ -114,7 +206,13 @@ class MainMenuScene: SKScene
             
         Menu = GameMenu(title: "main",
                         menuOptions:
-                        [GameMenu(title:"Play",
+                        [GameMenu(title:"Play Solo",
+                                  menuOptions:
+                            [MenuAction(title:"Practice VS", action: playFixedGame("Practice")),
+                             MenuAction(title:"Survival", action: playSurvival()),
+                             MenuAction(title:"Time Attack", action: playTimeAttack())
+                            ]),
+                            GameMenu(title:"Play VS",
                                   menuOptions:
                                   [MenuAction(title:"VS Local", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .Local)),
                                    GameMenu(title:"VS Bot",
@@ -129,7 +227,7 @@ class MainMenuScene: SKScene
                                   ]),
                          GameMenu(title:"Lessons",
                                   menuOptions:
-                                  [GameMenu(title: "Tutorial"),
+                                  [MenuAction(title: "Tutorial", action: playFixedGame("Tutorial")),
                                    GameMenu(title: "Novice"),
                                    GameMenu(title: "Adept"),
                                    MenuAction(title:"Expert", action: playDemoGame("Demo1"))
