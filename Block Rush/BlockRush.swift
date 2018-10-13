@@ -126,6 +126,11 @@ final class BlockRush
         return BlockScore*Int(ChainBonus);
     }
     
+    public static func CalculateOverpowerBonus(units u: Int) -> Int
+    {
+        return 1000 + u*(u+1);
+    }
+    
     public static func CalculateDamage(chainLevel: Int, blocksCleared: Int) -> Int
     {
         let ClearVal: Int;

@@ -130,6 +130,9 @@ class GameScene: SKScene
     var NextLevelDisp = 40;
     var NextLabel = SKLabelNode(fontNamed: "Avenir");
     
+    var OverpowerBonus = 0;
+    var OverpowerLabel = SKLabelNode(fontNamed: "Avenir-Heavy");
+    var OverpowerAmountLabel = SKLabelNode(fontNamed: "Avenir-Heavy");
     
     deinit
     {
@@ -294,10 +297,28 @@ class GameScene: SKScene
             NextLabel.fontSize = BlockRush.BlockWidth*2/3;
             NextLabel.position.y = self.frame.height/2-BlockRush.BlockWidth*2;
             NextLabel.position.x = self.frame.width/4;
+            //
+            OverpowerLabel.text = "OVERPOWER BONUS";
+            OverpowerLabel.alpha = 0;
+            OverpowerAmountLabel.text = "10,000,000";
+            OverpowerAmountLabel.alpha = 0;
+            
+            OverpowerLabel.fontColor = .red;
+            OverpowerAmountLabel.fontColor = .magenta;
+            
+            OverpowerLabel.fontSize = BlockRush.BlockWidth*2/3;
+            OverpowerAmountLabel.fontSize = BlockRush.BlockWidth*1.5;
+            
+            OverpowerLabel.position.y = -BlockRush.GameHeight/8+BlockRush.BlockWidth/2;
+            OverpowerAmountLabel.position.y = -BlockRush.GameHeight/8-BlockRush.BlockWidth;
+            OverpowerLabel.zPosition = 1;
+            OverpowerAmountLabel.zPosition = 2;
+            
             self.addChild(ScoreLabel);
             self.addChild(LevelLabel);
             self.addChild(NextLabel);
-            
+            self.addChild(OverpowerLabel);
+            self.addChild(OverpowerAmountLabel);
         case .Fixed(let name):
             playerTop!.Hide();
             playerTop!.TimeStop();
@@ -1041,6 +1062,32 @@ class GameScene: SKScene
     func ReadyEndOfGame()
     {
         EndGame = true;
+    }
+    
+    /**
+     Called when the value of overpowerBonus increases.
+     Animates the bonus and sets up the fade out in case it isn't called next frame.
+    */
+    func UpdateOverpowerBonusEffect()
+    {
+        OverpowerLabel.text = "OVERPOWER BONUS";
+        OverpowerLabel.alpha = 1;
+        OverpowerLabel.xScale = 1;
+        OverpowerLabel.yScale = 1;
+        OverpowerAmountLabel.text = BlockRush.Commafy(value: BlockRush.CalculateOverpowerBonus(units: OverpowerBonus));
+        OverpowerAmountLabel.alpha = 1;
+        OverpowerAmountLabel.xScale = 1;
+        OverpowerAmountLabel.yScale = 1;
+        
+        OverpowerLabel.fontColor = .red;
+        OverpowerAmountLabel.fontColor = .magenta;
+        
+        OverpowerLabel.removeAllActions();
+        OverpowerAmountLabel.removeAllActions();
+        
+        OverpowerLabel.run(.sequence([.wait(forDuration: 1),.fadeOut(withDuration: 1)]));
+        OverpowerAmountLabel.run(.sequence([.wait(forDuration: 1),
+                                      .group([.fadeOut(withDuration: 2),.scale(to: 2, duration: 2)])]));
     }
     
     /**

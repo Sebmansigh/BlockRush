@@ -178,7 +178,7 @@ class MainMenuScene: SKScene
                                    GameMenu(title: "Novice"),
                                    GameMenu(title: "Adept"),
                                    MenuAction(title:"Expert", action: playDemoGame("Demo1"))
-                                  ]),\\\\\\\\\\\\\
+                                  ]),
                          GameMenu(title:"Settings",
                                   menuOptions:
                                     [SoundMenu(title: "Sound"),

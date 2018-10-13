@@ -1026,10 +1026,20 @@ class PlayField
         {
             if(StackMove(player: playerTop))
             {
-                //Do not inch forward
+                if(moveAmount == 160)
+                {
+                    PartialMove = 0;
+                    gameScene.OverpowerBonus += 1;
+                    gameScene.UpdateOverpowerBonusEffect();
+                }
             }
             else if(!playerBottom.isFrozen())
             {
+                if(gameScene.OverpowerBonus > 0)
+                {
+                    gameScene.Score += BlockRush.CalculateOverpowerBonus(units: gameScene.OverpowerBonus);
+                    gameScene.OverpowerBonus = 0;
+                }
                 PartialMove += gameScene.Level*2-1;
                 if(PartialMove > 64)
                 {

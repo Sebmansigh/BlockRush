@@ -374,8 +374,11 @@ class Player
                 hasLost = playField.DetectPlayerLoss(player: self);
                 if(hasLost)
                 {
-                    if(foe.isFrozen())
+                    if(foe.isFrozen()
+                    || self is BottomPlayer && playField.movePower > 0
+                    || self is TopPlayer && playField.movePower < 0)
                     {
+                        //If the loss condition has been met but there's a possibility that it could be unmet, wait.
                         nextFrame += 1;
                     }
                     else
