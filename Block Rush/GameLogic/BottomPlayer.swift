@@ -21,14 +21,36 @@ class BottomPlayer: Player
     
     override func SceneUpdate()
     {
+        TimeGaugeUpdate();
+        
+        var numShow = 5;
+        if(!forcePieceQueue.isEmpty)
+        {
+            for i in 0...forcePieceQueue.count()-1
+            {
+                let sX = BlockRush.GameWidth * 0.45;
+                let sY = BlockRush.GameHeight * (CGFloat(1-numShow)/10.0);
+                let CenterPt = CGPoint(x: sX, y: sY);
+                forcePieceQueue.peek(i).SceneAdd(scene: scene, position: CenterPt,reversed:true);
+                numShow -= 1;
+                if(numShow == 0)
+                {
+                    return;
+                }
+            }
+        }
         for i in 0...pieceQueue.count()-1
         {
             let sX = BlockRush.GameWidth * 0.45;
-            let sY = BlockRush.GameHeight * (CGFloat(i-4)/10.0);
+            let sY = BlockRush.GameHeight * (CGFloat(1-numShow)/10.0);
             let CenterPt = CGPoint(x: sX, y: sY);
             pieceQueue.peek(i).SceneAdd(scene: scene, position: CenterPt,reversed:true);
+            numShow -= 1;
+            if(numShow == 0)
+            {
+                return;
+            }
         }
-        TimeGaugeUpdate();
     }
     
     override func Ready(_ p: Piece)
@@ -56,6 +78,8 @@ class BottomPlayer: Player
         {
             field.gameScene.Score += 50 * field.gameScene.Level;
         }
+        
+        GameEvent.Fire(.OnPlayerPlay);
     }
     
     override func PositionToColumn(_ n:Int)
@@ -76,15 +100,21 @@ class BottomPlayer: Player
             {
                 MoveToColumn(columnOver-1);
                 BlockRush.PlaySound(name: "MoveTick");
+                GameEvent.Fire(.OnPlayerMove);
             }
         case .RIGHT:
             if(readyPiece != nil && columnOver != 5)
             {
                 MoveToColumn(columnOver+1);
                 BlockRush.PlaySound(name: "MoveTick");
+                GameEvent.Fire(.OnPlayerMove);
             }
         case .FLIP:
-            readyPiece?.Flip()
+            if let rp = readyPiece
+            {
+                rp.Flip();
+                GameEvent.Fire(.OnPlayerFlip);
+            }
         case .PLAY:
             if(readyPiece != nil)
             {

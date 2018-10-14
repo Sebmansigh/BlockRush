@@ -47,6 +47,8 @@ class Player
     ///Contains the next pieces to be delivered to the player.
     ///These are visible along the right side of the screen.
     internal var pieceQueue: Queue<Piece>;
+    ///Contains the next pieces to be forced onto the player by a GameEvent.
+    internal var forcePieceQueue: Queue<Piece>;
     ///The grey background of the Time Gauge.
     internal var timeGaugeNode: SKSpriteNode;
     ///The colored portion of the Time Gauge.
@@ -82,11 +84,18 @@ class Player
     ///The `GameScene` in which the game is being played.
     internal unowned var scene: GameScene;
     
+    ///An array of inputs to ignore from the inputDevice
+    private var disabledInputs = [Input]();
+    
+    ///Unignorable inputs forced upon the player by a GameEvent
+    public var forcedInputs = [Input]();
+    
     internal init(rngSeed: UInt64, scene s: GameScene, device: InputDevice)
     {
         let source = GKMersenneTwisterRandomSource(seed: rngSeed);
         generator = GKRandomDistribution(randomSource: source, lowestValue: 0, highestValue: BlockRush.BlockColors.count-1);
         pieceQueue = Queue<Piece>();
+        forcePieceQueue = Queue<Piece>();
         scene = s;
         curFrame = 0;
         nextFrame = 200;
@@ -235,6 +244,14 @@ class Player
         {
             columnOver = n;
             PositionToColumn(n);
+            if(self is BottomPlayer)
+            {
+                GameEvent.Fire(.OnBottomPlayerColumn(n))
+            }
+            else if(self is TopPlayer)
+            {
+                GameEvent.Fire(.OnTopPlayerColumn(n))
+            }
         }
     }
     
@@ -254,9 +271,17 @@ class Player
     {
         GainTime(180);
         
-        let p = pieceQueue.dequeue();
-        Ready(p);
-        GeneratePiece();
+        if(forcePieceQueue.isEmpty)
+        {
+            let p = pieceQueue.dequeue();
+            Ready(p);
+            GeneratePiece();
+        }
+        else
+        {
+            let p = forcePieceQueue.dequeue();
+            Ready(p);
+        }
         chainLevel = 0;
     }
     
@@ -278,6 +303,15 @@ class Player
     {
         frozen = true;
         unfreezeFrame = untilFrame;
+    }
+    /**
+     Freezes this player for 30 frames.
+     This is to be called only by GameEvents in order to ensure that online games are deterministic.
+     */
+    func Freeze()
+    {
+        frozen = true;
+        unfreezeFrame = curFrame+30;
     }
     
     /**
@@ -316,6 +350,48 @@ class Player
             timeLeft = 1800;
         }
     }
+    
+    
+    /**
+     Causes this player to ignore a particular input from its input device.
+     - Parameter input: the input to ignore
+    */
+    final func DisableInput(input i:Input)
+    {
+        if(!disabledInputs.contains(i))
+        {
+            disabledInputs.append(i);
+        }
+    }
+    
+    /**
+     Causes this player to ignore all inputs from its input device.
+     */
+    final func DisableAllInputs()
+    {
+        disabledInputs = Input.ARRAY;
+    }
+    
+    /**
+     Causes this player to honor a particular input from its input device.
+     - Parameter input: the input to honor
+     */
+    final func EnableInput(input i:Input)
+    {
+        if let index = disabledInputs.index(of:i)
+        {
+            disabledInputs.remove(at: index);
+        }
+    }
+    
+    /**
+     Causes this player to honor all inputs from its input device.
+     */
+    final func EnableAllInputs()
+    {
+        disabledInputs = [];
+    }
+    
     
     /**
      Executes this player's inputs up to a frame number.
@@ -403,11 +479,13 @@ class Player
             
             for I in Input.ARRAY
             {
-                if(inputDevice.Get(input: I))
+                if(forcedInputs.contains(I) || (inputDevice.Get(input: I) && !disabledInputs.contains(I)))
                 {
                     Execute(input: I,field: playField);
                 }
             }
+            
+            forcedInputs = [];
             //
             if(timeLeft <= 0)
             {

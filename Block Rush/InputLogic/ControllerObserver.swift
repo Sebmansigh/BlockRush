@@ -273,6 +273,8 @@ final class ControllerObserver
                     {
                         AppDelegate.HumanInput(.PLAY, forTopPlayer: forTopPlayer);
                     }
+                    //
+                    GameEvent.Fire(.OnScreenTap);
                 }
             }
         }

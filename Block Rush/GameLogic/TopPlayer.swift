@@ -48,6 +48,8 @@ class TopPlayer: Player
         BlockRush.PlaySound(name: "PlaySnap");
         readyPiece = nil;
         nextFrame = curFrame + 30;
+        
+        GameEvent.Fire(.OnPlayerPlay);
     }
     
     override func PositionToColumn(_ n:Int)
@@ -68,15 +70,21 @@ class TopPlayer: Player
             {
                 MoveToColumn(columnOver+1);
                 BlockRush.PlaySound(name: "MoveTick");
+                GameEvent.Fire(.OnPlayerMove);
             }
         case .RIGHT:
             if(readyPiece != nil && columnOver != 0)
             {
                 MoveToColumn(columnOver-1);
                 BlockRush.PlaySound(name: "MoveTick");
+                GameEvent.Fire(.OnPlayerMove);
             }
         case .FLIP:
-            readyPiece?.Flip()
+            if let rp = readyPiece
+            {
+                rp.Flip();
+                GameEvent.Fire(.OnPlayerFlip);
+            }
         case .PLAY:
             if(readyPiece != nil)
             {

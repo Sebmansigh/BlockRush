@@ -1021,6 +1021,7 @@ class PlayField
      */
     func AdvanceFrame()
     {
+        GameEvent.Fire(.OnGameFrameUpdate);
         if GameFrame > 200,
            case .Survival = gameScene.GameMode
         {

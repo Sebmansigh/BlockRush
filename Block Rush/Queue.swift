@@ -98,6 +98,17 @@ class Queue<T>: Collection
     {
         return data[n];
     }
+    
+    /**
+     Looks at the `n`th element in the queue.
+     - Parameter n: How far back to look.
+     - Returns: The `n`th element in the queue.
+     */
+    func replace(at index: Int,with value:T)
+    {
+        data[index] = value;
+    }
+    
     /**
      Returns how many items are in the queue.
      - Returns: The size of the queue.

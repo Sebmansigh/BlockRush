@@ -109,6 +109,7 @@ class GameScene: SKScene
      */
     var PauseMenu: GameMenu?;
     
+    var DoCountdown: Bool = true;
     
     // Variables to be used during the debug process.
     var DebugNodeTop = SKLabelNode(fontNamed: "Avenir");
@@ -150,6 +151,7 @@ class GameScene: SKScene
             return;
         }
         
+        GameEvent.ClearEvents();
         
         if(BlockRush.DEBUG_MODE)
         {
@@ -320,9 +322,7 @@ class GameScene: SKScene
             self.addChild(OverpowerLabel);
             self.addChild(OverpowerAmountLabel);
         case .Fixed(let name):
-            playerTop!.Hide();
-            playerTop!.TimeStop();
-            playerBottom!.TimeStop();
+            GameEvent.EventQueue = FixedGame.Generate(name,gameScene: self);
         case .Practice:
             playerBottom!.TimeStop();
             playerTop!.TimeStop();
@@ -441,6 +441,8 @@ class GameScene: SKScene
         PauseMenuNode!.zPosition = 100;
         
         playField!.GameReady = true;
+        
+        GameEvent.DoEvents();
     }
     
     override func didMove(to view: SKView)
@@ -504,6 +506,9 @@ class GameScene: SKScene
                 return;
             }
         }
+        
+        GameEvent.Fire(.OnScreenTap);
+        
         let pos = touch.location(in: self)
         if(pos.y > 0)
         {
@@ -762,6 +767,7 @@ class GameScene: SKScene
     
     override func update(_ currentTime: TimeInterval)
     {
+        GameEvent.Fire(.OnFrameUpdate);
         if(Paused)
         {
             if(EndGame)
@@ -978,44 +984,47 @@ class GameScene: SKScene
                 {
                     if(playField!.GameFrame <= 200)
                     {
-                        if((playField!.GameFrame-20) % 60 == 0)
+                        if(DoCountdown)
                         {
-                            let n = 3 - (playField!.GameFrame-20)/60;
-                            let Str: String;
-                            if(n == 0)
+                            if((playField!.GameFrame-20) % 60 == 0)
                             {
-                                Str = "GO!";
-                                BlockRush.PlayMusic(name: "Track" + String(1+(InitialSeed % 3)) );
+                                let n = 3 - (playField!.GameFrame-20)/60;
+                                let Str: String;
+                                if(n == 0)
+                                {
+                                    Str = "GO!";
+                                    BlockRush.PlayMusic(name: "Track" + String(1+(InitialSeed % 3)) );
+                                }
+                                else
+                                {
+                                    Str = String(n);
+                                }
+                                
+                                let Bnode = SKLabelNode(text: Str);
+                                Bnode.fontName = "Avenir-Black";
+                                Bnode.fontSize = BlockRush.GameHeight/4;
+                                Bnode.verticalAlignmentMode = .center;
+                                if(n == 0)
+                                {
+                                    Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 2.0, duration: 1)]));
+                                }
+                                else
+                                {
+                                    Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 0.5, duration: 1)]));
+                                }
+                                if case .None = TopPlayerType,
+                                   case .Fixed = GameMode
+                                {}
+                                else
+                                {
+                                    let Tnode = Bnode.copy() as! SKLabelNode;
+                                    Tnode.position.y =  BlockRush.GameHeight/6;
+                                    Bnode.position.y = -BlockRush.GameHeight/6;
+                                    Tnode.zRotation = .pi;
+                                    addChild(Tnode);
+                                }
+                                addChild(Bnode);
                             }
-                            else
-                            {
-                                Str = String(n);
-                            }
-                            
-                            let Bnode = SKLabelNode(text: Str);
-                            Bnode.fontName = "Avenir-Black";
-                            Bnode.fontSize = BlockRush.GameHeight/4;
-                            Bnode.verticalAlignmentMode = .center;
-                            if(n == 0)
-                            {
-                                Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 2.0, duration: 1)]));
-                            }
-                            else
-                            {
-                                Bnode.run(.group([.fadeOut(withDuration: 1),.scale(by: 0.5, duration: 1)]));
-                            }
-                            if case .None = TopPlayerType,
-                               case .Fixed = GameMode
-                            {}
-                            else
-                            {
-                                let Tnode = Bnode.copy() as! SKLabelNode;
-                                Tnode.position.y =  BlockRush.GameHeight/6;
-                                Bnode.position.y = -BlockRush.GameHeight/6;
-                                Tnode.zRotation = .pi;
-                                addChild(Tnode);
-                            }
-                            addChild(Bnode);
                         }
                     }
                     playField!.AdvanceFrame();
