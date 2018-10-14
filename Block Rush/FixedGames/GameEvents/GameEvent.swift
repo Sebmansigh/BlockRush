@@ -26,7 +26,7 @@ class GameEvent
      */
     private var Trigger: GameEventTrigger?;
     
-    
+     
     /**
      Stores a reference to the current game scene
      */
