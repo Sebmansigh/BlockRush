@@ -156,9 +156,11 @@ class GameEvent
         fatalError("Execute(scene:) not overriden by a subclass.");
     }
     
+    /*
     deinit
     {
         let x = self;
         print("Deallocated \(type(of: x))");
     }
+    */
 }

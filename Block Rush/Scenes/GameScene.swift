@@ -121,6 +121,7 @@ class GameScene: SKScene
     var DebugNodeBottomColumn = [SKLabelNode?](repeating: nil, count: 6);
     
     
+    var HighScore = 0;
     
     var Score = 0;
     var ScoreDisp = 0;
@@ -442,6 +443,14 @@ class GameScene: SKScene
         
         playField!.GameReady = true;
         
+        if case .Survival = GameMode
+        {
+            HighScore = BlockRush.SurvivalHighScore;
+        }
+        else if case .TimeAttack = GameMode
+        {
+            HighScore = BlockRush.TimeAttackHighScore;
+        }
         GameEvent.DoEvents();
     }
     
@@ -787,15 +796,30 @@ class GameScene: SKScene
             }
             else if(playField!.Loser === playerBottom)
             {
-                PlayLoseEffect(top: false);
-                PlayWinEffect(top: true);
-                if(TopPlayerType == .Local)
+                if case .Survival = GameMode
                 {
-                    BlockRush.PlaySound(name: "Winner");
+                    ScoreDisp = Score;
+                    AnimScore();
+                    PlayGameOverEffect();
+                }
+                else if case .TimeAttack = GameMode
+                {
+                    ScoreDisp = Score;
+                    AnimScore();
+                    PlayGameOverEffect();
                 }
                 else
                 {
-                    BlockRush.PlaySound(name: "Loser");
+                    PlayLoseEffect(top: false);
+                    PlayWinEffect(top: true);
+                    if(TopPlayerType == .Local)
+                    {
+                        BlockRush.PlaySound(name: "Winner");
+                    }
+                    else
+                    {
+                        BlockRush.PlaySound(name: "Loser");
+                    }
                 }
             }
             else
@@ -1097,6 +1121,70 @@ class GameScene: SKScene
         OverpowerLabel.run(.sequence([.wait(forDuration: 0.1),.fadeOut(withDuration: 1)]));
         OverpowerAmountLabel.run(.sequence([.wait(forDuration: 0.1),
                                       .group([.fadeOut(withDuration: 2),.scale(to: 2, duration: 2)])]));
+    }
+    
+    /**
+     Place the GAME OVER banner on the top of the field.
+     */
+    func PlayGameOverEffect()
+    {
+        let GroupNode = SKNode();
+        let BGNode = SKSpriteNode(color: .gray, size: CGSize(width: BlockRush.GameWidth, height: BlockRush.BlockWidth*2));
+        let TextNode = SKLabelNode(text: "GAME OVER");
+        TextNode.fontName = "Avenir-Black";
+        TextNode.fontSize = BlockRush.BlockWidth*1.25;
+        TextNode.verticalAlignmentMode = .center;
+        TextNode.fontColor = .red;
+        
+        GroupNode.addChild(BGNode);
+        GroupNode.addChild(TextNode);
+        GroupNode.position.y = BlockRush.GameHeight/4;
+        
+        GroupNode.zPosition = 10;
+        self.addChild(GroupNode);
+        
+        if case .Survival = GameMode,
+        Score > HighScore
+        {
+            BlockRush.PlaySound(name: "Winner");
+            BlockRush.SurvivalHighScore = Score;
+            let nhs = SKLabelNode(fontNamed: "Avenir");
+            nhs.text = "NEW HIGH SCORE!";
+            nhs.fontSize = BlockRush.BlockWidth*0.75;
+            nhs.fontColor = .yellow;
+            nhs.position.y = BlockRush.BlockWidth*1.5;
+            addChild(nhs);
+            BlockRush.saveHighScores();
+        }
+        else if case .TimeAttack = GameMode,
+        Score > HighScore
+        {
+            BlockRush.PlaySound(name: "Winner");
+            BlockRush.TimeAttackHighScore = Score;
+            let nhs = SKLabelNode(fontNamed: "Avenir");
+            nhs.text = "NEW HIGH SCORE!";
+            nhs.fontSize = BlockRush.BlockWidth*0.75;
+            nhs.fontColor = .yellow;
+            nhs.position.y = BlockRush.BlockWidth*1.5;
+            addChild(nhs);
+            BlockRush.saveHighScores();
+        }
+        else
+        {
+            BlockRush.PlaySound(name: "Loser");
+            let nhs = SKLabelNode(fontNamed: "Avenir");
+            nhs.text = BlockRush.Commafy(value: HighScore);
+            nhs.fontSize = BlockRush.BlockWidth;
+            nhs.fontColor = .white;
+            nhs.position.y = BlockRush.BlockWidth*1.25;
+            addChild(nhs);
+            let hsl = SKLabelNode(fontNamed: "Avenir");
+            hsl.text = "Current high score:";
+            hsl.fontSize = BlockRush.BlockWidth/2;
+            hsl.fontColor = .white;
+            hsl.position.y = BlockRush.BlockWidth*2;
+            addChild(hsl);
+        }
     }
     
     /**

@@ -26,6 +26,7 @@ final class BlockRush
     public static func Initialize()
     {
         loadSettings();
+        loadHighScores();
         
         ScreenWidth = UIScreen.main.nativeBounds.width;
         ScreenHeight = UIScreen.main.nativeBounds.height;
@@ -79,7 +80,69 @@ final class BlockRush
             //print("\(s)=\(Settings[s]!.rawValue)")
         }
     }
-    
+    /**
+     Initializes `BlockRush.SurvivalHighScore` and `BlockRush.TimeAttackHighScore` from their files.
+     */
+    public static func loadHighScores()
+    {
+        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        {
+            do
+            {
+                let fileURL = dir.appendingPathComponent("survival.hs");
+                let FileString = try String(contentsOf: fileURL,encoding: .utf8);
+                let ScoreStrings = FileString.components(separatedBy: .newlines);
+                
+                for Str in ScoreStrings
+                {
+                    if(Str != "")
+                    {
+                        if let hs = Int(Str)
+                        {
+                            SurvivalHighScore = hs;
+                        }
+                        else
+                        {
+                            print("Error loading Survival High Score");
+                        }
+                    }
+                }
+                print("Survival High Score Loaded: \(TimeAttackHighScore)");
+            }
+            catch
+            {
+                print("Error loading Survival High Score");
+            }
+            //
+            do
+            {
+                let fileURL = dir.appendingPathComponent("timeattack.hs");
+                let FileString = try String(contentsOf: fileURL,encoding: .utf8);
+                let ScoreStrings = FileString.components(separatedBy: .newlines);
+                
+                for Str in ScoreStrings
+                {
+                    if(Str != "")
+                    {
+                        if let hs = Int(Str)
+                        {
+                            TimeAttackHighScore = hs;
+                        }
+                        else
+                        {
+                            print("Error loading Time Attack High Score");
+                        }
+                    }
+                }
+                print("Time Attack High Score Loaded: \(TimeAttackHighScore)");
+            }
+            catch
+            {
+                print("Error loading Time Attack High Score");
+            }
+        }
+        
+    }
     public static func saveSettings()
     {
         var settingsString = "";
@@ -101,6 +164,32 @@ final class BlockRush
             catch
             {
                 print("Error saving settings");
+            }
+        }
+    }
+    public static func saveHighScores()
+    {
+        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        {
+            do
+            {
+                let fileURL = dir.appendingPathComponent("survival.hs");
+                try String(SurvivalHighScore).write(to: fileURL, atomically: true, encoding: .utf8);
+                print("Survival High Score Saved");
+            }
+            catch
+            {
+                print("Error saving Survival High Score");
+            }
+            do
+            {
+                let fileURL = dir.appendingPathComponent("timeattack.hs");
+                try String(TimeAttackHighScore).write(to: fileURL, atomically: true, encoding: .utf8);
+                print("Time Attack High Score Saved");
+            }
+            catch
+            {
+                print("Error saving Time Attack High Score");
             }
         }
     }
@@ -233,6 +322,10 @@ final class BlockRush
             print(error.localizedDescription);
         }
     }
+    
+    public static var SurvivalHighScore = 0;
+    public static var TimeAttackHighScore = 0;
+    
     static func StopMusic()
     {
         player?.stop();

@@ -34,7 +34,7 @@ final class FixedGame
         
         switch(name)
         {
-        case "Offense":
+        case "General Tips":
             return eventQueue;
         case "Defense":
             return eventQueue;
