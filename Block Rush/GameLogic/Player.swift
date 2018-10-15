@@ -175,6 +175,12 @@ class Player
     {
         let x1 = generator.nextInt();
         let x2 = generator.nextInt();
+        //Skip games that begin with a piece that has 2 blocks of the same color.
+        if(x1 == x2 && pieceQueue.isEmpty())
+        {
+            GeneratePiece();
+            return;
+        }
         let p = Piece(nFront:x1,nRear:x2);
         if(IsHidden())
         {

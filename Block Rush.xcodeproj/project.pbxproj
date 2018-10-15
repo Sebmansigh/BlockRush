@@ -75,7 +75,6 @@
 		A8E3F24B217276D8006DA2DA /* Dialogue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F24A217276D8006DA2DA /* Dialogue.swift */; };
 		A8E3F24F2172869D006DA2DA /* GameEventTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F24E2172869D006DA2DA /* GameEventTrigger.swift */; };
 		A8E3F2532172B33D006DA2DA /* StopPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F2522172B33D006DA2DA /* StopPlayer.swift */; };
-		A8E3F2552172B35F006DA2DA /* StopBottomPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F2542172B35F006DA2DA /* StopBottomPlayer.swift */; };
 		A8E3F2572172B465006DA2DA /* DisableCountdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F2562172B465006DA2DA /* DisableCountdown.swift */; };
 		A8E3F2592172B571006DA2DA /* Stall.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F2582172B571006DA2DA /* Stall.swift */; };
 		A8E3F25B2172B66A006DA2DA /* DisableAllInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F25A2172B66A006DA2DA /* DisableAllInputs.swift */; };
@@ -85,6 +84,9 @@
 		A8E3F2632172D267006DA2DA /* EnableInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F2622172D267006DA2DA /* EnableInput.swift */; };
 		A8E3F2652172DDBF006DA2DA /* ForceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F2642172DDBF006DA2DA /* ForceInput.swift */; };
 		A8E3F2672172E2F4006DA2DA /* MoveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F2662172E2F4006DA2DA /* MoveStack.swift */; };
+		A8E3F2692173ED1F006DA2DA /* SetStoredMovement.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F2682173ED1F006DA2DA /* SetStoredMovement.swift */; };
+		A8E3F26B2173EE16006DA2DA /* SetFrameNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F26A2173EE16006DA2DA /* SetFrameNumber.swift */; };
+		A8E3F26D2173F411006DA2DA /* BeginFixedGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F26C2173F411006DA2DA /* BeginFixedGame.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,7 +181,6 @@
 		A8E3F24A217276D8006DA2DA /* Dialogue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialogue.swift; sourceTree = "<group>"; };
 		A8E3F24E2172869D006DA2DA /* GameEventTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEventTrigger.swift; sourceTree = "<group>"; };
 		A8E3F2522172B33D006DA2DA /* StopPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopPlayer.swift; sourceTree = "<group>"; };
-		A8E3F2542172B35F006DA2DA /* StopBottomPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopBottomPlayer.swift; sourceTree = "<group>"; };
 		A8E3F2562172B465006DA2DA /* DisableCountdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisableCountdown.swift; sourceTree = "<group>"; };
 		A8E3F2582172B571006DA2DA /* Stall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stall.swift; sourceTree = "<group>"; };
 		A8E3F25A2172B66A006DA2DA /* DisableAllInputs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisableAllInputs.swift; sourceTree = "<group>"; };
@@ -189,6 +190,9 @@
 		A8E3F2622172D267006DA2DA /* EnableInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableInput.swift; sourceTree = "<group>"; };
 		A8E3F2642172DDBF006DA2DA /* ForceInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceInput.swift; sourceTree = "<group>"; };
 		A8E3F2662172E2F4006DA2DA /* MoveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveStack.swift; sourceTree = "<group>"; };
+		A8E3F2682173ED1F006DA2DA /* SetStoredMovement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetStoredMovement.swift; sourceTree = "<group>"; };
+		A8E3F26A2173EE16006DA2DA /* SetFrameNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFrameNumber.swift; sourceTree = "<group>"; };
+		A8E3F26C2173F411006DA2DA /* BeginFixedGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeginFixedGame.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -420,7 +424,6 @@
 				A8E3F2662172E2F4006DA2DA /* MoveStack.swift */,
 				A8E3F23D21727290006DA2DA /* HidePlayer.swift */,
 				A8E3F2522172B33D006DA2DA /* StopPlayer.swift */,
-				A8E3F2542172B35F006DA2DA /* StopBottomPlayer.swift */,
 				A8E3F24A217276D8006DA2DA /* Dialogue.swift */,
 				A8E3F2562172B465006DA2DA /* DisableCountdown.swift */,
 				A8E3F2582172B571006DA2DA /* Stall.swift */,
@@ -430,6 +433,9 @@
 				A8E3F2602172C98F006DA2DA /* ForceQueuePiece.swift */,
 				A8E3F2622172D267006DA2DA /* EnableInput.swift */,
 				A8E3F2642172DDBF006DA2DA /* ForceInput.swift */,
+				A8E3F2682173ED1F006DA2DA /* SetStoredMovement.swift */,
+				A8E3F26A2173EE16006DA2DA /* SetFrameNumber.swift */,
+				A8E3F26C2173F411006DA2DA /* BeginFixedGame.swift */,
 			);
 			path = GameEvents;
 			sourceTree = "<group>";
@@ -597,11 +603,11 @@
 			files = (
 				A80CDA12206C382700AA579B /* Player.swift in Sources */,
 				A8E3F2632172D267006DA2DA /* EnableInput.swift in Sources */,
+				A8E3F2692173ED1F006DA2DA /* SetStoredMovement.swift in Sources */,
 				A8E3F2532172B33D006DA2DA /* StopPlayer.swift in Sources */,
 				A8C395D720795B3B00D57AE0 /* MenuAction.swift in Sources */,
 				A8C395D320795A5C00D57AE0 /* MenuOption.swift in Sources */,
 				A8E3F24F2172869D006DA2DA /* GameEventTrigger.swift in Sources */,
-				A8E3F2552172B35F006DA2DA /* StopBottomPlayer.swift in Sources */,
 				A8E3F24121727360006DA2DA /* NoviceBot.swift in Sources */,
 				A80CDA10206C14EC00AA579B /* Input.swift in Sources */,
 				A8D1D7FD209534ED004004EA /* MediatorDevice.swift in Sources */,
@@ -626,10 +632,12 @@
 				A8E3F25B2172B66A006DA2DA /* DisableAllInputs.swift in Sources */,
 				A8E3F2672172E2F4006DA2DA /* MoveStack.swift in Sources */,
 				A80539F6206961420059562D /* BlockRush.swift in Sources */,
+				A8E3F26B2173EE16006DA2DA /* SetFrameNumber.swift in Sources */,
 				A80CDA0E206C0FB800AA579B /* InputDevice.swift in Sources */,
 				A8E3F2472172753F006DA2DA /* MasterBot.swift in Sources */,
 				A80539F420686FA40059562D /* Piece.swift in Sources */,
 				A8E3F2612172C98F006DA2DA /* ForceQueuePiece.swift in Sources */,
+				A8E3F26D2173F411006DA2DA /* BeginFixedGame.swift in Sources */,
 				A80539F8206963DC0059562D /* PlayField.swift in Sources */,
 				A80539F220686CC60059562D /* Queue.swift in Sources */,
 				A80539C420685A650059562D /* GameViewController.swift in Sources */,

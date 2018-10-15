@@ -1094,8 +1094,8 @@ class GameScene: SKScene
         OverpowerLabel.removeAllActions();
         OverpowerAmountLabel.removeAllActions();
         
-        OverpowerLabel.run(.sequence([.wait(forDuration: 1),.fadeOut(withDuration: 1)]));
-        OverpowerAmountLabel.run(.sequence([.wait(forDuration: 1),
+        OverpowerLabel.run(.sequence([.wait(forDuration: 0.1),.fadeOut(withDuration: 1)]));
+        OverpowerAmountLabel.run(.sequence([.wait(forDuration: 0.1),
                                       .group([.fadeOut(withDuration: 2),.scale(to: 2, duration: 2)])]));
     }
     

@@ -140,6 +140,8 @@ class MainMenuScene: SKScene
         }
         ControllerObserver.initializeControllers();
         
+        GameEvent.ClearEvents();
+        
         BlockRush.SoundScene = self;
         
         titleNode = SKLabelNode(text: "BLOCK RUSH");
@@ -155,9 +157,9 @@ class MainMenuScene: SKScene
                         menuOptions:
                         [GameMenu(title:"Play Solo",
                                   menuOptions:
-                            [MenuAction(title:"Practice VS", action: playTypedGame(.Practice)),
-                             MenuAction(title:"Survival", action: playTypedGame(.Survival)),
-                             MenuAction(title:"Time Attack", action: playTypedGame(.TimeAttack))
+                            [MenuAction(title:"Survival", action: playTypedGame(.Survival)),
+                             MenuAction(title:"Time Attack", action: playTypedGame(.TimeAttack)),
+                             MenuAction(title:"Practice VS", action: playTypedGame(.Practice))
                             ]),
                             GameMenu(title:"Play VS",
                                   menuOptions:
@@ -175,9 +177,9 @@ class MainMenuScene: SKScene
                          GameMenu(title:"Lessons",
                                   menuOptions:
                                   [MenuAction(title: "Tutorial", action: playTypedGame(.Fixed(name: "Tutorial"))),
-                                   GameMenu(title: "Novice"),
-                                   GameMenu(title: "Adept"),
-                                   MenuAction(title:"Expert", action: playDemoGame("Demo1"))
+                                   MenuAction(title: "Basic Chains", action: playTypedGame(.Fixed(name: "Basic Chains"))),
+                                   MenuAction(title: "Defense", action: playTypedGame(.Fixed(name: "Defense"))),
+                                   MenuAction(title: "General Tips", action: playTypedGame(.Fixed(name: "General Tips")))
                                   ]),
                          GameMenu(title:"Settings",
                                   menuOptions:

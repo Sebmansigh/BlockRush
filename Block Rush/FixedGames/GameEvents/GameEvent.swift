@@ -7,6 +7,12 @@
 
 import Foundation
 
+//note: The GameEvent system is not designed to be used in multiplayer games and WILL
+//result in non-deterministic games if used in them (and probably with single-player games, too.)
+//They are designed to be used only with Fixed Games. For this reason, I've done the bare
+//minimum amount of work to get these to produce the desired Fixed Games, and gaps/inconsistencies
+//will exist. I know it's not pretty, but you'll have to live with it.
+
 /**
  Causes some specified behavior in a Fixed Game.
  */
@@ -21,12 +27,11 @@ class GameEvent
      */
     private var ActiveEvent = false;
     /**
-     If not nil, stores a closure that is run every frame. If it returns true, it is executed.
-     If it is nil, this event is executed immediatly when it is at the head of the queue.
+     The trigger that needs to be fired in order to this event to be executed.
      */
     private var Trigger: GameEventTrigger?;
     
-     
+    
     /**
      Stores a reference to the current game scene
      */
@@ -94,7 +99,7 @@ class GameEvent
             {
                 let _ = eq.dequeue();
                 event.OnTrigger();
-                print("Out of queue: \(type(of: event))");
+                //print("Out of queue: \(type(of: event))");
                 DoEvents();
             }
         }
@@ -111,13 +116,13 @@ class GameEvent
         {
             var ev = eq.peek();
             ev.ActiveEvent = true;
-            print("Top of queue: \(type(of: ev))");
+            //print("Top of queue: \(type(of: ev))");
             ev.AwaitTrigger();
             while ev.Trigger == nil
             {
                 let _ = eq.dequeue();
                 ev.OnTrigger();
-                print("Out of queue: \(type(of: ev))");
+                //print("Out of queue: \(type(of: ev))");
                 if(eq.isEmpty())
                 {
                     break;
@@ -126,7 +131,7 @@ class GameEvent
                 {
                     ev = eq.peek();
                     ev.ActiveEvent = true;
-                    print("Top of queue: \(type(of: ev))");
+                    //print("Top of queue: \(type(of: ev))");
                     ev.AwaitTrigger();
                 }
             }
@@ -149,5 +154,11 @@ class GameEvent
     func OnTrigger()
     {
         fatalError("Execute(scene:) not overriden by a subclass.");
+    }
+    
+    deinit
+    {
+        let x = self;
+        print("Deallocated \(type(of: x))");
     }
 }

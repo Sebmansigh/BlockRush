@@ -17,7 +17,7 @@ extension GameEvent
         }
         public convenience init(scene s:GameScene,numFrames: Int)
         {
-            self.init(scene:s,trigger:.Repeated(.OnFrameUpdate,numTimes: numFrames));
+            self.init(scene:s,trigger:.Repeated(.OnGameFrameUpdate,numTimes: numFrames));
         }
         public override init(scene s:GameScene, trigger t: GameEventTrigger?)
         {
