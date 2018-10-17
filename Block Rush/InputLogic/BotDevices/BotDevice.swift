@@ -7,7 +7,13 @@
 
 import Foundation
 
-final class BotDevice
+protocol BotDevice
 {
-    private init(){}
+    ///To be called when a game begins.
+    ///BotDevices should set their state to start-of-game status here.
+    func ResetState() -> Void
+}
+
+struct BotDevices
+{
 }

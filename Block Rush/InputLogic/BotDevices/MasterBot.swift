@@ -7,15 +7,20 @@
 
 import Foundation
 
-extension BotDevice
+extension BotDevices
 {
-    public class Master: InputDevice
+    public class Master: InputDevice, BotDevice
     {
         public override init() {fatalError("Expert Bot is not ready to play.");};
         
         public override func debugText() -> String
         {
             return "ExpertBot";
+        }
+        
+        func ResetState()
+        {
+            
         }
     }
 }

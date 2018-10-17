@@ -7,9 +7,9 @@
 
 import Foundation
 
-extension BotDevice
+extension BotDevices
 {
-    public class Adept: InputDevice
+    public class Adept: InputDevice, BotDevice
     {
         public override init() {};
         
@@ -23,10 +23,42 @@ extension BotDevice
             return true;
         }
         
+        ///Which column to play in. -1 if undecided
         var Decision: Int = -1;
-        
+        ///The block that causes the chain to clear if removed
+        var Trigger: Block? = nil;
+        /// The blocks in the second link of the chain.
+        var InChain = [Block]();
+        ///Which direction a match should be made from in order to clear the chain.
+        var TriggerDir: (Int,Int) = (0,0);
         private func MakeDecision() -> (Int,Bool)
         {
+            if let t = Trigger
+            {
+                var forget = false;
+                if(t.col == -1)
+                {
+                    forget = true;
+                }
+                //if any blocks in the chain link have been cleared, forget the chain.
+                if(!forget)
+                {
+                    for c in InChain
+                    {
+                        if(c.col == -1)
+                        {
+                            forget = true;
+                            break;
+                        }
+                    }
+                }
+                if(forget)
+                {
+                    Trigger = nil;
+                    InChain = [];
+                    TriggerDir = (0,0);
+                }
+            }
             let ActivePiece:Piece;
             if let p = player!.readyPiece
             {
@@ -36,7 +68,9 @@ extension BotDevice
             {
                 return (-1,false);
             }
-            var Best = (4,false);
+            
+            //If all scores are -1(death), then accept your fate by playing in column 4.
+            var BestMove = (4,false);
             var BestScore = -1;
             
             let surfaceData = playField!.getSurfaceData(player!);
@@ -51,30 +85,47 @@ extension BotDevice
                 moveAdjustment = x;
             }
             
+            ////Implementation note: currently only works if Bot is Top player. Will fix in the future.
+            
             for i in 0...5
             {
-                //Don't consider a move that puts you in game over status
-                if(surfaceData[i]+moveAdjustment > 10)
+                //Don't consider a move that puts you in game over status if you have a move that doesn't
+                if(surfaceData[i]+moveAdjustment > 10 && BestScore > -1)
                 {
                     continue;
                 }
                 //
-                for flip in [true,false]
+                for flip in [false,true]
                 {
                     let frontCol = flip ? ActivePiece.FrontBlock.col : ActivePiece.RearBlock.col;
                     let rearCol  = flip ? ActivePiece.RearBlock.col : ActivePiece.FrontBlock.col;
-                    var Score = 0;
                     
+                    if(frontCol == rearCol)
+                    {
+                        if(flip) //The cases are identical.
+                        {
+                            break;
+                        }
+                    }
                     
+                    var Score = 100;
+                    
+                    //If matches are made in this choice, add number of blocks cleared to the score
+                    //  If the trigger is in the blocks matched, add 20 to the score
+                    //  If blocks from the second chain link are in this set, deduct 100 from the score
+                    //Otherwise, if this choice extends the trigger, add 30 to the score
+                    //Otherwise, if this choice creates a new, uninterfered chain link, add 40 to the score
+                    //  If the stack has 3 or fewer blocks of height remaining to work with, deduct 50 from the score.
+                    //Otherwise, if the trigger interfered with, deduct 100 from the score
                     
                     if(Score > BestScore)
                     {
-                        Best = (i,flip);
+                        BestMove = (i,flip);
                         BestScore = Score;
                     }
                 }
             }
-            return Best;
+            return BestMove;
         }
         
         var FrameCt: Int = 0;
@@ -160,6 +211,15 @@ extension BotDevice
             //
             return ret.rawValue;
         }
+        
+        func ResetState()
+        {
+            Decision = -1;
+            Trigger = nil;
+            InChain = [];
+            TriggerDir = (0,0);
+        }
     }
+    
     
 }

@@ -7,9 +7,9 @@
 
 import Foundation
 
-extension BotDevice
+extension BotDevices
 {
-    class Novice: InputDevice
+    class Novice: InputDevice,BotDevice
     {
     public override init() {};
     
@@ -21,6 +21,11 @@ extension BotDevice
     override func CanEval() -> Bool
     {
         return true;
+    }
+        
+    func ResetState()
+    {
+        FrameCt = 0;
     }
     
     var FrameCt: Int = 0;

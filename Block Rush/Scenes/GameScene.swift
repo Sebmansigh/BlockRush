@@ -204,16 +204,16 @@ class GameScene: SKScene
             TopDevice = DelayedDevice(device: ReplayDevice(GameData!.2), frames:15);
             CreatePauseButton();
         case .BotNovice:
-            TopDevice = BotDevice.Novice();
+            TopDevice = BotDevices.Novice();
             CreatePauseButton();
         case .BotAdept:
-            TopDevice = BotDevice.Adept();
+            TopDevice = BotDevices.Adept();
             CreatePauseButton();
         case .BotExpert:
-            TopDevice = BotDevice.Expert();
+            TopDevice = BotDevices.Expert();
             CreatePauseButton();
         case .BotMaster:
-            TopDevice = BotDevice.Master();
+            TopDevice = BotDevices.Master();
             CreatePauseButton();
         case .None:
             switch(GameMode)
@@ -237,19 +237,29 @@ class GameScene: SKScene
         case .Replay:
             BottomDevice = ReplayDevice(GameData!.1);
         case .BotNovice:
-            BottomDevice = BotDevice.Novice();
+            BottomDevice = BotDevices.Novice();
         case .BotAdept:
-            BottomDevice = BotDevice.Adept();
+            BottomDevice = BotDevices.Adept();
         case .BotExpert:
-            BottomDevice = BotDevice.Expert();
+            BottomDevice = BotDevices.Expert();
         case .BotMaster:
-            BottomDevice = BotDevice.Master();
+            BottomDevice = BotDevices.Master();
         default:
             fatalError("Unkown Bottom Player Type: "+String(describing: TopPlayerType));
         }
         
         DebugTopObj = TopDevice;
         DebugBottomObj = BottomDevice;
+        
+        if let device = TopDevice as? BotDevice
+        {
+            device.ResetState()
+        }
+        if let device = BottomDevice as? BotDevice
+        {
+            device.ResetState()
+        }
+        
         playerTop = TopPlayer(rngSeed: InitialSeed, scene:self, device: TopDevice);
         playerBottom = BottomPlayer(rngSeed: InitialSeed, scene:self, device: BottomDevice);
         
