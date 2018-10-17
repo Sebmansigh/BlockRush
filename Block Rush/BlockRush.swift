@@ -287,8 +287,8 @@ final class BlockRush
         //let SfxVolume = Float(Settings[ .SoundEffectVolume ]!.rawValue)/100.0;
         
         let action = Sounds[name]!.copy() as! SKAction;
-        
-        SoundScene!.run(action);
+        let vol = Float(Settings[.SoundEffectVolume]!.rawValue)/100.0;
+        SoundScene!.run(.group([action,.changeVolume(to: vol, duration: 0.25)]));
     }
     
     public static var player: AVAudioPlayer? = nil;
@@ -307,7 +307,7 @@ final class BlockRush
                 player!.stop();
             }
             if #available(iOS 10.0, *) {
-                try AVAudioSession.sharedInstance().setCategory(.playback,mode:.default)
+                try AVAudioSession.sharedInstance().setCategory(.ambient,mode:.default)
             } else {
                 // Fallback on earlier versions
             };

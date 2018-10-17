@@ -20,7 +20,7 @@ extension GameEvent
             for line in t.split(separator: "\n")
             {
                 let label = SKLabelNode(fontNamed: "Avenir");
-                label.position.y = BlockRush.GameHeight/4;
+                label.position.y = BlockRush.BlockWidth*3.75;
                 label.fontSize = BlockRush.BlockWidth*2/3;
                 label.text = String(line);
                 labels.append(label);
@@ -83,7 +83,7 @@ extension GameEvent
             for line in t.split(separator: "\n")
             {
                 let label = SKLabelNode(fontNamed: "Avenir");
-                label.position.y = BlockRush.GameHeight/4;
+                label.position.y = BlockRush.BlockWidth*3.75;
                 label.fontSize = BlockRush.BlockWidth*2/3;
                 label.text = String(line);
                 labels.append(label);

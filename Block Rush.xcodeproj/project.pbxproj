@@ -398,8 +398,8 @@
 			isa = PBXGroup;
 			children = (
 				A83C577320B11266002A482D /* DemoGame.swift */,
+				A8E3F24E2172869D006DA2DA /* GameEventTrigger.swift */,
 				A8E3F23A21726DD4006DA2DA /* FixedGame.swift */,
-				A8E3F24D21728682006DA2DA /* GameEventTriggers */,
 				A8E3F24C21728657006DA2DA /* GameEvents */,
 			);
 			path = FixedGames;
@@ -438,14 +438,6 @@
 				A8E3F26C2173F411006DA2DA /* BeginFixedGame.swift */,
 			);
 			path = GameEvents;
-			sourceTree = "<group>";
-		};
-		A8E3F24D21728682006DA2DA /* GameEventTriggers */ = {
-			isa = PBXGroup;
-			children = (
-				A8E3F24E2172869D006DA2DA /* GameEventTrigger.swift */,
-			);
-			path = GameEventTriggers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

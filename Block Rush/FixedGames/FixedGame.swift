@@ -37,6 +37,14 @@ final class FixedGame
         case "General Tips":
             return eventQueue;
         case "Defense":
+            en(GameEvent.DisableCountdown(scene:gameScene));
+            en(GameEvent.SetFrameNumber(scene:gameScene,value:180));
+            en(GameEvent.StopTopPlayer(scene: gameScene));
+            en(GameEvent.StopBottomPlayer(scene: gameScene));
+            en(GameEvent.DisableAllInputs(scene: gameScene));
+            en(GameEvent.Stall(scene:gameScene, numFrames:90));
+            en(GameEvent.Dialogue(scene:gameScene, text:"Let's bring out\nan opponent for\nthis one."));
+            en(GameEvent.Dialogue(scene:gameScene, text:"Sorry if this is\na little hard\nto read."));
             return eventQueue;
         case "Basic Chains":
             en(GameEvent.HideTopPlayer(scene: gameScene));

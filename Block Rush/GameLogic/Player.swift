@@ -55,6 +55,8 @@ class Player
     internal var timeGaugeBar: SKSpriteNode;
     ///The word "TIME" under the Time Gauge.
     internal var timeLabelNode: SKLabelNode;
+    ///The word "NEXT" under the Time Gauge.
+    internal var nextLabelNode: SKLabelNode;
     
     ///Whether or not the playfield is accepting input from the player.
     ///The player can be frozen if, for instance, a chain from this player is resolving.
@@ -122,6 +124,15 @@ class Player
         timeLabelNode.zRotation = .pi;
         timeLabelNode.verticalAlignmentMode = .top;
         
+        nextLabelNode = SKLabelNode(text:"NEXT");
+        nextLabelNode.fontName = "Avenir-Black";
+        nextLabelNode.fontSize = BlockRush.BlockWidth*2/7;
+        nextLabelNode.position.y = timeGaugeNode.size.height/2;
+        nextLabelNode.verticalAlignmentMode = .top;
+
+        nextLabelNode.position.x =  BlockRush.GameWidth * 0.44;
+        nextLabelNode.position.y = BlockRush.GameHeight * (-0.45);
+        
         timeLabelNode.fontColor = .white;
         //
         
@@ -135,6 +146,7 @@ class Player
         timeGaugeNode.addChild(timeGaugeBar);
         timeGaugeNode.addChild(timeLabelNode);
         scene.addChild(timeGaugeNode);
+        scene.addChild(nextLabelNode);
         SceneUpdate();
     }
     

@@ -23,30 +23,86 @@ extension BotDevice
             return true;
         }
         
+        var Decision: Int = -1;
+        
+        private func MakeDecision() -> (Int,Bool)
+        {
+            let ActivePiece:Piece;
+            if let p = player!.readyPiece
+            {
+                ActivePiece = p;
+            }
+            else
+            {
+                return (-1,false);
+            }
+            var Best = (4,false);
+            var BestScore = -1;
+            
+            let surfaceData = playField!.getSurfaceData(player!);
+            let moveAdjustment:Int
+            do
+            {
+                var x = playField!.moveAmount / 16;
+                if player! is BottomPlayer
+                {
+                    x = -x;
+                }
+                moveAdjustment = x;
+            }
+            
+            for i in 0...5
+            {
+                //Don't consider a move that puts you in game over status
+                if(surfaceData[i]+moveAdjustment > 10)
+                {
+                    continue;
+                }
+                //
+                for flip in [true,false]
+                {
+                    let frontCol = flip ? ActivePiece.FrontBlock.col : ActivePiece.RearBlock.col;
+                    let rearCol  = flip ? ActivePiece.RearBlock.col : ActivePiece.FrontBlock.col;
+                    var Score = 0;
+                    
+                    
+                    
+                    if(Score > BestScore)
+                    {
+                        Best = (i,flip);
+                        BestScore = Score;
+                    }
+                }
+            }
+            return Best;
+        }
+        
         var FrameCt: Int = 0;
         
         override func Eval() -> UInt8
         {
+            var FlipPiece = false;
             if(player!.isFrozen() || player!.readyPiece == nil)
             {
                 return 0;
             }
             FrameCt += 1;
+            
             var ret = Input.NONE;
             
-            //
-            var t = 0;
-            var min = playField!.rows();
-            
-            let surfaceData = playField!.getSurfaceData(player!);
-            for i in 0...playField!.columns()-1
+            if(Decision != -1)
             {
-                if(surfaceData[i] < min)
+                let x = MakeDecision();
+                if(x.0 == -1)
                 {
-                    t = i;
-                    min = surfaceData[i];
+                    return 0;
                 }
+                Decision = x.0;
+                FlipPiece = x.1;
             }
+            
+            //
+            
             var inputRate = 30;
             if(player!.timeLeft < 500)
             {
@@ -62,30 +118,23 @@ extension BotDevice
             if(FrameCt % inputRate == 0)
             {
                 //print("Surface state before input: "+String(describing: surfaceData));
-                if(player!.columnOver == t)
+                if(FlipPiece)
+                {
+                    ret = Input.FLIP;
+                }
+                else if(player!.columnOver == Decision)
                 {
                     if(player!.readyPiece == nil)
                     {
-                        return 0;
+                        ret = Input.NONE;
                     }
-                    else if let r = player!.readyPiece
+                    else
                     {
-                        let AtCol = playField!.SurfaceBlockAtColumn(column: t, player: player!)?.col;
-                        if(r.FrontBlock.col == AtCol)
-                        {
-                            ret = Input.PLAY;
-                        }
-                        else if(r.RearBlock.col == AtCol)
-                        {
-                            ret = Input.FLIP;
-                        }
-                        else
-                        {
-                            ret = Input.PLAY;
-                        }
+                        ret = Input.PLAY;
+                        Decision = -1;
                     }
                 }
-                else if(player!.columnOver < t)
+                else if(player!.columnOver < Decision)
                 {
                     if(player === playField!.playerBottom)
                     {

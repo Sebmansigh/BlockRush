@@ -11,7 +11,7 @@ import Foundation
 //result in non-deterministic games if used in them (and probably with single-player games, too.)
 //They are designed to be used only with Fixed Games. For this reason, I've done the bare
 //minimum amount of work to get these to produce the desired Fixed Games, and gaps/inconsistencies
-//will exist. I know it's not pretty, but you'll have to live with it.
+//will exist in these classes. I know it's not pretty, but you'll have to live with it.
 
 /**
  Causes some specified behavior in a Fixed Game.
