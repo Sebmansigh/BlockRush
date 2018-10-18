@@ -28,6 +28,8 @@ class GameScene: SKScene
      This variable is to be set before the scene is presented and its value is used in the initialization of the game scene.
      */
     public var TopPlayerType: PlayerType = .None;
+    
+    
     /**
      The initial seed of the piece sequences.
      

@@ -114,6 +114,12 @@ class PlayField
     /// In a game of Survival, stores how many 64ths of a unit of applied movement. Is 0 in all other game modes.
     var PartialMove = 0;
     
+    ///These are the "Flashing" effect when a block is over a potential match for the top player.
+    public var TopHelperNodes: [SKSpriteNode];
+    
+    ///These are the "Flashing" effect when a block is over a potential match for the bottom player.
+    public var BottomHelperNodes: [SKSpriteNode];
+    
     init(cols:Int, rows:Int, playerTop t:Player, playerBottom b: Player, scene:SKScene)
     {
         fieldNode = SKNode();
@@ -129,6 +135,8 @@ class PlayField
         playerBottom = b;
         movePower = 0;
         moveAmount = 0;
+        TopHelperNodes = [];
+        BottomHelperNodes = [];
         
         let inArr = Array<Block?>(repeating: nil, count:rows);
         Field = Array<Array<Block?>>(repeating: inArr, count:cols);
@@ -1144,7 +1152,13 @@ class PlayField
             }
         }
         
+        let helperPulseAlpha = sin(Double(GameFrame)/5) / 8 + 0.125;
         
+        for node in TopHelperNodes
+        {
+            node.removeFromParent();
+        }
+        TopHelperNodes = [];
         
         if(Tr)
         {
@@ -1171,6 +1185,16 @@ class PlayField
             
             gameScene.addChild(GhostTopFront!);
             gameScene.addChild(GhostTopRear!);
+            
+            let MatchData = PieceMatchesTop(column: playerTop.columnOver, colorFront: P.FrontBlock.col!, colorRear: P.RearBlock.col!).0;
+            for block in MatchData
+            {
+                let newNode = SKSpriteNode(color: .white, size:CGSize(width:BlockRush.BlockWidth,height:BlockRush.BlockWidth/2));
+                block.nod.addChild(newNode);
+                newNode.alpha = CGFloat(helperPulseAlpha);
+                newNode.zPosition = 100;
+                TopHelperNodes.append(newNode);
+            }
         }
         else
         {
@@ -1179,6 +1203,13 @@ class PlayField
             GhostTopFront = nil;
             GhostTopRear = nil;
         }
+        
+        
+        for node in BottomHelperNodes
+        {
+            node.removeFromParent();
+        }
+        BottomHelperNodes = [];
         
         if(Br)
         {
@@ -1206,6 +1237,15 @@ class PlayField
             
             gameScene.addChild(GhostBottomFront!);
             gameScene.addChild(GhostBottomRear!);
+            let MatchData = PieceMatchesBottom(column: playerBottom.columnOver, colorFront: P.FrontBlock.col!, colorRear: P.RearBlock.col!).0;
+            for block in MatchData
+            {
+                let newNode = SKSpriteNode(color: .white, size:CGSize(width:BlockRush.BlockWidth,height:BlockRush.BlockWidth/2));
+                block.nod.addChild(newNode);
+                newNode.alpha = CGFloat(helperPulseAlpha);
+                newNode.zPosition = 100;
+                BottomHelperNodes.append(newNode);
+            }
         }
         else
         {
@@ -1551,7 +1591,9 @@ class PlayField
         
         BaseNode.position = CGPoint(x: cX, y: cY)
         gameScene.addChild(BaseNode);
-        BaseNode.run(.fadeOut(withDuration: 3)) {
+        BaseNode.run(.sequence([.wait(forDuration: 2),
+                                .fadeOut(withDuration: 3)] ))
+        {
             BaseNode.removeFromParent();
         };
     }
@@ -1896,5 +1938,266 @@ class PlayField
             GameOverFrame = frame;
             Loser = player;
         }
+    }
+    
+    ///Returns an array of blocks that would be matched by a hypothetical piece played by the top player in the given column
+    ///If a block is included twice, it exists in two matches.
+    ///Also returns the length of the longest match or partial match formed by the addition of this piece.
+    public func PieceMatchesTop(column:Int,colorFront:Int,colorRear:Int) -> ([Block],Int)
+    {
+        let twinpiece = (colorFront == colorRear);
+        
+        var TotalMatched = [Block]();
+        //Detect Horizontal Matches
+        
+        let DetectVec = [(0,1),(1,0),(1,1),(-1,1)];
+        var BiggestMatchPart = 1;
+        for v in DetectVec
+        {
+            var DirMatched = [Block]();
+            let iDir = v.0;
+            let jDir = v.1;
+            
+            for CheckingRearPiece in [true,false]
+            {
+                var matchMin = 0, matchMax = 0;
+                var MaxDir = false;
+                //If matching vertically
+                if(v == (0,1))
+                {
+                    //Don't ever check the rear piece's vertical matches.
+                    if(CheckingRearPiece)
+                    {
+                        continue;
+                    }
+                    else if(twinpiece)
+                    {
+                        //Include the rear of the hypothetical piece in this match as the only block in the min direction.
+                        matchMin = -1;
+                    }
+                    //Don't bother checking in the rear piece's direction.
+                    MaxDir = true;
+                }
+                
+                
+                let startIPos = column;
+                let startJPos:Int;
+                if let surfacePiece = SurfaceBlockAtColumn(column: column, player: playerTop)
+                {
+                    startJPos = surfacePiece.jPos - 1 - (CheckingRearPiece ? 1 : 0);
+                }
+                else
+                {
+                    startJPos = rows()/2 - 1 - (CheckingRearPiece ? 1 : 0);
+                }
+                
+                let matchColor = CheckingRearPiece ? colorRear : colorFront;
+                while(true)
+                {
+                    let testIPos:Int;
+                    let testJPos:Int;
+                    if(MaxDir)
+                    {
+                        testIPos = startIPos+iDir*(matchMax+1);
+                        testJPos = startJPos+jDir*(matchMax+1);
+                    }
+                    else
+                    {
+                        testIPos = startIPos+iDir*(matchMin-1);
+                        testJPos = startJPos+jDir*(matchMin-1);
+                    }
+                    //
+                    if testIPos >= 0 && testIPos < 6,
+                        testJPos >= 0 && testJPos < rows(),
+                        let b = Field[testIPos][testJPos]
+                    {
+                        if let c = b.col,
+                            c == matchColor
+                        {
+                            //Include this piece.
+                            if(MaxDir)
+                            {
+                                matchMax+=1;
+                            }
+                            else
+                            {
+                                matchMin-=1;
+                            }
+                        }
+                            //Otherwise, stop testing in this direction
+                        else if(MaxDir)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            MaxDir = true;
+                        }
+                    }
+                        //Otherwise, stop testing in this direction
+                    else if(MaxDir)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        MaxDir = true;
+                    }
+                }
+                let matchPartLength = matchMax - matchMin + 1
+                if matchPartLength >= 4
+                {
+                    for x in matchMin...matchMax
+                    {
+                        let iPos = startIPos+x*iDir;
+                        let jPos = startJPos+x*jDir;
+                        if let b = Field[iPos][jPos]
+                        {
+                            DirMatched.append(b);
+                        }
+                    }
+                    /*
+                     print("Match detected at start position (\(startIPos),\(startJPos)) along direction \(v) in range \(matchMin)...\(matchMax) RearPiece:\(CheckingRearPiece)");
+                     */
+                }
+                if(matchPartLength > BiggestMatchPart)
+                {
+                    BiggestMatchPart = matchPartLength;
+                }
+            }
+            TotalMatched.append(contentsOf: DirMatched);
+        }
+        return (TotalMatched,BiggestMatchPart);
+    }
+
+    
+    ///Returns an array of blocks that would be matched by a hypothetical piece played by the bottom player in the given column
+    ///If a block is included twice, it exists in two matches.
+    ///Also returns the length of the longest match or partial match formed by the addition of this piece.
+    public func PieceMatchesBottom(column:Int,colorFront:Int,colorRear:Int) -> ([Block],Int)
+    {
+        let twinpiece = (colorFront == colorRear);
+        
+        var TotalMatched = [Block]();
+        //Detect Horizontal Matches
+        
+        let DetectVec = [(0,-1),(1,0),(1,-1),(-1,-1)];
+        var BiggestMatchPart = 1;
+        for v in DetectVec
+        {
+            var DirMatched = [Block]();
+            let iDir = v.0;
+            let jDir = v.1;
+            
+            for CheckingRearPiece in [true,false]
+            {
+                var matchMin = 0, matchMax = 0;
+                var MaxDir = false;
+                //If matching vertically
+                if(v == (0,-1))
+                {
+                    //Don't ever check the rear piece's vertical matches.
+                    if(CheckingRearPiece)
+                    {
+                        continue;
+                    }
+                    else if(twinpiece)
+                    {
+                        //Include the rear of the hypothetical piece in this match as the only block in the min direction.
+                        matchMin = -1;
+                    }
+                    //Don't bother checking in the rear piece's direction.
+                    MaxDir = true;
+                }
+                
+                
+                let startIPos = column;
+                let startJPos:Int;
+                if let surfacePiece = SurfaceBlockAtColumn(column: column, player: playerBottom)
+                {
+                    startJPos = surfacePiece.jPos + 1 + (CheckingRearPiece ? 1 : 0);
+                }
+                else
+                {
+                    startJPos = rows()/2 + (CheckingRearPiece ? 1 : 0);
+                }
+                
+                let matchColor = CheckingRearPiece ? colorRear : colorFront;
+                while(true)
+                {
+                    let testIPos:Int;
+                    let testJPos:Int;
+                    if(MaxDir)
+                    {
+                        testIPos = startIPos+iDir*(matchMax+1);
+                        testJPos = startJPos+jDir*(matchMax+1);
+                    }
+                    else
+                    {
+                        testIPos = startIPos+iDir*(matchMin-1);
+                        testJPos = startJPos+jDir*(matchMin-1);
+                    }
+                    //
+                    if testIPos >= 0 && testIPos < 6,
+                        testJPos >= 0 && testJPos < rows(),
+                        let b = Field[testIPos][testJPos]
+                    {
+                        if let c = b.col,
+                            c == matchColor
+                        {
+                            //Include this piece.
+                            if(MaxDir)
+                            {
+                                matchMax+=1;
+                            }
+                            else
+                            {
+                                matchMin-=1;
+                            }
+                        }
+                            //Otherwise, stop testing in this direction
+                        else if(MaxDir)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            MaxDir = true;
+                        }
+                    }
+                        //Otherwise, stop testing in this direction
+                    else if(MaxDir)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        MaxDir = true;
+                    }
+                }
+                let matchPartLength = matchMax - matchMin + 1
+                if matchPartLength >= 4
+                {
+                    for x in matchMin...matchMax
+                    {
+                        let iPos = startIPos+x*iDir;
+                        let jPos = startJPos+x*jDir;
+                        if let b = Field[iPos][jPos]
+                        {
+                            DirMatched.append(b);
+                        }
+                    }
+                    /*
+                    print("Match detected at start position (\(startIPos),\(startJPos)) along direction \(v) in range \(matchMin)...\(matchMax) RearPiece:\(CheckingRearPiece)");
+                    */
+                }
+                if(matchPartLength > BiggestMatchPart)
+                {
+                    BiggestMatchPart = matchPartLength;
+                }
+            }
+            TotalMatched.append(contentsOf: DirMatched);
+        }
+        return (TotalMatched,BiggestMatchPart);
     }
 }

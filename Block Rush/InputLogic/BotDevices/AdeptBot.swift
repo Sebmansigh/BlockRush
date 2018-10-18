@@ -31,6 +31,8 @@ extension BotDevices
         var InChain = [Block]();
         ///Which direction a match should be made from in order to clear the chain.
         var TriggerDir: (Int,Int) = (0,0);
+        
+        //Doesn't work 100% yet.
         private func MakeDecision() -> (Int,Bool)
         {
             if let t = Trigger
@@ -74,13 +76,20 @@ extension BotDevices
             var BestScore = -1;
             
             let surfaceData = playField!.getSurfaceData(player!);
-            let moveAdjustment:Int
+            let moveAdjustment:Int;
+            //
+            let pieceMatch: (Int,Int,Int) -> ([Block],Int)
             do
             {
                 var x = playField!.moveAmount / 16;
                 if player! is BottomPlayer
                 {
                     x = -x;
+                    pieceMatch = playField!.PieceMatchesBottom;
+                }
+                else
+                {
+                    pieceMatch = playField!.PieceMatchesTop;
                 }
                 moveAdjustment = x;
             }
@@ -89,16 +98,24 @@ extension BotDevices
             
             for i in 0...5
             {
+                var OverTop = false;
                 //Don't consider a move that puts you in game over status if you have a move that doesn't
-                if(surfaceData[i]+moveAdjustment > 10 && BestScore > -1)
+                if(surfaceData[i]+moveAdjustment >= 9)
                 {
-                    continue;
+                    if(BestScore > -1)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        OverTop = true;
+                    }
                 }
                 //
                 for flip in [false,true]
                 {
-                    let frontCol = flip ? ActivePiece.FrontBlock.col : ActivePiece.RearBlock.col;
-                    let rearCol  = flip ? ActivePiece.RearBlock.col : ActivePiece.FrontBlock.col;
+                    let frontCol = flip ? ActivePiece.FrontBlock.col! : ActivePiece.RearBlock.col!;
+                    let rearCol  = flip ? ActivePiece.RearBlock.col! : ActivePiece.FrontBlock.col!;
                     
                     if(frontCol == rearCol)
                     {
@@ -109,15 +126,45 @@ extension BotDevices
                     }
                     
                     var Score = 100;
-                    
-                    //If matches are made in this choice, add number of blocks cleared to the score
+                    if(OverTop)
+                    {
+                        Score = -1;
+                    }
+                    //If matches are made in this choice, add twice the number of blocks cleared to the score
                     //  If the trigger is in the blocks matched, add 20 to the score
-                    //  If blocks from the second chain link are in this set, deduct 100 from the score
+                    //    If blocks from the second chain link are in this set, deduct 100 from the score
                     //Otherwise, if this choice extends the trigger, add 30 to the score
                     //Otherwise, if this choice creates a new, uninterfered chain link, add 40 to the score
-                    //  If the stack has 3 or fewer blocks of height remaining to work with, deduct 50 from the score.
-                    //Otherwise, if the trigger interfered with, deduct 100 from the score
+                    //  If the stack has 6 or more blocks of height, deduct 50 from the score.
+                    //Otherwise, if the trigger is interfered with, deduct 100 from the score.
+                    //Otherwise, look at the field to determine how to make a match part larger
                     
+                    let PotentialData = pieceMatch(i,frontCol,rearCol);
+                    let MatchBlocks = PotentialData.0;
+                    if(!MatchBlocks.isEmpty)
+                    {
+                        print("Match deteced!");
+                        Score += MatchBlocks.count*2;
+                        if let t = Trigger,
+                           MatchBlocks.contains(t)
+                        {
+                            Score+=30;
+                            for chainblock in InChain
+                            {
+                                if(MatchBlocks.contains(chainblock))
+                                {
+                                    Score -= 100;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Score += PotentialData.1-surfaceData[i]*2;
+                    }
+                    
+                    //
                     if(Score > BestScore)
                     {
                         BestMove = (i,flip);
@@ -125,6 +172,7 @@ extension BotDevices
                     }
                 }
             }
+            print("Best Move found \(BestMove) with score \(BestScore)")
             return BestMove;
         }
         
@@ -132,6 +180,7 @@ extension BotDevices
         
         override func Eval() -> UInt8
         {
+            //print("EVAL CALLED ON ADEPT BOT");
             var FlipPiece = false;
             if(player!.isFrozen() || player!.readyPiece == nil)
             {
@@ -141,7 +190,7 @@ extension BotDevices
             
             var ret = Input.NONE;
             
-            if(Decision != -1)
+            if(Decision == -1)
             {
                 let x = MakeDecision();
                 if(x.0 == -1)
