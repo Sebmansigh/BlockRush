@@ -62,6 +62,7 @@ struct SettingOption: OptionSet, Hashable
         
         static let BasicShapes    = SettingOption(rawValue: 0b0000_0000);
         static let Flat           = SettingOption(rawValue: 0b0000_0001);
+        static let Solid          = SettingOption(rawValue: 0b0000_0010);
     }
     
     /**

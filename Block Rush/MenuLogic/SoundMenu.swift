@@ -35,6 +35,8 @@ class SoundMenu: GameMenu
     
     override func show(node: SKNode)
     {
+        titleNode.text = title;
+        
         GameMenu.focusMenu = self;
         inNode = node;
         titleNode.text = title;

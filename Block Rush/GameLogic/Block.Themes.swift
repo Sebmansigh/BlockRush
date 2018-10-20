@@ -44,6 +44,9 @@ extension Block
             SettingOption.TextureTheme.Flat: TextureTheme(
                 SKTexture(imageNamed: "BlockFlat")
             ),
+            SettingOption.TextureTheme.Solid: TextureTheme(
+                SKTexture(data: Data(bytes: [255,255,255,255]), size: CGSize(width:1,height:1))
+            )
         ]
     
     static func ==(lhs: Block, rhs: Block) -> Bool

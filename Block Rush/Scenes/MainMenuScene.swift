@@ -156,10 +156,12 @@ class MainMenuScene: SKScene
         Menu = GameMenu(title: "main",
                         menuOptions:
                         [GameMenu(title:"Play Solo",
-                                  menuOptions:
-                            [MenuAction(title:"Survival", action: playTypedGame(.Survival)),
-                             MenuAction(title:"Time Attack", action: playTypedGame(.TimeAttack)),
-                             MenuAction(title:"Practice VS", action: playTypedGame(.Practice))
+                            menuOptions:
+                            [SurvivalMenu(title:"Survival", option: MenuAction(title:"Play", action: playTypedGame(.Survival))),
+                             TimeAttackMenu(title:"Time Attack", option: MenuAction(title:"Play", action: playTypedGame(.TimeAttack))),
+                             /*
+                             PracticeMenu(title:"Practice VS", action: playTypedGame(.Practice))
+                             */
                             ]),
                             GameMenu(title:"Play VS",
                                   menuOptions:
@@ -168,8 +170,10 @@ class MainMenuScene: SKScene
                                             menuOptions:
                                             [MenuAction(title:"Novice Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotNovice)),
                                              MenuAction(title:"Adept Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotAdept)),
+                                             /*
                                              MenuAction(title:"Expert Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotExpert)),
                                              MenuAction(title:"Master Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotMaster))
+                                            */
                                             ]),
                                    GameMenu(title:"VS Bluetooth"),
                                    GameMenu(title:"VS Online")

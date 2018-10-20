@@ -69,6 +69,8 @@ class BlockThemeMenu: GameMenu
     
     override func show(node: SKNode)
     {
+        titleNode.text = title;
+        
         GameMenu.focusMenu = self;
         inNode = node;
         
@@ -76,6 +78,7 @@ class BlockThemeMenu: GameMenu
         node.addChild(ColorSelector.Fetch());
         node.addChild(TextureSelector.Fetch());
         
+        RemoveBlocks();
         AddBlocks();
         
         showBackButton()
@@ -155,14 +158,14 @@ class BlockThemeMenu: GameMenu
         MenuRight();
     }
     
-    func RemoveBlocks()
+    private func RemoveBlocks()
     {
         Block1.nod.removeFromParent();
         Block2.nod.removeFromParent();
         Block3.nod.removeFromParent();
     }
     
-    func AddBlocks()
+    private func AddBlocks()
     {
         ShowNode.addChild(Block1.nod);
         ShowNode.addChild(Block2.nod);
@@ -187,6 +190,7 @@ class BlockThemeMenu: GameMenu
         let ret = [
             (SettingOption.TextureTheme.BasicShapes, "Basic Shapes"),
             (SettingOption.TextureTheme.Flat, "Flat"),
+            (SettingOption.TextureTheme.Solid, "Solid"),
         ];
         return ret;
     }

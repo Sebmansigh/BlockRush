@@ -53,6 +53,8 @@
 		A83C577A20B2640B002A482D /* DelayedDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C577920B2640B002A482D /* DelayedDevice.swift */; };
 		A87302DC20B8735900B26F8F /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87302DB20B8735900B26F8F /* GameView.swift */; };
 		A8A3A38E20D46FFF005E3DE3 /* ControllerObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A3A38D20D46FFF005E3DE3 /* ControllerObserver.swift */; };
+		A8B5E0A6217ADE2200830F5C /* SurvivalMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B5E0A5217ADE2200830F5C /* SurvivalMenu.swift */; };
+		A8B5E0A8217AE81400830F5C /* TimeAttackMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B5E0A7217AE81400830F5C /* TimeAttackMenu.swift */; };
 		A8C386D8209A405D00DB58D4 /* MoveTick.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386D7209A405D00DB58D4 /* MoveTick.wav */; };
 		A8C386DA209A43D800DB58D4 /* PlaySnap.wav in Resources */ = {isa = PBXBuildFile; fileRef = A8C386D9209A43D800DB58D4 /* PlaySnap.wav */; };
 		A8C395CF2079546D00D57AE0 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */; };
@@ -163,6 +165,8 @@
 		A83C577920B2640B002A482D /* DelayedDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayedDevice.swift; sourceTree = "<group>"; };
 		A87302DB20B8735900B26F8F /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		A8A3A38D20D46FFF005E3DE3 /* ControllerObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerObserver.swift; sourceTree = "<group>"; };
+		A8B5E0A5217ADE2200830F5C /* SurvivalMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurvivalMenu.swift; sourceTree = "<group>"; };
+		A8B5E0A7217AE81400830F5C /* TimeAttackMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeAttackMenu.swift; sourceTree = "<group>"; };
 		A8C386D7209A405D00DB58D4 /* MoveTick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MoveTick.wav; sourceTree = "<group>"; };
 		A8C386D9209A43D800DB58D4 /* PlaySnap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = PlaySnap.wav; sourceTree = "<group>"; };
 		A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
@@ -381,9 +385,11 @@
 				A8C395D420795A9600D57AE0 /* GameMenu.swift */,
 				A8EE4BAE217AB88C00BAED34 /* BlockThemeMenu.swift */,
 				A8071BD92079A4B900EC3272 /* ControlMenu.swift */,
+				A8B5E0A5217ADE2200830F5C /* SurvivalMenu.swift */,
 				A8071BD72079A2C100EC3272 /* SoundMenu.swift */,
 				A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */,
 				A8071BEC207AD81E00EC3272 /* MenuSelector.swift */,
+				A8B5E0A7217AE81400830F5C /* TimeAttackMenu.swift */,
 			);
 			path = MenuLogic;
 			sourceTree = "<group>";
@@ -648,6 +654,7 @@
 				A80539C420685A650059562D /* GameViewController.swift in Sources */,
 				A8071BDA2079A4B900EC3272 /* ControlMenu.swift in Sources */,
 				A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */,
+				A8B5E0A8217AE81400830F5C /* TimeAttackMenu.swift in Sources */,
 				A8EE4BB1217ABDDD00BAED34 /* TextureTheme.swift in Sources */,
 				A83C577820B1E928002A482D /* IdleDevice.swift in Sources */,
 				A8E3F245217274F3006DA2DA /* ExpertBot.swift in Sources */,
@@ -661,6 +668,7 @@
 				A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */,
 				A8071BDE2079DF7400EC3272 /* Setting.swift in Sources */,
 				A8E3F2652172DDBF006DA2DA /* ForceInput.swift in Sources */,
+				A8B5E0A6217ADE2200830F5C /* SurvivalMenu.swift in Sources */,
 				A8E3F239217249C2006DA2DA /* GameMode.swift in Sources */,
 				A8E3F23521715B8A006DA2DA /* CaseIterable.extension.swift in Sources */,
 				A8071BD82079A2C100EC3272 /* SoundMenu.swift in Sources */,
