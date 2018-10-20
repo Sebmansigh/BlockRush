@@ -95,7 +95,7 @@ class Player
     internal init(rngSeed: UInt64, scene s: GameScene, device: InputDevice)
     {
         let source = GKMersenneTwisterRandomSource(seed: rngSeed);
-        generator = GKRandomDistribution(randomSource: source, lowestValue: 0, highestValue: BlockRush.BlockColors.count-1);
+        generator = GKRandomDistribution(randomSource: source, lowestValue: 0, highestValue: BlockRush.NumberOfGameBlocks-1);
         pieceQueue = Queue<Piece>();
         forcePieceQueue = Queue<Piece>();
         scene = s;

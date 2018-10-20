@@ -1165,8 +1165,8 @@ class PlayField
             let P = playerTop.readyPiece!;
             GhostTopFront?.removeFromParent();
             GhostTopRear?.removeFromParent();
-            GhostTopFront = SKSpriteNode(texture: Block.Textures[P.FrontBlock.col!], color: BlockRush.BlockColors[P.FrontBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
-            GhostTopRear = SKSpriteNode(texture: Block.Textures[P.RearBlock.col!], color: BlockRush.BlockColors[P.RearBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostTopFront = SKSpriteNode(texture: P.FrontBlock.blockTexture(), color: P.FrontBlock.blockColor(), size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostTopRear = SKSpriteNode(texture: P.RearBlock.blockTexture(), color: P.RearBlock.blockColor(), size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
             
             GhostTopFront?.colorBlendFactor = 1;
             GhostTopRear?.colorBlendFactor = 1;
@@ -1216,8 +1216,8 @@ class PlayField
             let P = playerBottom.readyPiece!
             GhostBottomFront?.removeFromParent();
             GhostBottomRear?.removeFromParent();
-            GhostBottomFront = SKSpriteNode(texture: Block.Textures[P.FrontBlock.col!], color: BlockRush.BlockColors[P.FrontBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
-            GhostBottomRear = SKSpriteNode(texture: Block.Textures[P.RearBlock.col!], color: BlockRush.BlockColors[P.RearBlock.col!], size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostBottomFront = SKSpriteNode(texture: P.FrontBlock.blockTexture(), color: P.FrontBlock.blockColor(), size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
+            GhostBottomRear = SKSpriteNode(texture: P.RearBlock.blockTexture(), color: P.RearBlock.blockColor(), size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
             
             
             GhostBottomFront?.colorBlendFactor = 1;

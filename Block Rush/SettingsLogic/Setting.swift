@@ -12,48 +12,12 @@ import Foundation
  */
 enum Setting: CaseIterable
 {
-    case KeyboardControlsUnlocked;
+    case ColorTheme;
+    case TextureTheme;
     
     case BottomPlayerControlType;
     
-    case BottomPlayerKeyboardCustomInputLeft;
-    case BottomPlayerKeyboardCustomInputRight;
-    case BottomPlayerKeyboardCustomInputFlip;
-    case BottomPlayerKeyboardCustomInputPlay;
-    case BottomPlayerKeyboardCustomInput4;
-    case BottomPlayerKeyboardCustomInput5;
-    case BottomPlayerKeyboardCustomInput6;
-    case BottomPlayerKeyboardCustomInput7;
-    
-    case BottomPlayerGamepadCustomInputLeft;
-    case BottomPlayerGamepadCustomInputRight;
-    case BottomPlayerGamepadCustomInputFlip;
-    case BottomPlayerGamepadCustomInputPlay;
-    case BottomPlayerGamepadCustomInput4;
-    case BottomPlayerGamepadCustomInput5;
-    case BottomPlayerGamepadCustomInput6;
-    case BottomPlayerGamepadCustomInput7;
-    
-    
     case TopPlayerControlType;
-    
-    case TopPlayerKeyboardCustomInputLeft;
-    case TopPlayerKeyboardCustomInputRight;
-    case TopPlayerKeyboardCustomInputFlip;
-    case TopPlayerKeyboardCustomInputPlay;
-    case TopPlayerKeyboardCustomInput4;
-    case TopPlayerKeyboardCustomInput5;
-    case TopPlayerKeyboardCustomInput6;
-    case TopPlayerKeyboardCustomInput7;
-    
-    case TopPlayerGamepadCustomInputLeft;
-    case TopPlayerGamepadCustomInputRight;
-    case TopPlayerGamepadCustomInputFlip;
-    case TopPlayerGamepadCustomInputPlay;
-    case TopPlayerGamepadCustomInput4;
-    case TopPlayerGamepadCustomInput5;
-    case TopPlayerGamepadCustomInput6;
-    case TopPlayerGamepadCustomInput7;
     
     case SoundEffectVolume;
     case BackgroundMusicVolume;
@@ -67,8 +31,10 @@ enum Setting: CaseIterable
     {
         switch s
         {
-        case .KeyboardControlsUnlocked:
-            return .False;
+        case .ColorTheme:
+            return SettingOption.ColorTheme.BasicColors;
+        case .TextureTheme:
+            return SettingOption.TextureTheme.BasicShapes;
         case .BottomPlayerControlType, .TopPlayerControlType:
             return SettingOption.ControlType.TouchSlide;
             
@@ -77,9 +43,6 @@ enum Setting: CaseIterable
             
         case .BackgroundMusicVolume:
             return .Volume(80);
-            
-        default:
-            return .None;
         }
     }
     

@@ -38,7 +38,7 @@ extension BotDevices
             if let t = Trigger
             {
                 var forget = false;
-                if(t.col == -1)
+                if(t.col == nil)
                 {
                     forget = true;
                 }
@@ -47,7 +47,7 @@ extension BotDevices
                 {
                     for c in InChain
                     {
-                        if(c.col == -1)
+                        if(c.col == nil)
                         {
                             forget = true;
                             break;
@@ -71,8 +71,8 @@ extension BotDevices
                 return (-1,false);
             }
             
-            //If all scores are -1(death), then accept your fate by playing in column 4.
-            var BestMove = (4,false);
+            //If all scores are -1(death), then accept your fate by playing in column 3.
+            var BestMove = (3,false);
             var BestScore = -1;
             
             let surfaceData = playField!.getSurfaceData(player!);
@@ -100,7 +100,7 @@ extension BotDevices
             {
                 var OverTop = false;
                 //Don't consider a move that puts you in game over status if you have a move that doesn't
-                if(surfaceData[i]+moveAdjustment >= 9)
+                if(surfaceData[i]+moveAdjustment >= 10)
                 {
                     if(BestScore > -1)
                     {
@@ -114,8 +114,8 @@ extension BotDevices
                 //
                 for flip in [false,true]
                 {
-                    let frontCol = flip ? ActivePiece.FrontBlock.col! : ActivePiece.RearBlock.col!;
-                    let rearCol  = flip ? ActivePiece.RearBlock.col! : ActivePiece.FrontBlock.col!;
+                    let frontCol = flip ? ActivePiece.RearBlock.col! : ActivePiece.FrontBlock.col!;
+                    let rearCol  = flip ? ActivePiece.FrontBlock.col! : ActivePiece.RearBlock.col!;
                     
                     if(frontCol == rearCol)
                     {
@@ -130,10 +130,10 @@ extension BotDevices
                     {
                         Score = -1;
                     }
-                    //If matches are made in this choice, add twice the number of blocks cleared to the score
+                    //If matches are made in this choice, add 30 plus twice the number of blocks cleared to the score
                     //  If the trigger is in the blocks matched, add 20 to the score
                     //    If blocks from the second chain link are in this set, deduct 100 from the score
-                    //Otherwise, if this choice extends the trigger, add 30 to the score
+                    //Otherwise, if this choice extends the trigger, add 40 to the score
                     //Otherwise, if this choice creates a new, uninterfered chain link, add 40 to the score
                     //  If the stack has 6 or more blocks of height, deduct 50 from the score.
                     //Otherwise, if the trigger is interfered with, deduct 100 from the score.
@@ -143,12 +143,11 @@ extension BotDevices
                     let MatchBlocks = PotentialData.0;
                     if(!MatchBlocks.isEmpty)
                     {
-                        print("Match deteced!");
-                        Score += MatchBlocks.count*2;
+                        Score += 30 + MatchBlocks.count*2;
                         if let t = Trigger,
                            MatchBlocks.contains(t)
                         {
-                            Score+=30;
+                            Score += 30;
                             for chainblock in InChain
                             {
                                 if(MatchBlocks.contains(chainblock))
@@ -161,7 +160,7 @@ extension BotDevices
                     }
                     else
                     {
-                        Score += PotentialData.1-surfaceData[i]*2;
+                        Score += PotentialData.1-surfaceData[i];
                     }
                     
                     //
@@ -177,11 +176,11 @@ extension BotDevices
         }
         
         var FrameCt: Int = 0;
+        var FlipPiece = false;
         
         override func Eval() -> UInt8
         {
             //print("EVAL CALLED ON ADEPT BOT");
-            var FlipPiece = false;
             if(player!.isFrozen() || player!.readyPiece == nil)
             {
                 return 0;
@@ -221,6 +220,7 @@ extension BotDevices
                 if(FlipPiece)
                 {
                     ret = Input.FLIP;
+                    FlipPiece = false;
                 }
                 else if(player!.columnOver == Decision)
                 {

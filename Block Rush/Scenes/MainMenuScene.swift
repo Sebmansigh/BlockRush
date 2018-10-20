@@ -183,8 +183,9 @@ class MainMenuScene: SKScene
                                   ]),
                          GameMenu(title:"Settings",
                                   menuOptions:
-                                    [SoundMenu(title: "Sound"),
-                                     ControlMenu(title: "Controls")
+                                    [BlockThemeMenu(title:"Block Theme"),
+                                     SoundMenu(title: "Sound"),
+                                     ControlMenu(title: "Controls"),
                                     ])
                          ]);
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0)

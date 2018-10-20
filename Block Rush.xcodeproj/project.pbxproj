@@ -87,6 +87,10 @@
 		A8E3F2692173ED1F006DA2DA /* SetStoredMovement.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F2682173ED1F006DA2DA /* SetStoredMovement.swift */; };
 		A8E3F26B2173EE16006DA2DA /* SetFrameNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F26A2173EE16006DA2DA /* SetFrameNumber.swift */; };
 		A8E3F26D2173F411006DA2DA /* BeginFixedGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3F26C2173F411006DA2DA /* BeginFixedGame.swift */; };
+		A8EE4BAD217AA11200BAED34 /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EE4BAC217AA11200BAED34 /* ColorTheme.swift */; };
+		A8EE4BAF217AB88C00BAED34 /* BlockThemeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EE4BAE217AB88C00BAED34 /* BlockThemeMenu.swift */; };
+		A8EE4BB1217ABDDD00BAED34 /* TextureTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EE4BB0217ABDDD00BAED34 /* TextureTheme.swift */; };
+		A8EE4BB3217ABF5500BAED34 /* Block.Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EE4BB2217ABF5500BAED34 /* Block.Themes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -193,6 +197,10 @@
 		A8E3F2682173ED1F006DA2DA /* SetStoredMovement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetStoredMovement.swift; sourceTree = "<group>"; };
 		A8E3F26A2173EE16006DA2DA /* SetFrameNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFrameNumber.swift; sourceTree = "<group>"; };
 		A8E3F26C2173F411006DA2DA /* BeginFixedGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeginFixedGame.swift; sourceTree = "<group>"; };
+		A8EE4BAC217AA11200BAED34 /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
+		A8EE4BAE217AB88C00BAED34 /* BlockThemeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockThemeMenu.swift; sourceTree = "<group>"; };
+		A8EE4BB0217ABDDD00BAED34 /* TextureTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureTheme.swift; sourceTree = "<group>"; };
+		A8EE4BB2217ABF5500BAED34 /* Block.Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.Themes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,6 +268,8 @@
 				A83507042096C8E600DC7C37 /* DebugTools.swift */,
 				A80539F120686CC60059562D /* Queue.swift */,
 				A80539F5206961420059562D /* BlockRush.swift */,
+				A8EE4BAC217AA11200BAED34 /* ColorTheme.swift */,
+				A8EE4BB0217ABDDD00BAED34 /* TextureTheme.swift */,
 				A80539CD20685A650059562D /* Info.plist */,
 				A80539BB20685A650059562D /* AppDelegate.swift */,
 				A8E3F23C2172724D006DA2DA /* FixedGames */,
@@ -336,6 +346,7 @@
 				A80FE7012072BAE000E73E36 /* TopPlayer.swift */,
 				A80539F320686FA40059562D /* Piece.swift */,
 				A80FE7032072D8E900E73E36 /* Block.swift */,
+				A8EE4BB2217ABF5500BAED34 /* Block.Themes.swift */,
 				A8D1D7FE2095381E004004EA /* PlayerType.swift */,
 				A8E3F238217249C2006DA2DA /* GameMode.swift */,
 			);
@@ -368,6 +379,7 @@
 				A8C395D220795A5C00D57AE0 /* MenuOption.swift */,
 				A8C395D620795B3B00D57AE0 /* MenuAction.swift */,
 				A8C395D420795A9600D57AE0 /* GameMenu.swift */,
+				A8EE4BAE217AB88C00BAED34 /* BlockThemeMenu.swift */,
 				A8071BD92079A4B900EC3272 /* ControlMenu.swift */,
 				A8071BD72079A2C100EC3272 /* SoundMenu.swift */,
 				A8071BE1207AA4DA00EC3272 /* MenuSlider.swift */,
@@ -614,6 +626,7 @@
 				A83C577A20B2640B002A482D /* DelayedDevice.swift in Sources */,
 				A8071BDC2079D5B900EC3272 /* TouchDevice.swift in Sources */,
 				A8E3F25F2172C536006DA2DA /* ReplaceActivePiece.swift in Sources */,
+				A8EE4BAD217AA11200BAED34 /* ColorTheme.swift in Sources */,
 				A8E3F243217274BC006DA2DA /* AdeptBot.swift in Sources */,
 				A8071BE2207AA4DA00EC3272 /* MenuSlider.swift in Sources */,
 				A80539C220685A650059562D /* GameScene.swift in Sources */,
@@ -635,6 +648,7 @@
 				A80539C420685A650059562D /* GameViewController.swift in Sources */,
 				A8071BDA2079A4B900EC3272 /* ControlMenu.swift in Sources */,
 				A80FE7022072BAE000E73E36 /* TopPlayer.swift in Sources */,
+				A8EE4BB1217ABDDD00BAED34 /* TextureTheme.swift in Sources */,
 				A83C577820B1E928002A482D /* IdleDevice.swift in Sources */,
 				A8E3F245217274F3006DA2DA /* ExpertBot.swift in Sources */,
 				A8E3F24B217276D8006DA2DA /* Dialogue.swift in Sources */,
@@ -643,6 +657,7 @@
 				A8E3F2572172B465006DA2DA /* DisableCountdown.swift in Sources */,
 				A8D1D80120953F22004004EA /* BotDevice.swift in Sources */,
 				A8E3F23E21727290006DA2DA /* HidePlayer.swift in Sources */,
+				A8EE4BB3217ABF5500BAED34 /* Block.Themes.swift in Sources */,
 				A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */,
 				A8071BDE2079DF7400EC3272 /* Setting.swift in Sources */,
 				A8E3F2652172DDBF006DA2DA /* ForceInput.swift in Sources */,
@@ -650,6 +665,7 @@
 				A8E3F23521715B8A006DA2DA /* CaseIterable.extension.swift in Sources */,
 				A8071BD82079A2C100EC3272 /* SoundMenu.swift in Sources */,
 				A80539BC20685A650059562D /* AppDelegate.swift in Sources */,
+				A8EE4BAF217AB88C00BAED34 /* BlockThemeMenu.swift in Sources */,
 				A87302DC20B8735900B26F8F /* GameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

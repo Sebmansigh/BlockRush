@@ -30,15 +30,38 @@ struct SettingOption: OptionSet, Hashable
     }
     
     /**
-     A class containing `SettingOptions` for use with control type settings.
+     A namespace struct containing `SettingOptions` for use with control type settings.
      */
-    final class ControlType
+    struct ControlType
     {
         private init(){}
         
         static let TouchSlide     = SettingOption(rawValue: 0b0000_0001);
         static let TouchTap       = SettingOption(rawValue: 0b0000_0010);
         static let TouchHybrid    = SettingOption(rawValue: 0b0000_0100);
+    }
+    
+    /**
+     A namespace struct containing `SettingOptions` for use with block color theme settings.
+     */
+    struct ColorTheme
+    {
+        private init(){}
+        
+        static let BasicColors    = SettingOption(rawValue: 0b0000_0000);
+        static let Deuteranopia   = SettingOption(rawValue: 0b0000_0001);
+        static let Tritanopia     = SettingOption(rawValue: 0b0000_0010);
+        static let Grayscale      = SettingOption(rawValue: 0b0000_0011);
+    }
+    /**
+     A namespace struct containing `SettingOptions` for use with block color theme settings.
+     */
+    struct TextureTheme
+    {
+        private init(){}
+        
+        static let BasicShapes    = SettingOption(rawValue: 0b0000_0000);
+        static let Flat           = SettingOption(rawValue: 0b0000_0001);
     }
     
     /**

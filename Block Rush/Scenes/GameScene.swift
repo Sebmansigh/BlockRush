@@ -36,6 +36,7 @@ class GameScene: SKScene
      This variable is to be set before the scene is presented and its value is used in the initialization of the game scene.
      */
     public var InitialSeed: UInt64 = 0;
+    
     /**
      What game mode the player is playing.
      */
@@ -46,21 +47,24 @@ class GameScene: SKScene
     /**
      A touch device for _potential_ use by the bottom player.
      
-     If the bottom player is using a different touch device, then
-     this input device will not affect the game.
+     If the bottom player is using a different input device, then
+     the inputs this device generates will not affect the game.
      */
     private let BDevice = TouchDevice();
+    
     /**
      A touch device for _potential_ use by the top player.
      
-     If the top player is using a different touch device, then
-     this input device will not affect the game.
+     If the top player is using a different input device, then
+     the inputs this device generates will not affect the game.
      */
     private let TDevice = TouchDevice();
+    
     /**
      The column that the bottom player's touch device should seek.
      */
     var BTarget: Int? = nil;
+    
     /**
      The column that the top player's touch device should seek.
      */
@@ -111,6 +115,9 @@ class GameScene: SKScene
      */
     var PauseMenu: GameMenu?;
     
+    /**
+     Whether or not to do the 3,2,1,GO! during the start of the game.
+     */
     var DoCountdown: Bool = true;
     
     // Variables to be used during the debug process.
@@ -269,7 +276,7 @@ class GameScene: SKScene
         playerBottom!.foe = playerTop;
         
         backgroundGrid = SKShapeNode(rectOf: CGSize(width:BlockRush.BlockWidth*6, height:BlockRush.BlockWidth*10));
-        backgroundGrid?.fillColor = UIColor.black;
+        backgroundGrid!.fillColor = UIColor.black;
         self.addChild(backgroundGrid!);
         playField = PlayField(cols:6, rows:46, playerTop:playerTop!, playerBottom:playerBottom!, scene:self);
         

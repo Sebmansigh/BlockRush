@@ -15,14 +15,11 @@ import AVFoundation
 final class BlockRush
 {
     public static let DEBUG_MODE = false;//264
-    /**
-     A publically readable and writable map of settings and their values.
-     */
+    
+    ///A publically readable and writable map of settings and their values.
     public static var Settings: [Setting:SettingOption] = [:];
     
-    /**
-     To be called exactly once when the app launches.
-     */
+    ///To be called exactly once when the app launches.
     public static func Initialize()
     {
         loadSettings();
@@ -37,9 +34,7 @@ final class BlockRush
         BlockWidth = min(GameWidth * 0.12,GameHeight/14);
     }
     
-    /**
-     Initializes `BlockRush.Settings` using the contents of the local .settings file
-     */
+    ///Initializes `BlockRush.Settings` using the contents of the local .settings file
     public static func loadSettings()
     {
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
@@ -80,9 +75,7 @@ final class BlockRush
             //print("\(s)=\(Settings[s]!.rawValue)")
         }
     }
-    /**
-     Initializes `BlockRush.SurvivalHighScore` and `BlockRush.TimeAttackHighScore` from their files.
-     */
+    ///Initializes `BlockRush.SurvivalHighScore` and `BlockRush.TimeAttackHighScore` from their files.
     public static func loadHighScores()
     {
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
@@ -143,6 +136,8 @@ final class BlockRush
         }
         
     }
+    
+    ///Saves the settings map to a file.
     public static func saveSettings()
     {
         var settingsString = "";
@@ -167,6 +162,8 @@ final class BlockRush
             }
         }
     }
+    
+    ///Saves the high scores to their files.
     public static func saveHighScores()
     {
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
@@ -197,16 +194,14 @@ final class BlockRush
     private init(){}
     
     public static var BlockWidth: CGFloat = 0;
-    public static let BlockColors: [UIColor] = [
-        UIColor(red:1,green:0.2,blue:0.2,alpha:1),
-        UIColor(red:0.2,green:1,blue:0.2,alpha:1),
-        UIColor(red:0.2,green:0.2,blue:1,alpha:1)];
     
     public static var ScreenWidth: CGFloat = 0;
     public static var ScreenHeight: CGFloat = 0;
     
     public static var GameWidth: CGFloat = 0;
     public static var GameHeight: CGFloat = 0;
+    
+    public static let NumberOfGameBlocks: Int = 3;
     
     public static func CalculateScore(chainLevel c: Int, blocksCleared n: Int) -> Int
     {

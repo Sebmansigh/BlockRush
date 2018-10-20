@@ -10,18 +10,6 @@ import SpriteKit
 
 class Block:Hashable
 {
-    static var Textures: [SKTexture] =
-    [
-        SKTexture(imageNamed: "BlockFlat"),
-        SKTexture(imageNamed: "BlockFlat"),
-        SKTexture(imageNamed: "BlockFlat"),
-    ]
-    
-    static func ==(lhs: Block, rhs: Block) -> Bool
-    {
-        return lhs === rhs;
-    }
-    
     var col: Int?;
     let initCol: Int;
     let nod: SKSpriteNode;
@@ -35,8 +23,8 @@ class Block:Hashable
         col = nColor;
         initCol = nColor;
         //nod = SKShapeNode(rectOf: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
-        nod = SKSpriteNode(texture: Block.Textures[col!],
-                           color: BlockRush.BlockColors[col!],
+        nod = SKSpriteNode(texture: Block.CurrentTextureTheme()[col!],
+                           color: Block.CurrentColorTheme()[col!],
                            size: CGSize(width: BlockRush.BlockWidth, height: BlockRush.BlockWidth/2));
         nod.colorBlendFactor = 1.0;
         if let ln = debugLabel
@@ -51,5 +39,14 @@ class Block:Hashable
     var hashValue: Int
     {
         return nod.hashValue;
+    }
+    func blockColor() -> UIColor
+    {
+        return Block.CurrentColorTheme()[col!];
+    }
+    
+    func blockTexture() -> SKTexture
+    {
+        return Block.CurrentTextureTheme()[col!];
     }
 }
