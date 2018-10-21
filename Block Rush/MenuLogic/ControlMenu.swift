@@ -55,6 +55,16 @@ class ControlMenu: GameMenu
             let _ = self.BottomSelector.Fetch();
             BlockRush.saveSettings();
         };
+        
+        
+        if(focusIndex == 0)
+        {
+            TopSelector.Highlight();
+        }
+        else if(focusIndex == 1)
+        {
+            BottomSelector.Highlight();
+        }
     }
     
     override func MenuUp()

@@ -88,6 +88,16 @@ class BlockThemeMenu: GameMenu
             self.ShowNode.removeFromParent();
             BlockRush.saveSettings();
         };
+        
+        
+        if(focusIndex == 0)
+        {
+            ColorSelector.Highlight();
+        }
+        else if(focusIndex == 1)
+        {
+            TextureSelector.Highlight();
+        }
     }
     
     override func MenuUp()

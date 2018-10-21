@@ -79,7 +79,7 @@ class MenuSelector<T: Equatable>: SKNode
         Vnode.fontSize = Bh/16-Mw;
         Vnode.verticalAlignmentMode = .baseline;
         Vnode.fontColor = .white;
-        Vnode.position.y = -Bh/10;
+        Vnode.position.y = -Bh/10-Mw;
         
         super.init();
         isUserInteractionEnabled = true;

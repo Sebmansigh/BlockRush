@@ -60,6 +60,34 @@ class MenuSlider: SKNode
         fatalError("init(coder:) has not been implemented.");
     }
     
+    func SetSlideValue(newValue:Int)
+    {
+        value = newValue;
+        
+        Snode.position.x = CGFloat(value-Min) / CGFloat(Max-Min);
+        Snode.position.x -= 0.5;
+        Snode.position.x *= BlockRush.GameWidth*3/4;
+        
+        Action(value);
+    }
+    
+    func MoveSlideValue(amount:Int)
+    {
+        let newVal = value+amount;
+        if(newVal < Min)
+        {
+            SetSlideValue(newValue: Min);
+        }
+        else if(newVal > Max)
+        {
+            SetSlideValue(newValue: Max);
+        }
+        else
+        {
+            SetSlideValue(newValue: newVal);
+        }
+    }
+    
     var validTouch: UITouch? = nil;
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -109,17 +137,12 @@ class MenuSlider: SKNode
         {
             if(t == validTouch!)
             {
-                let Bw = BlockRush.GameWidth;
-                let num = Snode.position.x*CGFloat(Max-Min)
-                let den = Bw*3/4
-                value = Int(round(num/den))+Min+(Max-Min)/2;
+                let num = Snode.position.x*CGFloat(Max-Min);
+                let den = BlockRush.GameWidth*3/4
+                let newValue = Int(round(num/den))+Min+(Max-Min)/2;
                 
+                SetSlideValue(newValue: newValue);
                 
-                Snode.position.x = CGFloat(value-Min) / CGFloat(Max-Min);
-                Snode.position.x -= 0.5;
-                Snode.position.x *= Bw*3/4
-                
-                Action(value);
                 validTouch = nil;
                 Dehighlight();
                 break;
@@ -137,7 +160,6 @@ class MenuSlider: SKNode
         {
             if(t == validTouch!)
             {
-                //revert to initial position.
                 validTouch = nil;
                 Dehighlight();
                 break;
