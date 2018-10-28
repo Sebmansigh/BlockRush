@@ -40,7 +40,11 @@ class MainMenuScene: SKScene
     {
         return {
             [unowned self] in
+            
             GameMenu.focusMenu = nil;
+            
+            Audio.PrepareMusic(name: "Track" + String(Int.random(in: 1...3)));
+            
             if let scene = SKScene(fileNamed: "GameScene") as? GameScene
             {
                 // Set the scale mode to scale to fit the window
@@ -51,7 +55,7 @@ class MainMenuScene: SKScene
                 scene.BottomPlayerType = bottomPlayerType;
                 scene.TopPlayerType = topPlayerType;
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                BlockRush.StopMusic();
+                Audio.StopMusic();
                 self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
             }
             else
@@ -69,7 +73,11 @@ class MainMenuScene: SKScene
     {
         return {
             [unowned self] in
+            
             GameMenu.focusMenu = nil;
+            
+            Audio.PrepareMusic(name: "Track" + String(Int.random(in: 1...3)));
+            
             if let scene = SKScene(fileNamed: "GameScene") as? GameScene
             {
                 // Set the scale mode to scale to fit the window
@@ -82,7 +90,7 @@ class MainMenuScene: SKScene
                 scene.GameMode = .Replay(name: name);
                 
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                BlockRush.StopMusic();
+                Audio.StopMusic();
                 self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
             }
             else
@@ -101,7 +109,11 @@ class MainMenuScene: SKScene
     {
         return {
             [unowned self] in
+            
             GameMenu.focusMenu = nil;
+            
+            Audio.PrepareMusic(name: "Track" + String(Int.random(in: 1...3)));
+            
             if let scene = SKScene(fileNamed: "GameScene") as? GameScene
             {
                 // Set the scale mode to scale to fit the window
@@ -121,7 +133,7 @@ class MainMenuScene: SKScene
                 scene.GameMode = mode;
                 
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                BlockRush.StopMusic();
+                Audio.StopMusic();
                 self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
             }
             else
@@ -142,7 +154,7 @@ class MainMenuScene: SKScene
         
         GameEvent.ClearEvents();
         
-        BlockRush.SoundScene = self;
+        Audio.SoundScene = self;
         
         titleNode = SKLabelNode(text: "BLOCK RUSH");
         titleNode!.position.y = CGFloat(BlockRush.GameHeight/4);
@@ -176,7 +188,7 @@ class MainMenuScene: SKScene
                                             */
                                             ]),
                                    GameMenu(title:"VS Bluetooth"),
-                                   GameMenu(title:"VS Online")
+                                   OnlineMenu(title:"VS Online", option: MenuAction(title:"Quick Play", action: playTypedGame(.Survival))),
                                   ]),
                          GameMenu(title:"Lessons",
                                   menuOptions:
@@ -194,7 +206,8 @@ class MainMenuScene: SKScene
                          ]);
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0)
         {
-            BlockRush.PlayMusic(name: "Intro");
+            Audio.PrepareMusic(name: "Intro")
+            Audio.PlayMusic();
             self.Menu!.show(node: self);
         }
         loaded = true;

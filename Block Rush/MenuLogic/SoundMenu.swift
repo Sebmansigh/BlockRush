@@ -20,7 +20,7 @@ class SoundMenu: GameMenu
                                min: 0, max: 100)
         {
             BlockRush.Settings[.BackgroundMusicVolume] = .Volume($0);
-            BlockRush.player?.volume = Float($0)/100;
+            Audio.BGMplayer?.volume = Float($0)/100;
         };
         
         

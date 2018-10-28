@@ -1462,7 +1462,7 @@ class PlayField
         }
         if(!TotalMatched.isEmpty)
         {
-            BlockRush.PlaySound(name: "Chain1");
+            Audio.PlaySound(name: "Chain1");
         }
     }
     
@@ -1645,19 +1645,19 @@ class PlayField
                     switch p.chainLevel
                     {
                     case 1:
-                        BlockRush.PlaySound(name: "Chain1");
+                        Audio.PlaySound(name: "Chain1");
                     case 2:
-                        BlockRush.PlaySound(name: "Chain2");
+                        Audio.PlaySound(name: "Chain2");
                     case 3:
-                        BlockRush.PlaySound(name: "Chain3");
+                        Audio.PlaySound(name: "Chain3");
                     case 4:
-                        BlockRush.PlaySound(name: "Chain4");
+                        Audio.PlaySound(name: "Chain4");
                     case 5:
-                        BlockRush.PlaySound(name: "Chain5");
+                        Audio.PlaySound(name: "Chain5");
                     case 6:
-                        BlockRush.PlaySound(name: "Chain6");
+                        Audio.PlaySound(name: "Chain6");
                     default:
-                        BlockRush.PlaySound(name: "Chain7");
+                        Audio.PlaySound(name: "Chain7");
                     }
                     
                     //print(String(p.chainLevel)+" CHAIN => "+String(linkDamage)+" DAMAGE!");

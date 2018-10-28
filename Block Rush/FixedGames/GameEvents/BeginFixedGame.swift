@@ -51,7 +51,7 @@ extension GameEvent
                 scene.GameMode = .Fixed(name: Name);
                 
                 arc4random_buf(&scene.InitialSeed, MemoryLayout.size(ofValue: scene.InitialSeed));
-                BlockRush.StopMusic();
+                Audio.StopMusic();
                 Scene.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
             }
             else

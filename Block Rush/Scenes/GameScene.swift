@@ -195,7 +195,7 @@ class GameScene: SKScene
                 addChild(n);
             }
         }
-        BlockRush.SoundScene = self;
+        Audio.SoundScene = self;
         
         let TopDevice: InputDevice;
         var GameData: (UInt64,[Input],[Input])? = nil;
@@ -360,6 +360,9 @@ class GameScene: SKScene
                 {
                     [unowned self] in
                     GameMenu.focusMenu = nil;
+                    
+                    Audio.ReprepareMusic();
+                    
                     if let scene = SKScene(fileNamed: "GameScene") as? GameScene
                     {
                         // Set the scale mode to scale to fit the window
@@ -811,7 +814,7 @@ class GameScene: SKScene
             {
                 PlayLoseEffect(top: true);
                 PlayWinEffect(top: false);
-                BlockRush.PlaySound(name: "Winner");
+                Audio.PlaySound(name: "Winner");
             }
             else if(playField!.Loser === playerBottom)
             {
@@ -833,11 +836,11 @@ class GameScene: SKScene
                     PlayWinEffect(top: true);
                     if(TopPlayerType == .Local)
                     {
-                        BlockRush.PlaySound(name: "Winner");
+                        Audio.PlaySound(name: "Winner");
                     }
                     else
                     {
-                        BlockRush.PlaySound(name: "Loser");
+                        Audio.PlaySound(name: "Loser");
                     }
                 }
             }
@@ -845,9 +848,9 @@ class GameScene: SKScene
             {
                 PlayLoseEffect(top: true);
                 PlayLoseEffect(top: false);
-                BlockRush.PlaySound(name: "Loser");
+                Audio.PlaySound(name: "Loser");
             }
-            BlockRush.StopMusic();
+            Audio.StopMusic();
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.0)
             {
                 self.addChild(self.EndMenuNode!);
@@ -1036,7 +1039,7 @@ class GameScene: SKScene
                                 if(n == 0)
                                 {
                                     Str = "GO!";
-                                    BlockRush.PlayMusic(name: "Track" + String(1+(InitialSeed % 3)) );
+                                    Audio.PlayMusic();
                                 }
                                 else
                                 {
@@ -1171,7 +1174,7 @@ class GameScene: SKScene
         if case .Survival = GameMode,
         Score > HighScore
         {
-            BlockRush.PlaySound(name: "Winner");
+            Audio.PlaySound(name: "Winner");
             BlockRush.SurvivalHighScore = Score;
             let nhs = SKLabelNode(fontNamed: "Avenir");
             nhs.horizontalAlignmentMode = .center;
@@ -1185,7 +1188,7 @@ class GameScene: SKScene
         else if case .TimeAttack = GameMode,
         Score > HighScore
         {
-            BlockRush.PlaySound(name: "Winner");
+            Audio.PlaySound(name: "Winner");
             BlockRush.TimeAttackHighScore = Score;
             let nhs = SKLabelNode(fontNamed: "Avenir");
             nhs.horizontalAlignmentMode = .center;
@@ -1198,7 +1201,7 @@ class GameScene: SKScene
         }
         else
         {
-            BlockRush.PlaySound(name: "Loser");
+            Audio.PlaySound(name: "Loser");
             let nhs = SKLabelNode(fontNamed: "Avenir");
             nhs.text = BlockRush.Commafy(value: HighScore);
             nhs.fontSize = BlockRush.BlockWidth;

@@ -7,8 +7,6 @@
 
 import Foundation
 import SpriteKit
-import AVFoundation
-
 /**
  A class containing functions and properties relating to the game as a whole.
  */
@@ -18,6 +16,11 @@ final class BlockRush
     
     ///A publically readable and writable map of settings and their values.
     public static var Settings: [Setting:SettingOption] = [:];
+    
+    ///The highest score earned in survival mode
+    public static var SurvivalHighScore = 0;
+    ///The highest score earned in time attack mode
+    public static var TimeAttackHighScore = 0;
     
     ///To be called exactly once when the app launches.
     public static func Initialize()
@@ -256,93 +259,6 @@ final class BlockRush
         return ClearVal * chainLevel;
     }
     
-    static let Sounds: [String: SKAction] =
-    [
-        //"MatchBoom": SKAction.playSoundFileNamed("MatchBoom.aif", waitForCompletion: false),
-        "MoveTick" : SKAction.playSoundFileNamed("MoveTick.wav", waitForCompletion: false),
-        "PlaySnap" : SKAction.playSoundFileNamed("PlaySnap.wav", waitForCompletion: false),
-        
-        "Chain1"   : SKAction.playSoundFileNamed("Chain1.wav", waitForCompletion: false),
-        "Chain2"   : SKAction.playSoundFileNamed("Chain2.wav", waitForCompletion: false),
-        "Chain3"   : SKAction.playSoundFileNamed("Chain3.wav", waitForCompletion: false),
-        "Chain4"   : SKAction.playSoundFileNamed("Chain4.wav", waitForCompletion: false),
-        "Chain5"   : SKAction.playSoundFileNamed("Chain5.wav", waitForCompletion: false),
-        "Chain6"   : SKAction.playSoundFileNamed("Chain6.wav", waitForCompletion: false),
-        "Chain7"   : SKAction.playSoundFileNamed("Chain7.wav", waitForCompletion: false),
-        
-        "Winner"   : SKAction.playSoundFileNamed("Winner.wav", waitForCompletion: false),
-        "Loser"    : SKAction.playSoundFileNamed("Loser.wav", waitForCompletion: false),
-    ];
-    
-    public static var SoundScene: SKScene? = nil;
-    
-    static func PlaySound(name:String)
-    {
-        //print("Playing sound: "+name);
-        //let SfxVolume = Float(Settings[ .SoundEffectVolume ]!.rawValue)/100.0;
-        
-        let action = Sounds[name]!.copy() as! SKAction;
-        let vol = Float(Settings[.SoundEffectVolume]!.rawValue)/100.0;
-        SoundScene!.run(.group([action,.changeVolume(to: vol, duration: 0.25)]));
-    }
-    
-    public static var player: AVAudioPlayer? = nil;
-    static func PlayMusic(name:String)
-    {
-        guard let url = Bundle.main.url(forResource: name, withExtension: "aiff")
-        else
-        {
-            print("Could not play music file "+name+".aiff");
-            return;
-        }
-        do
-        {
-            if(player != nil)
-            {
-                player!.stop();
-            }
-            if #available(iOS 10.0, *) {
-                try AVAudioSession.sharedInstance().setCategory(.ambient,mode:.default)
-            } else {
-                // Fallback on earlier versions
-            };
-            try AVAudioSession.sharedInstance().setActive(true);
-            player = try AVAudioPlayer(contentsOf: url);
-            player!.numberOfLoops = -1;
-            player!.volume = Float(Settings[Setting.BackgroundMusicVolume]!.rawValue)/100;
-            player!.play();
-        }
-        catch let error
-        {
-            print(error.localizedDescription);
-        }
-    }
-    
-    public static var SurvivalHighScore = 0;
-    public static var TimeAttackHighScore = 0;
-    
-    static func StopMusic()
-    {
-        player?.stop();
-    }
-    
-    static func PopUp(_ text: String)
-    {
-        let bgNode = SKSpriteNode(color: .darkGray, size: CGSize(width: BlockRush.BlockWidth*8, height: BlockRush.BlockWidth*0.75));
-        let label = SKLabelNode(text: text);
-        label.verticalAlignmentMode = .center;
-        label.fontName = "Avenir";
-        label.fontSize = BlockRush.BlockWidth * 0.5;
-        
-        bgNode.run(.sequence([.wait(forDuration: 3) ,.fadeOut(withDuration: 2)]))
-        {
-            bgNode.removeFromParent();
-        };
-        bgNode.addChild(label);
-        bgNode.zPosition = 10000000;
-        GameView.curview?.scene?.addChild(bgNode);
-    }
-    
     static func Commafy(value: Int) -> String
     {
         var x = value;
@@ -368,12 +284,21 @@ final class BlockRush
         }
         return "\(x)"+ret;
     }
+    
+    static func PopUp(_ text: String)
+    {
+        let bgNode = SKSpriteNode(color: .darkGray, size: CGSize(width: BlockRush.BlockWidth*8, height: BlockRush.BlockWidth*0.75));
+        let label = SKLabelNode(text: text);
+        label.verticalAlignmentMode = .center;
+        label.fontName = "Avenir";
+        label.fontSize = BlockRush.BlockWidth * 0.5;
+        
+        bgNode.run(.sequence([.wait(forDuration: 3) ,.fadeOut(withDuration: 2)]))
+        {
+            bgNode.removeFromParent();
+        };
+        bgNode.addChild(label);
+        bgNode.zPosition = 10000000;
+        GameView.curview?.scene?.addChild(bgNode);
+    }
 }
-
-/*
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
-	return input.rawValue
-}
-*/
