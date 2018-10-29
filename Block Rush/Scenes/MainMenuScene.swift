@@ -143,6 +143,35 @@ class MainMenuScene: SKScene
         }
     }
     
+    
+    /**
+     Creates a closure that, when executed, presents an instance of `GameScene` that plays a specific game mode.
+     - Parameter name: the name of the fixed game.
+     - Returns: A closure that presents a `GameScene` when executed.
+     */
+    private func toMatchmakingScene() -> ( () -> Void )
+    {
+        return {
+            [unowned self] in
+            
+            GameMenu.focusMenu = nil;
+            
+            if let scene = SKScene(fileNamed: "MatchmakingScene") as? GameScene
+            {
+                // Set the scale mode to scale to fit the window
+                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                    height: UIScreen.main.nativeBounds.height);
+                scene.scaleMode = .aspectFit;
+                
+                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+            }
+            else
+            {
+                fatalError("Could not load MatchmakingScene.");
+            }
+        }
+    }
+    
     override func sceneDidLoad()
     {
         backgroundColor = .black;
@@ -188,7 +217,10 @@ class MainMenuScene: SKScene
                                             */
                                             ]),
                                    GameMenu(title:"VS Bluetooth"),
-                                   OnlineMenu(title:"VS Online", option: MenuAction(title:"Quick Play", action: playTypedGame(.Survival))),
+                                   OnlineMenu(title: "VS Online",
+                                              menuOptions:
+                                              [MenuAction(title: "Quick Play", action: toMatchmakingScene())
+                                              ])
                                   ]),
                          GameMenu(title:"Lessons",
                                   menuOptions:

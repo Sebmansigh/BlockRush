@@ -117,9 +117,9 @@ class GameMenu: MenuOption
                 let _ = o.FetchButton();
             }
         }
-        if(Back != nil && highlight !== Back!)
+        if let b = Back, highlight !== b
         {
-            let _ = Back!.FetchButton();
+            let _ = b.FetchButton();
         }
     }
     

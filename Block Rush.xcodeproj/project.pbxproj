@@ -283,15 +283,13 @@
 		A80539BA20685A650059562D /* Block Rush */ = {
 			isa = PBXGroup;
 			children = (
-				A8F260CB21864DF200DA706E /* Socket Libraries */,
-				A8E3F23421715B8A006DA2DA /* CaseIterable.extension.swift */,
+				A80539CD20685A650059562D /* Info.plist */,
 				A83507042096C8E600DC7C37 /* DebugTools.swift */,
 				A80539F120686CC60059562D /* Queue.swift */,
-				A80539F5206961420059562D /* BlockRush.swift */,
-				A8EE4BAC217AA11200BAED34 /* ColorTheme.swift */,
-				A8EE4BB0217ABDDD00BAED34 /* TextureTheme.swift */,
-				A80539CD20685A650059562D /* Info.plist */,
+				A8E3F23421715B8A006DA2DA /* CaseIterable.extension.swift */,
+				A8F260CB21864DF200DA706E /* Socket Libraries */,
 				A80539BB20685A650059562D /* AppDelegate.swift */,
+				A80539F5206961420059562D /* BlockRush.swift */,
 				A8F260C62186264500DA706E /* SoundLogic */,
 				A8F260BF2186155000DA706E /* NetworkLogic */,
 				A8E3F23C2172724D006DA2DA /* FixedGames */,
@@ -378,6 +376,8 @@
 		A8071BE7207AD36000EC3272 /* SettingsLogic */ = {
 			isa = PBXGroup;
 			children = (
+				A8EE4BAC217AA11200BAED34 /* ColorTheme.swift */,
+				A8EE4BB0217ABDDD00BAED34 /* TextureTheme.swift */,
 				A8071BDD2079DF7400EC3272 /* Setting.swift */,
 				A8071BE8207AD39D00EC3272 /* SettingOption.swift */,
 			);
