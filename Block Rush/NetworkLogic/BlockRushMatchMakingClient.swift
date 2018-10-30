@@ -10,9 +10,13 @@ import Foundation
 fileprivate struct Tag
 {
     private init(){};
-    static let WRITE_GENERIC_STRING = 0;
-    static let READ_GENERIC_STRING = 1;
+    
+    static let READ_GENERIC_STRING = 0;
+    static let WRITE_GENERIC_STRING = 1;
+    
     static let READ_HELLO = 100;
+    
+    //static let WRITE_IP = 200;
 }
 
 final class BlockRushMatchMakingClient
@@ -101,6 +105,7 @@ final class BlockRushMatchMakingClient
         do
         {
             try Socket!.connect(toHost: "192.168.0.7", onPort: 22196);
+            //writeIP();
         }
         catch
         {
@@ -134,12 +139,18 @@ final class BlockRushMatchMakingClient
         //print("Queueing write: '\(str)'");
         write(str+"\n");
     }
+    /*
+    func writeIP()
+    {
+        Socket?.write("<IP Address>\n".data(using: .ascii)!, withTimeout: -1, tag: Tag.WRITE_IP);
+    }
+     */
     
     func write(_ str:String)
     {
         if let strData = str.data(using: .ascii)
         {
-            Socket?.write(strData, withTimeout: 3, tag: 0);
+            Socket?.write(strData, withTimeout: 3, tag: Tag.WRITE_GENERIC_STRING);
         }
         else
         {

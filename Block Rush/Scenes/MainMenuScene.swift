@@ -145,9 +145,9 @@ class MainMenuScene: SKScene
     
     
     /**
-     Creates a closure that, when executed, presents an instance of `GameScene` that plays a specific game mode.
-     - Parameter name: the name of the fixed game.
-     - Returns: A closure that presents a `GameScene` when executed.
+     Creates a closure that, when executed, presents an the user with the matchmaking scene.
+     It is assumed that Matchmaking client either is currently or was previously connected to the server.
+     - Returns: A closure that presents a `MatchmakingScene` when executed.
      */
     private func toMatchmakingScene() -> ( () -> Void )
     {
@@ -155,8 +155,9 @@ class MainMenuScene: SKScene
             [unowned self] in
             
             GameMenu.focusMenu = nil;
+            BlockRushMatchMakingClient.Client.writeLine("quickPlay");
             
-            if let scene = SKScene(fileNamed: "MatchmakingScene") as? GameScene
+            if let scene = SKScene(fileNamed: "MatchmakingScene") as? MatchmakingScene
             {
                 // Set the scale mode to scale to fit the window
                 scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
@@ -168,6 +169,62 @@ class MainMenuScene: SKScene
             else
             {
                 fatalError("Could not load MatchmakingScene.");
+            }
+        }
+    }
+    
+    /**
+     Creates a closure that, when executed, presents an the user with the server lobby scene.
+     It is assumed that Matchmaking client either is currently or was previously connected to the server.
+     - Returns: A closure that presents a `ServerLobbyScene` when executed.
+     */
+    private func toServerLobbyScene() -> ( () -> Void )
+    {
+        return {
+            [unowned self] in
+            
+            GameMenu.focusMenu = nil;
+            BlockRushMatchMakingClient.Client.writeLine("enterLobby");
+            
+            if let scene = SKScene(fileNamed: "ServerLobbyScene") as? ServerLobbyScene
+            {
+                // Set the scale mode to scale to fit the window
+                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                    height: UIScreen.main.nativeBounds.height);
+                scene.scaleMode = .aspectFit;
+                
+                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+            }
+            else
+            {
+                fatalError("Could not load ServerLobbyScene.");
+            }
+        }
+    }
+    
+    /**
+     Creates a closure that, when executed, presents an the user with the bluetooth lobby scene.
+     - Returns: A closure that presents a `BluetoothLobbyScene` when executed.
+     */
+    private func toBluetoothLobbyScene() -> ( () -> Void )
+    {
+        return {
+            [unowned self] in
+            
+            GameMenu.focusMenu = nil;
+            
+            if let scene = SKScene(fileNamed: "BluetoothLobbyScene") as? BluetoothLobbyScene
+            {
+                // Set the scale mode to scale to fit the window
+                scene.size = CGSize(width: UIScreen.main.nativeBounds.width,
+                                    height: UIScreen.main.nativeBounds.height);
+                scene.scaleMode = .aspectFit;
+                
+                self.view!.presentScene(scene, transition: SKTransition.fade(withDuration: 2));
+            }
+            else
+            {
+                fatalError("Could not load BluetoothLobbyScene.");
             }
         }
     }
@@ -216,10 +273,11 @@ class MainMenuScene: SKScene
                                              MenuAction(title:"Master Bot", action: toGameScene(bottomPlayerType: .Local, topPlayerType: .BotMaster))
                                             */
                                             ]),
-                                   GameMenu(title:"VS Bluetooth"),
+                                   MenuAction(title:"VS Bluetooth", action: toBluetoothLobbyScene()),
                                    OnlineMenu(title: "VS Online",
                                               menuOptions:
-                                              [MenuAction(title: "Quick Play", action: toMatchmakingScene())
+                                              [MenuAction(title: "Quick Play", action: toMatchmakingScene()),
+                                               MenuAction(title: "Game Lobby", action: toServerLobbyScene())
                                               ])
                                   ]),
                          GameMenu(title:"Lessons",

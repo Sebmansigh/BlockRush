@@ -99,6 +99,13 @@
 		A8F260CA21863DF300DA706E /* OnlineMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F260C921863DF300DA706E /* OnlineMenu.swift */; };
 		A8F260D121864E3100DA706E /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F260CD21864E3000DA706E /* GCDAsyncUdpSocket.m */; settings = {COMPILER_FLAGS = "-Wdeprecated-declarations"; }; };
 		A8F260D221864E3100DA706E /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = A8F260CE21864E3000DA706E /* GCDAsyncSocket.m */; settings = {COMPILER_FLAGS = "-Wdeprecated-declarations"; }; };
+		A8F260D62187EAA300DA706E /* MatchmakingScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A8F260D52187EAA300DA706E /* MatchmakingScene.sks */; };
+		A8F260D82187EAC200DA706E /* ServerLobbyScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A8F260D72187EAC200DA706E /* ServerLobbyScene.sks */; };
+		A8F260DA2187EC1500DA706E /* MatchmakingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F260D92187EC1500DA706E /* MatchmakingScene.swift */; };
+		A8F260DC2187EDF800DA706E /* ServerLobbyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F260DB2187EDF800DA706E /* ServerLobbyScene.swift */; };
+		A8F260DE2187EE1700DA706E /* BluetoothLobbyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F260DD2187EE1700DA706E /* BluetoothLobbyScene.swift */; };
+		A8F260E02187EE2F00DA706E /* LobbyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F260DF2187EE2F00DA706E /* LobbyScene.swift */; };
+		A8F260E42187EF0600DA706E /* BluetoothLobbyScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A8F260E32187EF0600DA706E /* BluetoothLobbyScene.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -220,6 +227,13 @@
 		A8F260CE21864E3000DA706E /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		A8F260CF21864E3100DA706E /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
 		A8F260D021864E3100DA706E /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		A8F260D52187EAA300DA706E /* MatchmakingScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MatchmakingScene.sks; sourceTree = "<group>"; };
+		A8F260D72187EAC200DA706E /* ServerLobbyScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ServerLobbyScene.sks; sourceTree = "<group>"; };
+		A8F260D92187EC1500DA706E /* MatchmakingScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchmakingScene.swift; sourceTree = "<group>"; };
+		A8F260DB2187EDF800DA706E /* ServerLobbyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLobbyScene.swift; sourceTree = "<group>"; };
+		A8F260DD2187EE1700DA706E /* BluetoothLobbyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothLobbyScene.swift; sourceTree = "<group>"; };
+		A8F260DF2187EE2F00DA706E /* LobbyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LobbyScene.swift; sourceTree = "<group>"; };
+		A8F260E32187EF0600DA706E /* BluetoothLobbyScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BluetoothLobbyScene.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,6 +342,10 @@
 				A8071BE4207AD28700EC3272 /* SceneFiles */,
 				A8C395D02079548F00D57AE0 /* MainMenuScene.swift */,
 				A80539C120685A650059562D /* GameScene.swift */,
+				A8F260D92187EC1500DA706E /* MatchmakingScene.swift */,
+				A8F260DB2187EDF800DA706E /* ServerLobbyScene.swift */,
+				A8F260DD2187EE1700DA706E /* BluetoothLobbyScene.swift */,
+				A8F260DF2187EE2F00DA706E /* LobbyScene.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -337,6 +355,9 @@
 			children = (
 				A8C395CE2079546D00D57AE0 /* MainMenuScene.sks */,
 				A80539BD20685A650059562D /* GameScene.sks */,
+				A8F260D52187EAA300DA706E /* MatchmakingScene.sks */,
+				A8F260D72187EAC200DA706E /* ServerLobbyScene.sks */,
+				A8F260E32187EF0600DA706E /* BluetoothLobbyScene.sks */,
 			);
 			path = SceneFiles;
 			sourceTree = "<group>";
@@ -628,13 +649,16 @@
 				A8231F8320A54FFF000BC14E /* Chain7.wav in Resources */,
 				A83C577020B10FC4002A482D /* Track2.aiff in Resources */,
 				A83C576C20B10A5D002A482D /* Winner.wav in Resources */,
+				A8F260D82187EAC200DA706E /* ServerLobbyScene.sks in Resources */,
 				A83C576E20B10B5E002A482D /* Loser.wav in Resources */,
 				A80539BE20685A650059562D /* GameScene.sks in Resources */,
 				A83C577220B11111002A482D /* Track3.aiff in Resources */,
+				A8F260E42187EF0600DA706E /* BluetoothLobbyScene.sks in Resources */,
 				A8C395CF2079546D00D57AE0 /* MainMenuScene.sks in Resources */,
 				A80539CC20685A650059562D /* LaunchScreen.storyboard in Resources */,
 				A80539C720685A650059562D /* Main.storyboard in Resources */,
 				A80539C920685A650059562D /* Assets.xcassets in Resources */,
+				A8F260D62187EAA300DA706E /* MatchmakingScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -689,6 +713,7 @@
 				A8E3F23B21726DD4006DA2DA /* FixedGame.swift in Sources */,
 				A8A3A38E20D46FFF005E3DE3 /* ControllerObserver.swift in Sources */,
 				A8E3F23721718CC3006DA2DA /* GameEvent.swift in Sources */,
+				A8F260DC2187EDF800DA706E /* ServerLobbyScene.swift in Sources */,
 				A8E3F25D2172C088006DA2DA /* ReturnToMainMenu.swift in Sources */,
 				A8E3F25B2172B66A006DA2DA /* DisableAllInputs.swift in Sources */,
 				A8E3F2672172E2F4006DA2DA /* MoveStack.swift in Sources */,
@@ -698,6 +723,8 @@
 				A8E3F2472172753F006DA2DA /* MasterBot.swift in Sources */,
 				A80539F420686FA40059562D /* Piece.swift in Sources */,
 				A8E3F2612172C98F006DA2DA /* ForceQueuePiece.swift in Sources */,
+				A8F260DA2187EC1500DA706E /* MatchmakingScene.swift in Sources */,
+				A8F260E02187EE2F00DA706E /* LobbyScene.swift in Sources */,
 				A8E3F26D2173F411006DA2DA /* BeginFixedGame.swift in Sources */,
 				A80539F8206963DC0059562D /* PlayField.swift in Sources */,
 				A80539F220686CC60059562D /* Queue.swift in Sources */,
@@ -716,6 +743,7 @@
 				A8D1D80120953F22004004EA /* BotDevice.swift in Sources */,
 				A8E3F23E21727290006DA2DA /* HidePlayer.swift in Sources */,
 				A8F260C521861F6C00DA706E /* BlockRushMatchMakingClient.swift in Sources */,
+				A8F260DE2187EE1700DA706E /* BluetoothLobbyScene.swift in Sources */,
 				A8F260C82186267500DA706E /* Audio.swift in Sources */,
 				A8EE4BB3217ABF5500BAED34 /* Block.Themes.swift in Sources */,
 				A8C395D12079548F00D57AE0 /* MainMenuScene.swift in Sources */,

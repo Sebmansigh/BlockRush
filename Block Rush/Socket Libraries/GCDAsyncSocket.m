@@ -8098,7 +8098,7 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	
 	return writeStream;
 }
-
+/*
 - (BOOL)enableBackgroundingOnSocketWithCaveat:(BOOL)caveat
 {
 	if (![self createReadAndWriteStream])
@@ -8129,6 +8129,7 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 	
 	return YES;
 }
+ */
 
 /**
  * Questions? Have you read the header file?
@@ -8143,7 +8144,7 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 		return NO;
 	}
 	
-	return [self enableBackgroundingOnSocketWithCaveat:NO];
+    return NO;//[self enableBackgroundingOnSocketWithCaveat:NO];
 }
 
 - (BOOL)enableBackgroundingOnSocketWithCaveat // Deprecated in iOS 4.???
@@ -8160,7 +8161,7 @@ static void CFWriteStreamCallback (CFWriteStreamRef stream, CFStreamEventType ty
 		return NO;
 	}
 	
-	return [self enableBackgroundingOnSocketWithCaveat:YES];
+    return NO;//[self enableBackgroundingOnSocketWithCaveat:YES];
 }
 
 #endif
